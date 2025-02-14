@@ -1,36 +1,31 @@
+// scripts.js
+
 // Configuración de las firmas
-let pads = [];
-function initFirmas() {
-  [1, 2].forEach(num => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 300;
-    canvas.height = 150;
-    const containerId = num === 1 ? 'firma-paciente' : 'firma-medico';
-    document.getElementById(containerId).appendChild(canvas);
-    pads[num] = new SignaturePad(canvas);
-  });
+let signaturePad;
+
+function initFirma() {
+  const container = document.getElementById('firma-paciente');
+  container.innerHTML = "";
+  const canvas = document.createElement('canvas');
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+  container.appendChild(canvas);
+  signaturePad = new SignaturePad(canvas);
 }
 
-function borrarFirma(num) {
-  pads[num].clear();
+function borrarFirma() {
+  signaturePad.clear();
 }
 
 function guardarFirmas(e) {
   e.preventDefault();
-
   // Validar Sección 2: Quejas
   const quejasCheckboxes = document.querySelectorAll('input[name="quejas[]"]:checked');
   const otrosQuejas = document.getElementById('otros_quejas').value.trim();
   if (quejasCheckboxes.length === 0 && otrosQuejas === '') {
-    Swal.fire({
-      icon: 'error',
-      title: 'Sección incompleta',
-      text: '¡Por favor seleccione al menos una opción en "Quejas" o complete el campo Otros!',
-    }).then(() => {
-      document.getElementById('seccion-quejas').scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    document.getElementById('seccion-quejas').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
     return;
   }
@@ -39,34 +34,37 @@ function guardarFirmas(e) {
   const afirmacionesCheckboxes = document.querySelectorAll('input[name="afirmaciones[]"]:checked');
   const otrosAfirmaciones = document.getElementById('otros_afirmaciones').value.trim();
   if (afirmacionesCheckboxes.length === 0 && otrosAfirmaciones === '') {
-    Swal.fire({
-      icon: 'error',
-      title: 'Sección incompleta',
-      text: '¡Por favor seleccione al menos una opción en "Afirmaciones" o complete el campo Otros!',
-    }).then(() => {
-      document.getElementById('seccion-afirmaciones').scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    document.getElementById('seccion-afirmaciones').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
     return;
   }
 
-  // Validar firma del paciente
-  if (pads[1].isEmpty()) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'Por favor complete la firma del paciente',
+  // Validar Sección 5: Declaraciones Legales
+  const declaracionesCheckboxes = document.querySelectorAll('input[name="declaraciones[]"]');
+  const allDeclaracionesChecked = Array.from(declaracionesCheckboxes).every(checkbox => checkbox.checked);
+
+  if (!allDeclaracionesChecked) {
+    document.getElementById('seccion-declaraciones').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
     return;
   }
 
-  // Guardar firmas
-  document.getElementById('firmaPaciente').value = pads[1].toDataURL();
-  document.getElementById('firmaMedico').value = pads[2].isEmpty() ? '' : pads[2].toDataURL();
+  // Resto de validaciones y envío
+  if (signaturePad.isEmpty()) {
+    document.getElementById('firma-paciente').closest('.section').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+    Swal.fire('Error', 'La firma del paciente es obligatoria', 'error');
+    return;
+  }
 
-  // Enviar formulario
+  document.getElementById('firmaPaciente').value = signaturePad.toDataURL();
+
   Swal.fire({
     icon: 'success',
     title: 'Enviado',
@@ -78,31 +76,29 @@ function guardarFirmas(e) {
   });
 }
 
-window.onload = initFirmas;
+window.onload = initFirma;
 
-// Configurar fecha máxima al cargar la página
+// Configurar fecha máxima y cálculo de edad
 document.addEventListener('DOMContentLoaded', function() {
   const today = new Date().toISOString().split('T')[0];
   document.querySelector('input[name="fecha_nacimiento"]').setAttribute('max', today);
+
+  // Event listener para cálculo de edad
+  document.querySelector('input[name="fecha_nacimiento"]').addEventListener('change', calcularEdad);
 });
 
 function calcularEdad() {
   const fechaInput = document.querySelector('input[name="fecha_nacimiento"]');
   const edadInput = document.querySelector('input[name="edad"]');
-  const menorEdadSelect = document.querySelector('select[name="menor_edad"]');
-  
+
   const fechaNacimiento = new Date(fechaInput.value);
   const hoy = new Date();
-  
-  const resetCampos = () => {
-    fechaInput.value = '';
-    edadInput.value = '';
-    menorEdadSelect.value = 'No';
-  };
 
+  // Validaciones
   if (fechaNacimiento > hoy) {
     alert("❌ Error: La fecha de nacimiento no puede ser futura");
-    resetCampos();
+    fechaInput.value = '';
+    edadInput.value = '';
     return;
   }
 
@@ -110,29 +106,50 @@ function calcularEdad() {
   fechaMinima.setFullYear(hoy.getFullYear() - 150);
   if (fechaNacimiento < fechaMinima) {
     alert("❌ Error: La fecha excede el rango válido (máximo 150 años)");
-    resetCampos();
+    fechaInput.value = '';
+    edadInput.value = '';
     return;
   }
 
+  // Cálculo de edad
   let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
   const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-  
+
   if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
     edad--;
   }
 
   edadInput.value = edad;
-  menorEdadSelect.value = edad < 18 ? 'Sí' : 'No';
 }
 
-document.querySelector('input[name="fecha_nacimiento"]').addEventListener('change', calcularEdad);
-
+// Habilitar/deshabilitar campos condicionales
 function toggleField(fieldId, isEnabled) {
   var field = document.getElementById(fieldId);
   field.disabled = !isEnabled;
   if (!isEnabled) {
-    field.value = '';
+    field.value = ''; // Limpiar campo si se deshabilita
   }
 }
 
-// Eliminar las validaciones antiguas que usaban alert()
+// Habilitar/deshabilitar campos de emergencia
+document.addEventListener('DOMContentLoaded', function() {
+  const menorEdad = document.getElementById('menor_edad');
+  const camposEmergencia = [
+    document.getElementById('contacto_emergencia'),
+    document.getElementById('telefono_emergencia'),
+    document.getElementById('relacion')
+  ];
+
+  function actualizarCampos() {
+    const esMenor = menorEdad.value === 'Si';
+
+    camposEmergencia.forEach(campo => {
+      campo.disabled = !esMenor;
+      campo.required = esMenor;
+    });
+  }
+
+  // Ejecutar al cargar y cuando cambie la selección
+  menorEdad.addEventListener('change', actualizarCampos);
+  actualizarCampos(); // Estado inicial
+});

@@ -57,7 +57,7 @@ function agregarSeccion($pdf, $titulo) {
 
 // Sección 1: Datos Personales
 agregarSeccion($pdf, 'Datos Personales');
-agregarDato($pdf, 'Nombre del Paciente:', $_POST['nombre'] . ' ' . $_POST['apellido']);
+agregarDato($pdf, 'Nombre del Paciente:', $_POST['nombre']. ' ' . $_POST['apellido']);
 agregarDato($pdf, 'Menor de edad:', $_POST['menor_edad']);
 agregarDato($pdf, 'Fecha de Nacimiento:', $_POST['fecha_nacimiento']);
 agregarDato($pdf, 'Edad:', $_POST['edad']);
