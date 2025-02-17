@@ -36,11 +36,11 @@ function agregarDato($pdf, $titulo, $dato) {
         
         // Configurar estilos
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(70, 10, $titulo, 0, 0); // Aumenté el ancho de 60 a 70
+        $pdf->Cell(75, 10, $titulo, 0, 0); // Aumenté el ancho de 60 a 70
         
         // Posicionar datos 15mm más a la derecha
         $pdf->SetFont('Arial', '', 12);
-        $pdf->SetX(80); // Posición horizontal fija para los datos
+        $pdf->SetX(100); // Posición horizontal fija para los datos
         $pdf->MultiCell(0, 10, $dato); // Usar MultiCell para texto largo
         
         $pdf->Ln(2); // Pequeño espacio entre elementos
@@ -59,6 +59,9 @@ function agregarSeccion($pdf, $titulo) {
 agregarSeccion($pdf, 'Datos Personales');
 agregarDato($pdf, 'Nombre del Paciente:', $_POST['nombre']. ' ' . $_POST['apellido']);
 agregarDato($pdf, 'Menor de edad:', $_POST['menor_edad']);
+agregarDato($pdf, 'Nombre del tutor:', $_POST['nombre_tutor']);
+agregarDato($pdf, 'Telefono del tutor:', $_POST['telefono_tutor']);
+agregarDato($pdf, 'Relación:', $_POST['relacion']);
 agregarDato($pdf, 'Fecha de Nacimiento:', $_POST['fecha_nacimiento']);
 agregarDato($pdf, 'Edad:', $_POST['edad']);
 agregarDato($pdf, 'Género:', $_POST['genero']);
@@ -72,25 +75,66 @@ agregarDato($pdf, 'Teléfono Celular:', $_POST['telefono_celular']);
 agregarDato($pdf, 'Teléfono Trabajo:', $_POST['telefono_trabajo']);
 agregarDato($pdf, 'Contacto de Emergencia:', $_POST['contacto_emergencia']);
 agregarDato($pdf, 'Teléfono de Emergencia:', $_POST['telefono_emergencia']);
-agregarDato($pdf, 'Relación:', $_POST['relacion']);
 
-// Sección 2: Quejas
+
+// Sección 2: Quejas y Afirmaciones
+agregarSeccion($pdf, 'Quejas y Afirmaciones');
+
+// Array de quejas con sus descripciones
+$quejas = [
+    'Fatiga' => 'Fatiga o falta de energía',
+    'Estrés' => 'Estrés',
+    'Mala alimentación' => 'Mala alimentación',
+    'Concentración' => 'Problemas de concentración',
+    'Depresión' => 'Bajo estado de ánimo o depresión',
+    'Resfriado' => 'Síntomas de resfriado o gripe',
+    'Arrugas' => 'Arrugas faciales o líneas de expresión',
+    'Piel opaca' => 'Piel opaca o seca',
+    'Mala absorción' => 'Problemas de mala absorción',
+];
+
+// Agrega solo las quejas seleccionadas
 if (!empty($_POST['quejas'])) {
-    agregarSeccion($pdf, 'Principales Quejas');
-    $pdf->SetFont('Arial', '', 12);
     foreach ($_POST['quejas'] as $queja) {
-        $pdf->Cell(0, 10, utf8_decode($queja), 0, 1); // Usar utf8_decode
+        if (array_key_exists($queja, $quejas)) {
+            agregarDato($pdf, $quejas[$queja] . ':', 'Si');
+        }
     }
+} else {
+    agregarDato($pdf, 'Principales Quejas:', 'Ninguna');
 }
+
+// Agrega la queja adicional si existe
+agregarDato($pdf, 'Otras Quejas:', !empty($_POST['otros_quejas']) ? utf8_decode($_POST['otros_quejas']) : 'Ninguna');
 
 // Sección 3: Afirmaciones
+agregarSeccion($pdf, 'Afirmaciones');
+
+// Array de afirmaciones con sus descripciones
+$afirmaciones = [
+    'Energía' => 'Más energía y bienestar',
+    'Cuidar cuerpo' => 'Cuidar mi cuerpo',
+    'Pérdida de peso' => 'Apoyar mi pérdida de peso',
+    'Evitar enfermedad' => 'Evitar enfermedades',
+    'Recuperación' => 'Recuperarme rápido',
+    'Envejecimiento' => 'Retrasar el envejecimiento',
+    'Parecer joven' => 'Sentirme y verme joven',
+    'Piel suave' => 'Piel más suave y brillante',
+    'Toxinas' => 'Eliminar toxinas',
+    'Resaca' => 'Recuperarme de resaca',
+];
+
+// Agrega solo las afirmaciones seleccionadas
 if (!empty($_POST['afirmaciones'])) {
-    agregarSeccion($pdf, 'Motivos');
-    $pdf->SetFont('Arial', '', 12);
     foreach ($_POST['afirmaciones'] as $afirmacion) {
-        $pdf->Cell(0, 10, utf8_decode($afirmacion), 0, 1); // Usar utf8_decode
+        if (array_key_exists($afirmacion, $afirmaciones)) {
+            agregarDato($pdf, $afirmaciones[$afirmacion] . ':', 'Si');
+        }
     }
-}
+} else {
+    agregarDato($pdf, 'Afirmaciones:', 'Ninguna');
+}  
+agregarDato($pdf, 'Otras Afirmaciones:', !empty($_POST['otros_afirmaciones']) ? utf8_decode($_POST['otros_afirmaciones']) : 'Ninguna');
 
 // Sección 4: Preguntas de Salud
 agregarSeccion($pdf, 'Preguntas de Salud');

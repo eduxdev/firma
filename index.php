@@ -30,44 +30,7 @@
   color: #333; /* Este color se mantiene igual para las letras */
   line-height: 1.6;
 }
- /* Estilos para el navbar */
-/* Estilos para el navbar */
-.navbar {
-  border-bottom: 1px solid #eee; /* Borde inferior */
-}
-
-/* Estilos para el Hero Banner (banner completo) */
-.hero {
-  position: relative;
-  background: url("consentimiento.jpg") no-repeat center center/cover; /* Imagen de fondo */
-  height: 300px; /* Altura del banner */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff; /* Color del texto */
-  text-align: center;
-  width: 100%; /* Ocupa todo el ancho */
-  margin-top: 20px; /* Margen superior para separarlo del borde */
-}
-
-/* Overlay oscuro sobre la imagen del Hero Banner */
-.hero::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4); /* Color oscuro semi-transparente */
-  z-index: 1; /* Coloca el overlay sobre la imagen */
-}
-
-/* Contenido del Hero Banner */
-.hero-content {
-  position: relative;
-  z-index: 2; /* Coloca el contenido sobre el overlay */
-  max-width: 900px; /* Limita el ancho del contenido */
-  margin: 0 auto; /* Centra el contenido */
-  padding: 0 20px; /* Espaciado lateral para dispositivos móviles */
-}
-  
+ 
   /* Estilos para el texto con gradiente */
   .text-primary {
     font-size: 30px;
@@ -228,40 +191,127 @@
 .text:active {
   transform: scale(0.95); /* Efecto de "clic" */
 }
+/* Estilos para el Hero Banner */
+/* Estilos para el Hero Banner */
+.hero {
+  position: relative;
+  background: linear-gradient(to bottom right, hsl(0, 0%, 10%), hsl(0, 0%, 5%)); /* Fondo oscuro */
+  height: 300px; /* Altura aumentada para más impacto visual */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* Color del texto */
+  text-align: center;
+  border-radius: 12px; /* Bordes redondeados */
+  overflow: hidden; /* Evita que la imagen sobresalga */
+  margin: 2px auto 20px; /* Margen superior reducido */
+  padding: 20px; /* Espaciado interno */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+}
+
+/* Efecto hover para el Hero Banner */
+.hero:hover {
+  transform: translateY(-5px); /* Levanta ligeramente el banner */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4); /* Sombra más intensa al pasar el mouse */
+}
+
+/* Contenido del Hero Banner */
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Más espacio entre la imagen y el texto */
+}
+
+/* Estilos para la imagen */
+.hero-image {
+  width: 400px; /* Ancho de la imagen */
+  height: auto; /* Mantiene la proporción de la imagen */
+  border-radius: 12px; /* Bordes redondeados */
+  border: 4px solid rgba(255, 255, 255, 0.2); /* Borde semi-transparente */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+}
+
+/* Efecto hover para la imagen */
+.hero-image:hover {
+  transform: scale(1.05); /* Escala ligeramente la imagen */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el mouse */
+}
+
+/* Estilos para el texto del Hero Banner */
+.hero h2 {
+  font-size: 2.5rem; /* Tamaño del texto más grande */
+  font-weight: 700; /* Grosor de la fuente más fuerte */
+  color: #fff; /* Color del texto */
+  margin: 0; /* Elimina el margen predeterminado */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Sombra más pronunciada */
+  background: linear-gradient(45deg, #ffd700, #ffcc00, #b8860b); /* Gradiente dorado */
+  -webkit-background-clip: text; /* Aplica el gradiente al texto */
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* Texto transparente */
+  animation: shine 3s infinite alternate; /* Animación de brillo */
+}
+
+/* Animación para el gradiente del texto */
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Ajuste para dispositivos móviles */
+@media (max-width: 768px) {
+  .hero {
+    height: auto; /* Altura automática en móviles */
+    padding: 15px; /* Menos espaciado interno */
+    flex-direction: column; /* Coloca la imagen y el texto en columna */
+  }
+
+  .hero-content {
+    flex-direction: column; /* Coloca la imagen y el texto en columna */
+    gap: 20px; /* Menos espacio entre la imagen y el texto */
+  }
+
+  .hero-image {
+    width: 250px; /* Imagen más pequeña en móviles */
+  }
+
+  .hero h2 {
+    font-size: 2rem; /* Texto más pequeño en móviles */
+  }
+}
    </style>
  </head>
  <body>
 
-   <!-- Hero Banner con imagen de fondo -->
-   <div class="hero mb-4">
-     <div class="hero-content">
 
-     </div>
-   </div>
+ <div class="container animate__animated animate__fadeIn">
+  <!-- Hero Banner con imagen -->
+  <div class="hero mb-4">
+  <div class="hero-content">
+  <img src="consentimiento.jpg" alt="Consentimiento" class="hero-image" />
+</div>
+  </div>
 
+  <form method="POST" action="enviar.php" onsubmit="guardarFirmas(event)">
+    <!-- Sección de Datos Personales -->
+    <div class="section">
+      <h3 class="text-primary mb-4">Datos Personales</h3>
 
-   <div class="container animate__animated animate__fadeIn">
-     <form method="POST" action="enviar.php" onsubmit="guardarFirmas(event)">
-       <h2 class="text-center mb-4">Formulario de Consentimiento</h2>
-       <div class="section">
-         <h3 class="text-primary mb-4">Datos Personales</h3>
-
-         <div class="row g-3">
-
-
-           <!-- Fila 2 - Nombre/Apellido -->
-           <div class="col-md-6">
-             <label class="form-label">Nombre*</label>
-             <input type="text" class="form-control" name="nombre" required
-               pattern="[A-Za-zÁ-ÿ\s']+"
-               title="Solo letras y espacios (no se permiten números o caracteres especiales)">
-           </div>
-           <div class="col-md-6">
-             <label class="form-label">Apellido*</label>
-             <input type="text" class="form-control" name="apellido" required
-               pattern="[A-Za-zÁ-ÿ\s']+"
-               title="Solo letras y espacios (no se permiten números o caracteres especiales)">
-           </div>
+      <div class="row g-3">
+        <!-- Fila 2 - Nombre/Apellido -->
+        <div class="col-md-6">
+          <label class="form-label">Nombre*</label>
+          <input type="text" class="form-control" name="nombre" required
+            pattern="[A-Za-zÁ-ÿ\s']+"
+            title="Solo letras y espacios (no se permiten números o caracteres especiales)">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apellido*</label>
+          <input type="text" class="form-control" name="apellido" required
+            pattern="[A-Za-zÁ-ÿ\s']+"
+            title="Solo letras y espacios (no se permiten números o caracteres especiales)">
+        </div>
            <!-- Selector independiente de menor de edad -->
            <div class="col-12">
              <label class="form-label">¿La persona es menor de edad?</label>
@@ -269,6 +319,38 @@
                <option value="Si">Si</option>
                <option value="No">No</option>
              </select>
+           </div>
+           <div id="emergencia-fields">
+             <!-- Fila 7 - Contacto Emergencia -->
+             <div class="row g-3 align-items-center">
+               <div class="col-md-8">
+                 <label class="form-label">Nombre del Tutor*</label>
+                 <input type="text" class="form-control"
+                   name="nombre_tutor" id="nombre_tutor"
+                   required pattern="[A-Za-zÁ-ÿ\s']+"
+                   title="Solo letras y espacios">
+               </div>
+               <div class="col-md-4">
+                 <label class="form-label">Teléfono del Tutor*</label>
+                 <input type="tel" class="form-control"
+                   name="telefono_tutor" id="telefono_tutor"
+                   required title="Solo números (sin espacios ni guiones)">
+               </div>
+
+               <!-- Fila 8 - Relación -->
+               <div class="col-12">
+                 <label class="form-label">Relación*</label>
+                 <select class="form-select" name="relacion" id="relacion" required>
+                   <option value="Esposa">Esposa</option>
+                   <option value="Esposo">Esposo</option>
+                   <option value="Madre">Madre</option>
+                   <option value="Padre">Padre</option>
+                   <option value="Amigo">Amigo</option>
+                   <option value="Hijo">Hijo</option>
+                   <option value="Hija">Hija</option>
+                 </select>
+               </div>
+             </div>
            </div>
            <!-- Fila 3 - Fecha/Edad/Género -->
            <!-- Fila 3 - Fecha/Edad -->
@@ -334,7 +416,7 @@
 
            <!-- Fila 7 - Contacto Emergencia -->
            <!-- Campos de emergencia -->
-           <div id="emergencia-fields">
+          
              <!-- Fila 7 - Contacto Emergencia -->
              <div class="row g-3 align-items-center">
                <div class="col-md-8">
@@ -352,19 +434,8 @@
                </div>
 
                <!-- Fila 8 - Relación -->
-               <div class="col-12">
-                 <label class="form-label">Relación*</label>
-                 <select class="form-select" name="relacion" id="relacion" required>
-                   <option value="Esposa">Esposa</option>
-                   <option value="Esposo">Esposo</option>
-                   <option value="Madre">Madre</option>
-                   <option value="Padre">Padre</option>
-                   <option value="Amigo">Amigo</option>
-                   <option value="Hijo">Hijo</option>
-                   <option value="Hija">Hija</option>
-                 </select>
-               </div>
-             </div>
+               
+             
            </div>
          </div>
        </div>
@@ -829,8 +900,8 @@
      document.addEventListener('DOMContentLoaded', function() {
        const menorEdad = document.getElementById('menor_edad');
        const camposEmergencia = [
-         document.getElementById('contacto_emergencia'),
-         document.getElementById('telefono_emergencia'),
+         document.getElementById('nombre_tutor'),
+         document.getElementById('telefono_tutor'),
          document.getElementById('relacion')
        ];
 
