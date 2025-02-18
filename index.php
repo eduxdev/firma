@@ -7,6 +7,7 @@
 
  <head>
    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Formulario de Consentimiento informado</title>
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="css/styles.css">
@@ -223,30 +224,47 @@
   gap: 40px; /* Más espacio entre la imagen y el texto */
 }
 
-/* Estilos para la imagen */
-.hero-image {
-  width: 400px; /* Ancho de la imagen */
-  height: auto; /* Mantiene la proporción de la imagen */
+/* Estilos para el Hero Banner */
+/* Estilos para el Hero Banner */
+.hero {
+  position: relative;
+  background: #000; /* Fondo negro */
+  height: 300px; /* Altura aumentada para más impacto visual */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* Color del texto */
+  text-align: center;
   border-radius: 12px; /* Bordes redondeados */
-  border: 4px solid rgba(255, 255, 255, 0.2); /* Borde semi-transparente */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  overflow: hidden; /* Evita que el contenido sobresalga */
+  margin: 20px 20px; /* Margen superior aumentado (40px) */
+  padding: 20px; /* Espaciado interno */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
 }
 
-/* Efecto hover para la imagen */
-.hero-image:hover {
-  transform: scale(1.05); /* Escala ligeramente la imagen */
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el mouse */
+/* Efecto hover para el Hero Banner */
+
+/* Contenido del Hero Banner */
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el contenido horizontalmente */
 }
 
 /* Estilos para el texto del Hero Banner */
 .hero h2 {
-  font-size: 2.5rem; /* Tamaño del texto más grande */
+  font-size: 3rem; /* Tamaño del texto más grande */
   font-weight: 700; /* Grosor de la fuente más fuerte */
-  color: #fff; /* Color del texto */
   margin: 0; /* Elimina el margen predeterminado */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Sombra más pronunciada */
-  background: linear-gradient(45deg, #ffd700, #ffcc00, #b8860b); /* Gradiente dorado */
+  text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.5); /* Sombra dorada */
+  background: linear-gradient(
+    45deg,
+    #ffd700, /* Dorado brillante */
+    #ffcc00, /* Dorado medio */
+    #ffae42, /* Dorado anaranjado */
+    #ffd700 /* Dorado brillante */
+  ); /* Gradiente dorado más vibrante */
   -webkit-background-clip: text; /* Aplica el gradiente al texto */
   background-clip: text;
   -webkit-text-fill-color: transparent; /* Texto transparente */
@@ -264,38 +282,41 @@
   .hero {
     height: auto; /* Altura automática en móviles */
     padding: 15px; /* Menos espaciado interno */
-    flex-direction: column; /* Coloca la imagen y el texto en columna */
-  }
-
-  .hero-content {
-    flex-direction: column; /* Coloca la imagen y el texto en columna */
-    gap: 20px; /* Menos espacio entre la imagen y el texto */
-  }
-
-  .hero-image {
-    width: 250px; /* Imagen más pequeña en móviles */
   }
 
   .hero h2 {
     font-size: 2rem; /* Texto más pequeño en móviles */
   }
 }
+.titulo-consentimiento {
+  text-align: center; /* Centra el texto */
+  font-weight: bold; /* Texto en negrita */
+  text-transform: uppercase; /* Texto en mayúsculas */
+  color:rgb(0, 0, 0); /* Color azul */
+  font-size: 1.5rem; /* Tamaño de fuente */
+  margin-bottom: 1.5rem; /* Margen inferior */
+  padding: 0.5rem 0; /* Espaciado interno */
+}
    </style>
  </head>
  <body>
 
 
- <div class="container animate__animated animate__fadeIn">
-  <!-- Hero Banner con imagen -->
+ <div class="container animate__animated animate__fadeIn">  
+  <!-- Hero Banner con fondo blanco y texto dorado -->
   <div class="hero mb-4">
-  <div class="hero-content">
-  <img src="consentimiento.jpg" alt="Consentimiento" class="hero-image" />
-</div>
+    <div class="hero-content">
+      <h2>Vital | Drops Infusion</h2>
+    </div>
   </div>
 
   <form method="POST" action="enviar.php" onsubmit="guardarFirmas(event)">
     <!-- Sección de Datos Personales -->
     <div class="section">
+    <h4 class="titulo-consentimiento">
+  Consentimiento de tratamiento
+</h4>
+
       <h3 class="text-primary mb-4">Datos Personales</h3>
 
       <div class="row g-3">
