@@ -25,11 +25,11 @@
     <style>
       /* Estilos generales del body */
       body {
-    background: linear-gradient(to bottom right, hsl(0, 0%, 10%), hsl(0, 0%, 5%));
+    background: #fff; /* Cambiado de gradient oscuro a blanco */
     margin: 0;
     font-family: 'Poppins', sans-serif;
     color: #333; /* Este color se mantiene igual para las letras */
-    line-height: 1.6;
+    line-height: 1.6;
   }
   
   .text-primary {
@@ -204,7 +204,7 @@
 
 /* Imagen pequeña en el navbar con animación al hacer hover */
 .custom-navbar img {
-    height: 50px;
+    height: 80px; /* Aumentado de 50px a 80px */
     transition: transform 0.3s ease;
 }
 
@@ -227,7 +227,7 @@
     </head>
     <body>
     <nav class="custom-navbar">
-      <img src="logo.jpg" alt="Logo">
+      <img src="logo2.png" alt="Logo">
     </nav>
 
     <div class="container animate__animated animate__fadeIn">  
