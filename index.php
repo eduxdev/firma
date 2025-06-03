@@ -260,8 +260,9 @@
             <div class="col-12">
               <label class="form-label">¿La persona es menor de edad?</label>
               <select class="form-select" name="menor_edad" id="menor_edad" required>
-                <option value="Si">Si</option>
+                
                 <option value="No">No</option>
+                <option value="Si">Si</option>
               </select>
             </div>
             <div id="emergencia-fields">
@@ -300,11 +301,39 @@
             <!-- Fila 3 - Fecha/Edad -->
             <div class="col-md-4">
               <label class="form-label">Fecha Nacimiento*</label>
-              <input type="date" class="form-control" name="fecha_nacimiento" required>
+              <div class="row">
+                <div class="col-4">
+                  <select class="form-select" name="fecha_nacimiento_dia" required>
+                    <option value="">Día</option>
+                    <!-- Generar opciones para días del 1 al 31 -->
+                    <?php for ($i = 1; $i <= 31; $i++): ?>
+                      <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php endfor; ?>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <select class="form-select" name="fecha_nacimiento_mes" required>
+                    <option value="">Mes</option>
+                    <!-- Generar opciones para meses del 1 al 12 -->
+                    <?php for ($i = 1; $i <= 12; $i++): ?>
+                      <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php endfor; ?>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <select class="form-select" name="fecha_nacimiento_anio" required>
+                    <option value="">Año</option>
+                    <!-- Generar opciones para años desde el actual hasta 100 años atrás -->
+                    <?php for ($i = date('Y'); $i >= date('Y') - 100; $i--): ?>
+                      <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                    <?php endfor; ?>
+                  </select>
+                </div>
+              </div>
             </div>
             <div class="col-md-2">
               <label class="form-label">Edad*</label>
-              <input type="number" class="form-control" name="edad" readonly required>
+              <input type="number" class="form-control" name="edad" required>
             </div>
             <div class="col-md-6">
               <label class="form-label">Género*</label>

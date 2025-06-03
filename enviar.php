@@ -55,6 +55,30 @@ function agregarSeccion($pdf, $titulo) {
     $pdf->Ln(5);
 }
 
+// Recibir los valores de fecha de nacimiento y edad
+$dia = $_POST['fecha_nacimiento_dia'];
+$mes = $_POST['fecha_nacimiento_mes'];
+$anio = $_POST['fecha_nacimiento_anio'];
+$edad = $_POST['edad'];
+
+// Validar que los campos de fecha de nacimiento no estén vacíos
+if (empty($dia) || empty($mes) || empty($anio)) {
+    die("Error: La fecha de nacimiento es obligatoria.");
+}
+
+// Validar que la edad no esté vacía
+if (empty($edad)) {
+    die("Error: La edad es obligatoria.");
+}
+
+// Formatear la fecha de nacimiento
+$fecha_nacimiento = sprintf('%04d-%02d-%02d', $anio, $mes, $dia);
+
+// Validar que la fecha de nacimiento sea válida
+if (!checkdate($mes, $dia, $anio)) {
+    die("Error: La fecha de nacimiento no es válida.");
+}
+
 // Sección 1: Datos Personales
 agregarSeccion($pdf, 'Datos Personales');
 agregarDato($pdf, 'Nombre del Paciente:', $_POST['nombre']. ' ' . $_POST['apellido']);
@@ -62,8 +86,8 @@ agregarDato($pdf, 'Menor de edad:', $_POST['menor_edad']);
 agregarDato($pdf, 'Nombre del tutor:', $_POST['nombre_tutor']);
 agregarDato($pdf, 'Telefono del tutor:', $_POST['telefono_tutor']);
 agregarDato($pdf, 'Relación:', $_POST['relacion']);
-agregarDato($pdf, 'Fecha de Nacimiento:', $_POST['fecha_nacimiento']);
-agregarDato($pdf, 'Edad:', $_POST['edad']);
+agregarDato($pdf, 'Fecha de Nacimiento:', $fecha_nacimiento);
+agregarDato($pdf, 'Edad:', $edad);
 agregarDato($pdf, 'Género:', $_POST['genero']);
 agregarDato($pdf, 'Correo:', $_POST['correo']);
 agregarDato($pdf, 'Dirección:', $_POST['direccion']);
@@ -209,8 +233,7 @@ $pdf->Cell($anchoFirma, 10, utf8_decode('Firma del Paciente'), 0, 0, 'C');
 
 // Firma Médico (Derecha - Siempre visible)
 $pdf->Rect($xMedico, $yFirmas, $anchoFirma, $altoFirma);
-$pdf->SetFont('Arial','I',10);
-$pdf->Text($xMedico + 5, $yFirmas + 20, utf8_decode(''));
+$pdf->Image('firma_doctor.png', $xMedico, $yFirmas, $anchoFirma, $altoFirma, 'PNG');
 $pdf->SetFont('Arial','',12);
 $pdf->SetXY($xMedico, $yFirmas + $altoFirma + 2);
 $pdf->Cell($anchoFirma, 10, utf8_decode('Firma del Profesional de la Salud'), 0, 0, 'C');
