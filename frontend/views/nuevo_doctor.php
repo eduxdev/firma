@@ -69,33 +69,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
+        :root {
+            --color-primary: #2c6e8f;
+            --color-secondary: #48a5c5;
+            --color-accent: #e9f5fb;
+            --color-pending: #7c97ab;
+            --color-approved: #4a8573;
+            --color-rejected: #a17a7a;
+            --color-light: #f8f9fa;
+            --color-dark: #345464;
+            --color-users: #5a7d9a;
+            --color-admin: #3d4a54;
+            --color-active: #4a8573;
+        }
+        
+        body {
+            background-color: var(--color-light);
+            color: var(--color-dark);
+        }
+        
         .custom-navbar {
             background-color: #ffffff;
-            color: #333;
+            color: var(--color-dark);
             padding: 15px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        
         .custom-navbar img {
             height: 50px;
         }
+        
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+            border: none;
         }
+        
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        
         .admin-menu .nav-link {
-            color: #495057;
+            color: var(--color-dark);
             border-radius: 5px;
             margin-bottom: 5px;
+            padding: 10px;
         }
+        
         .admin-menu .nav-link:hover, 
         .admin-menu .nav-link.active {
-            background-color: #0d6efd;
+            background-color: var(--color-primary);
             color: white;
         }
+        
         .admin-menu .nav-link i {
             width: 25px;
             text-align: center;
+        }
+        
+        .card-header-primary {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .card-header-users {
+            background-color: var(--color-users);
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d5977;
+            border-color: #1d5977;
+        }
+        
+        .btn-outline-primary {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert-success {
+            background-color: rgba(74, 133, 115, 0.2);
+            border-color: var(--color-approved);
+            color: var(--color-approved);
+        }
+        
+        .alert-danger {
+            background-color: rgba(161, 122, 122, 0.2);
+            border-color: var(--color-rejected);
+            color: var(--color-rejected);
         }
     </style>
 </head>
@@ -123,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="bi bi-arrow-left"></i> Volver al Dashboard
                 </a>
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header-primary">
                         <h5 class="mb-0"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
                     </div>
                     <div class="card-body p-0">
@@ -156,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </nav>
 
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header-users">
                         <h5 class="mb-0"><i class="bi bi-person-plus"></i> Añadir Nuevo Doctor</h5>
                     </div>
                     <div class="card-body">
