@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Decodificar arrays JSON
-$quejas = json_decode($formulario['quejas'], true);
-$afirmaciones = json_decode($formulario['afirmaciones'], true);
+$quejas = json_decode($formulario['quejas'], true) ?? [];
+$afirmaciones = json_decode($formulario['afirmaciones'], true) ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -103,13 +103,52 @@ $afirmaciones = json_decode($formulario['afirmaciones'], true);
                         <p><strong>Fecha de Nacimiento:</strong> <?php echo date('d/m/Y', strtotime($formulario['fecha_nacimiento'])); ?></p>
                         <p><strong>Edad:</strong> <?php echo $formulario['edad']; ?></p>
                         <p><strong>Género:</strong> <?php echo $formulario['genero']; ?></p>
+                        <?php if ($formulario['menor_edad'] === 'Si'): ?>
+                            <p><strong>Menor de edad:</strong> Sí</p>
+                            <p><strong>Nombre del tutor:</strong> <?php echo htmlspecialchars($formulario['nombre_tutor']); ?></p>
+                            <p><strong>Teléfono del tutor:</strong> <?php echo htmlspecialchars($formulario['telefono_tutor']); ?></p>
+                            <p><strong>Relación:</strong> <?php echo htmlspecialchars($formulario['relacion']); ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Correo:</strong> <?php echo htmlspecialchars($formulario['correo']); ?></p>
-                        <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($formulario['telefono_celular']); ?></p>
+                        <p><strong>Teléfono Celular:</strong> <?php echo htmlspecialchars($formulario['telefono_celular']); ?></p>
+                        <p><strong>Teléfono Casa:</strong> <?php echo htmlspecialchars($formulario['telefono_casa']); ?></p>
+                        <p><strong>Teléfono Trabajo:</strong> <?php echo htmlspecialchars($formulario['telefono_trabajo']); ?></p>
                         <p><strong>Dirección:</strong> <?php echo htmlspecialchars($formulario['direccion']); ?></p>
+                        <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($formulario['ciudad']); ?></p>
+                        <p><strong>Estado:</strong> <?php echo htmlspecialchars($formulario['estado']); ?></p>
+                        <p><strong>Código Postal:</strong> <?php echo htmlspecialchars($formulario['zipcode']); ?></p>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Quejas y Afirmaciones -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Quejas y Afirmaciones</h4>
+            </div>
+            <div class="card-body">
+                <h5>Quejas Principales:</h5>
+                <ul>
+                    <?php foreach ($quejas as $queja): ?>
+                        <li><?php echo htmlspecialchars($queja); ?></li>
+                    <?php endforeach; ?>
+                    <?php if (!empty($formulario['otros_quejas'])): ?>
+                        <li>Otras quejas: <?php echo htmlspecialchars($formulario['otros_quejas']); ?></li>
+                    <?php endif; ?>
+                </ul>
+
+                <h5>Afirmaciones:</h5>
+                <ul>
+                    <?php foreach ($afirmaciones as $afirmacion): ?>
+                        <li><?php echo htmlspecialchars($afirmacion); ?></li>
+                    <?php endforeach; ?>
+                    <?php if (!empty($formulario['otros_afirmaciones'])): ?>
+                        <li>Otras afirmaciones: <?php echo htmlspecialchars($formulario['otros_afirmaciones']); ?></li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
 
@@ -125,6 +164,9 @@ $afirmaciones = json_decode($formulario['afirmaciones'], true);
                         <p><strong>Diabético:</strong> <?php echo $formulario['diabetico']; ?></p>
                         <p><strong>Fumador:</strong> <?php echo $formulario['fumador']; ?></p>
                         <p><strong>Drogas:</strong> <?php echo $formulario['drogas']; ?></p>
+                        <?php if ($formulario['drogas'] === 'Si'): ?>
+                            <p><strong>Frecuencia de uso:</strong> <?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></p>
+                        <?php endif; ?>
                         <p><strong>Paciente Renal:</strong> <?php echo $formulario['renal']; ?></p>
                     </div>
                     <div class="col-md-6">
@@ -133,9 +175,21 @@ $afirmaciones = json_decode($formulario['afirmaciones'], true);
                         <p><strong>Cáncer:</strong> <?php echo $formulario['cancer']; ?></p>
                         <p><strong>Alergias:</strong> <?php echo $formulario['alergico']; ?></p>
                         <?php if ($formulario['alergico'] === 'Si'): ?>
-                        <p><strong>Medicamentos Alérgicos:</strong> <?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></p>
+                            <p><strong>Medicamentos Alérgicos:</strong> <?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></p>
+                        <?php endif; ?>
+                        <p><strong>Condición Médica:</strong> <?php echo $formulario['condicion_medica']; ?></p>
+                        <?php if ($formulario['condicion_medica'] === 'Si'): ?>
+                            <p><strong>Explicación:</strong> <?php echo htmlspecialchars($formulario['condicion_explicacion']); ?></p>
                         <?php endif; ?>
                     </div>
+                </div>
+
+                <!-- Medicamentos y Suplementos -->
+                <div class="mt-4">
+                    <h5>Medicamentos y Suplementos</h5>
+                    <p><strong>Medicamentos Recetados:</strong><br><?php echo nl2br(htmlspecialchars($formulario['medicamentos_recetados'])); ?></p>
+                    <p><strong>Medicamentos de Venta Libre:</strong><br><?php echo nl2br(htmlspecialchars($formulario['medicamentos_venta_libre'])); ?></p>
+                    <p><strong>Suplementos:</strong><br><?php echo nl2br(htmlspecialchars($formulario['suplementos'])); ?></p>
                 </div>
             </div>
         </div>
