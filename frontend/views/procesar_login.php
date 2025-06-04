@@ -7,8 +7,8 @@ require_once '../../backend/db/conection.php';
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-// Preparar consulta
-$sql = "SELECT id, nombre, apellido, password, activo FROM usuarios WHERE email = ? AND password = ? AND rol = 'doctor'";
+// Preparar consulta - Ahora sin filtrar por rol
+$sql = "SELECT id, nombre, apellido, password, activo, rol FROM usuarios WHERE email = ? AND password = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $email, $password);
 $stmt->execute();
@@ -33,9 +33,14 @@ if ($result->num_rows === 1) {
     $_SESSION['doctor_id'] = $usuario['id'];
     $_SESSION['doctor_nombre'] = $usuario['nombre'];
     $_SESSION['doctor_apellido'] = $usuario['apellido'];
+    $_SESSION['user_rol'] = $usuario['rol'];
     
-    // Redirigir al panel
-    header("Location: revisar_formularios.php");
+    // Redirigir según el rol
+    if ($usuario['rol'] === 'admin') {
+        header("Location: admin_panel.php"); // Creamos esta página después
+    } else {
+        header("Location: revisar_formularios.php");
+    }
     exit();
 }
 

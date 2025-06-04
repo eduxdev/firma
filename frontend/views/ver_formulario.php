@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Redirigir a generar PDF
             header("Location: generar_pdf.php?id=" . $id);
         } else {
-            header("Location: revisar_formularios.php");
+            // Redirigir a la página de formularios rechazados
+            header("Location: formularios_rechazados.php");
         }
         exit();
     }
@@ -70,7 +71,20 @@ $afirmaciones = json_decode($formulario['afirmaciones'], true) ?? [];
     <title>Revisar Formulario - Panel del Doctor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        .custom-navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .custom-navbar img {
+            height: 50px;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
     <nav class="custom-navbar">
@@ -230,7 +244,16 @@ $afirmaciones = json_decode($formulario['afirmaciones'], true) ?? [];
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-circle"></i> Enviar Revisión
                         </button>
-                        <a href="revisar_formularios.php" class="btn btn-secondary">
+                        <?php
+                        // Determinar a qué página redirigir según el estado del formulario
+                        $pagina_volver = 'formularios_pendientes.php';
+                        if ($formulario['estado_revision'] === 'aprobado') {
+                            $pagina_volver = 'formularios_aprobados.php';
+                        } elseif ($formulario['estado_revision'] === 'rechazado') {
+                            $pagina_volver = 'formularios_rechazados.php';
+                        }
+                        ?>
+                        <a href="<?php echo $pagina_volver; ?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-left"></i> Volver
                         </a>
                     </div>
