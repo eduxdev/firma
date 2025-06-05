@@ -217,6 +217,11 @@ $conteo = $result_conteo->fetch_assoc();
             </li>
             <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
             <li class="nav-item">
+                <a class="nav-link" href="estadisticas.php">
+                    <i class="bi bi-bar-chart me-2"></i>Estadísticas
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="admin_panel.php">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                 </a>

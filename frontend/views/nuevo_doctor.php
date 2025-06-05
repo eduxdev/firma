@@ -66,26 +66,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Doctor - Panel de Administración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2c6e8f',
+                        secondary: '#48a5c5',
+                        accent: '#e9f5fb',
+                        pending: '#7c97ab',
+                        approved: '#4a8573',
+                        rejected: '#a17a7a',
+                        light: '#f8f9fa',
+                        dark: '#345464',
+                        users: '#5a7d9a',
+                        admin: '#3d4a54',
+                        active: '#4a8573',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
-        :root {
-            --color-primary: #2c6e8f;
-            --color-secondary: #48a5c5;
-            --color-accent: #e9f5fb;
-            --color-pending: #7c97ab;
-            --color-approved: #4a8573;
-            --color-rejected: #a17a7a;
-            --color-light: #f8f9fa;
-            --color-dark: #345464;
-            --color-users: #5a7d9a;
-            --color-admin: #3d4a54;
-            --color-active: #4a8573;
-        }
-        
         body {
-            background-color: var(--color-light);
-            color: var(--color-dark);
+            background-color: #f8f9fa;
+            color: #345464;
         }
         
         .custom-navbar {
@@ -190,46 +197,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-<body>
-    <nav class="custom-navbar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo">
-            <div class="d-flex align-items-center">
-                <span class="me-3 text-dark">
+<body class="bg-light">
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
+            <div class="flex items-center">
+                <span class="mr-4 text-dark">
                     <i class="bi bi-person-badge-fill"></i> 
                     Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
                 </span>
-                <a href="cerrar_sesion.php" class="btn btn-outline-primary">
+                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
                     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
+    <div class="container mx-auto px-4 mt-6">
+        <div class="flex flex-wrap">
             <!-- Menú lateral -->
-            <div class="col-md-3 col-lg-2">
-                <a href="admin_panel.php" class="btn btn-primary mb-3">
+            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
+                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-primary text-white rounded hover:bg-opacity-90">
                     <i class="bi bi-arrow-left"></i> Volver al Dashboard
                 </a>
-                <div class="card">
-                    <div class="card-header-primary">
-                        <h5 class="mb-0"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
+                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
                     </div>
-                    <div class="card-body p-0">
-                        <nav class="nav flex-column admin-menu p-2">
-                            <a class="nav-link" href="admin_panel.php">
-                                <i class="bi bi-house-door"></i> Dashboard
+                    <div class="p-0">
+                        <nav class="flex flex-col p-2">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="admin_panel.php">
+                                <i class="bi bi-house-door w-6 text-center"></i> Dashboard
                             </a>
-                            <a class="nav-link active" href="gestionar_doctores.php">
-                                <i class="bi bi-people"></i> Gestionar Doctores
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="formularios_pendientes.php">
+                                <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
                             </a>
-                            <a class="nav-link" href="formularios_pendientes.php">
-                                <i class="bi bi-file-earmark-text"></i> Formularios
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white bg-primary text-white" href="gestionar_doctores.php">
+                                <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
                             </a>
-                            <a class="nav-link" href="configuracion.php">
-                                <i class="bi bi-gear"></i> Configuración
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="estadisticas.php">
+                                <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
+                            </a>
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="configuracion.php">
+                                <i class="bi bi-gear w-6 text-center"></i> Configuración
                             </a>
                         </nav>
                     </div>
@@ -237,78 +247,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Contenido principal -->
-            <div class="col-md-9 col-lg-10">
-                <nav aria-label="breadcrumb" class="mb-4">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin_panel.php">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="gestionar_doctores.php">Gestionar Doctores</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Nuevo Doctor</li>
+            <div class="w-full md:w-3/4 lg:w-5/6">
+                <nav class="flex mb-6" aria-label="breadcrumb">
+                    <ol class="flex">
+                        <li class="mr-2">
+                            <a href="admin_panel.php" class="text-primary hover:underline">Dashboard</a>
+                            <span class="mx-1 text-gray-500">/</span>
+                        </li>
+                        <li class="mr-2">
+                            <a href="gestionar_doctores.php" class="text-primary hover:underline">Gestionar Doctores</a>
+                            <span class="mx-1 text-gray-500">/</span>
+                        </li>
+                        <li class="text-gray-600">Nuevo Doctor</li>
                     </ol>
                 </nav>
 
-                <div class="card">
-                    <div class="card-header-users">
-                        <h5 class="mb-0"><i class="bi bi-person-plus"></i> Añadir Nuevo Doctor</h5>
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="bg-users text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-person-plus"></i> Añadir Nuevo Doctor</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="p-6">
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger">
+                            <div class="mb-4 p-4 bg-red-100 border-l-4 border-rejected text-rejected rounded">
                                 <i class="bi bi-exclamation-triangle"></i> <?php echo $error; ?>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success">
+                            <div class="mb-4 p-4 bg-green-100 border-l-4 border-approved text-approved rounded">
                                 <i class="bi bi-check-circle"></i> <?php echo $success; ?>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo isset($nombre) ? htmlspecialchars($nombre) : ''; ?>" required>
+                            <div class="flex flex-wrap -mx-3 mb-4">
+                                <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                    <label for="nombre" class="block text-gray-700 mb-2">Nombre <span class="text-red-500">*</span></label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                                           id="nombre" name="nombre" value="<?php echo isset($nombre) ? htmlspecialchars($nombre) : ''; ?>" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="apellido" name="apellido" value="<?php echo isset($apellido) ? htmlspecialchars($apellido) : ''; ?>" required>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="w-full md:w-1/2 px-3">
+                                    <label for="apellido" class="block text-gray-700 mb-2">Apellido <span class="text-red-500">*</span></label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                                           id="apellido" name="apellido" value="<?php echo isset($apellido) ? htmlspecialchars($apellido) : ''; ?>" required>
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="rol" class="form-label">Rol <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="rol" name="rol" required>
+                            <div class="flex flex-wrap -mx-3 mb-4">
+                                <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                    <label for="email" class="block text-gray-700 mb-2">Correo Electrónico <span class="text-red-500">*</span></label>
+                                    <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                                           id="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
+                                </div>
+                                <div class="w-full md:w-1/2 px-3">
+                                    <label for="password" class="block text-gray-700 mb-2">Contraseña <span class="text-red-500">*</span></label>
+                                    <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                                           id="password" name="password" required>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap -mx-3 mb-4">
+                                <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                    <label for="rol" class="block text-gray-700 mb-2">Rol <span class="text-red-500">*</span></label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                                            id="rol" name="rol" required>
                                         <option value="doctor" <?php echo (isset($rol) && $rol === 'doctor') ? 'selected' : ''; ?>>Doctor</option>
                                         <option value="admin" <?php echo (isset($rol) && $rol === 'admin') ? 'selected' : ''; ?>>Administrador</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" id="activo" name="activo" <?php echo (!isset($activo) || $activo) ? 'checked' : ''; ?>>
-                                        <label class="form-check-label" for="activo">
+                                <div class="w-full md:w-1/2 px-3">
+                                    <div class="flex items-center mt-8">
+                                        <input class="mr-2 h-5 w-5" type="checkbox" id="activo" name="activo" 
+                                               <?php echo (!isset($activo) || $activo) ? 'checked' : ''; ?>>
+                                        <label class="text-gray-700" for="activo">
                                             Cuenta activa
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="gestionar_doctores.php" class="btn btn-secondary">
+                            <div class="flex justify-end">
+                                <a href="gestionar_doctores.php" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600">
                                     <i class="bi bi-x-circle"></i> Cancelar
                                 </a>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">
                                     <i class="bi bi-save"></i> Guardar
                                 </button>
                             </div>
@@ -319,7 +341,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Alpine.js para interactividad, alternativa ligera a jQuery/Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
 <?php

@@ -36,203 +36,77 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Doctores - Panel de Administración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2c6e8f',
+                        secondary: '#48a5c5',
+                        accent: '#e9f5fb',
+                        pending: '#7c97ab',
+                        approved: '#4a8573',
+                        rejected: '#a17a7a',
+                        light: '#f8f9fa',
+                        dark: '#345464',
+                        users: '#5a7d9a',
+                        admin: '#3d4a54',
+                        active: '#4a8573',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/public/assets/css/admin-style.css">
     <style>
-        :root {
-            --color-primary: #2c6e8f;
-            --color-secondary: #48a5c5;
-            --color-accent: #e9f5fb;
-            --color-pending: #7c97ab;
-            --color-approved: #4a8573;
-            --color-rejected: #a17a7a;
-            --color-light: #f8f9fa;
-            --color-dark: #345464;
-            --color-users: #5a7d9a;
-            --color-admin: #3d4a54;
-            --color-active: #4a8573;
-        }
-        
-        body {
-            background-color: var(--color-light);
-            color: var(--color-dark);
-        }
-        
-        .custom-navbar {
-            background-color: #ffffff;
-            color: var(--color-dark);
-            padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .custom-navbar img {
-            height: 50px;
-        }
-        
-        .card {
-            border-radius: 8px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
-            border: none;
-        }
-        
-        .card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .nav-pills .nav-link.active {
-            background-color: var(--color-primary);
-            color: white;
-        }
-        
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .admin-menu .nav-link {
-            color: var(--color-dark);
-            border-radius: 5px;
-            margin-bottom: 5px;
-            padding: 10px;
-        }
-        
-        .admin-menu .nav-link:hover, 
-        .admin-menu .nav-link.active {
-            background-color: var(--color-primary);
-            color: white;
-        }
-        
-        .admin-menu .nav-link i {
-            width: 25px;
-            text-align: center;
-        }
-        
-        .card-header-primary {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .card-header-users {
-            background-color: var(--color-users);
-            color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .btn-primary {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #1d5977;
-            border-color: #1d5977;
-        }
-        
-        .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-            color: white;
-        }
-        
-        .btn-new {
-            background-color: var(--color-approved);
-            border-color: var(--color-approved);
-            color: white;
-        }
-        
-        .btn-new:hover {
-            background-color: #3b7160;
-            border-color: #3b7160;
-        }
-        
-        .badge-admin {
-            background-color: var(--color-admin);
-        }
-        
-        .badge-doctor {
-            background-color: var(--color-primary);
-        }
-        
-        .badge-active {
-            background-color: var(--color-approved);
-        }
-        
-        .badge-inactive {
-            background-color: var(--color-rejected);
-        }
-        
-        .btn-activate {
-            background-color: var(--color-approved);
-            border-color: var(--color-approved);
-            color: white;
-        }
-        
-        .btn-activate:hover {
-            background-color: #3b7160;
-            border-color: #3b7160;
-        }
-        
-        .btn-deactivate {
-            background-color: var(--color-rejected);
-            border-color: var(--color-rejected);
-            color: white;
-        }
-        
-        .btn-deactivate:hover {
-            background-color: #855e5e;
-            border-color: #855e5e;
-        }
+        /* Los estilos específicos de esta vista pueden permanecer aquí */
     </style>
 </head>
-<body>
-    <nav class="custom-navbar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo">
-            <div class="d-flex align-items-center">
-                <span class="me-3 text-dark">
+<body class="bg-light">
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
+            <div class="flex items-center">
+                <span class="mr-4 text-dark">
                     <i class="bi bi-person-badge-fill"></i> 
                     Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
                 </span>
-                <a href="cerrar_sesion.php" class="btn btn-outline-primary">
+                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
                     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
+    <div class="container mx-auto px-4 mt-6">
+        <div class="flex flex-wrap">
             <!-- Menú lateral -->
-            <div class="col-md-3 col-lg-2">
-                <a href="admin_panel.php" class="btn btn-primary mb-3">
+            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
+                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-primary text-white rounded hover:bg-opacity-90">
                     <i class="bi bi-arrow-left"></i> Volver al Dashboard
                 </a>
-                <div class="card">
-                    <div class="card-header-primary">
-                        <h5 class="mb-0"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
+                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
                     </div>
-                    <div class="card-body p-0">
-                        <nav class="nav flex-column admin-menu p-2">
-                            <a class="nav-link" href="admin_panel.php">
-                                <i class="bi bi-house-door"></i> Dashboard
+                    <div class="p-0">
+                        <nav class="flex flex-col p-2">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="admin_panel.php">
+                                <i class="bi bi-house-door w-6 text-center"></i> Dashboard
                             </a>
-                            <a class="nav-link active" href="gestionar_doctores.php">
-                                <i class="bi bi-people"></i> Gestionar Doctores
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="formularios_pendientes.php">
+                                <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
                             </a>
-                            <a class="nav-link" href="formularios_pendientes.php">
-                                <i class="bi bi-file-earmark-text"></i> Formularios
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white bg-primary text-white" href="gestionar_doctores.php">
+                                <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
                             </a>
-                            <a class="nav-link" href="configuracion.php">
-                                <i class="bi bi-gear"></i> Configuración
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="estadisticas.php">
+                                <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
+                            </a>
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="configuracion.php">
+                                <i class="bi bi-gear w-6 text-center"></i> Configuración
                             </a>
                         </nav>
                     </div>
@@ -240,67 +114,67 @@ $result = $conn->query($sql);
             </div>
 
             <!-- Contenido principal -->
-            <div class="col-md-9 col-lg-10">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="bi bi-people"></i> Gestionar Doctores</h2>
-                    <a href="nuevo_doctor.php" class="btn btn-new">
+            <div class="w-full md:w-3/4 lg:w-5/6 content-container">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold"><i class="bi bi-people"></i> Gestionar Doctores</h2>
+                    <a href="nuevo_doctor.php" class="px-4 py-2 bg-approved text-white rounded hover:bg-opacity-90">
                         <i class="bi bi-person-plus"></i> Nuevo Doctor
                     </a>
                 </div>
                 
-                <div class="card">
-                    <div class="card-header-users">
-                        <h5 class="mb-0"><i class="bi bi-list-ul"></i> Lista de Doctores</h5>
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="bg-users text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-list-ul"></i> Lista de Doctores</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
+                    <div class="p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead class="bg-gray-100">
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Email</th>
-                                        <th>Rol</th>
-                                        <th>Estado</th>
-                                        <th>Fecha Creación</th>
-                                        <th>Última Sesión</th>
-                                        <th>Acciones</th>
+                                        <th class="px-4 py-2 text-left">ID</th>
+                                        <th class="px-4 py-2 text-left">Nombre</th>
+                                        <th class="px-4 py-2 text-left">Email</th>
+                                        <th class="px-4 py-2 text-left">Rol</th>
+                                        <th class="px-4 py-2 text-left">Estado</th>
+                                        <th class="px-4 py-2 text-left">Fecha Creación</th>
+                                        <th class="px-4 py-2 text-left">Última Sesión</th>
+                                        <th class="px-4 py-2 text-left">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php while ($row = $result->fetch_assoc()): ?>
-                                    <tr>
-                                        <td><?php echo $row['id']; ?></td>
-                                        <td><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                        <td>
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="px-4 py-3"><?php echo $row['id']; ?></td>
+                                        <td class="px-4 py-3"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></td>
+                                        <td class="px-4 py-3"><?php echo htmlspecialchars($row['email']); ?></td>
+                                        <td class="px-4 py-3">
                                             <?php if ($row['rol'] === 'admin'): ?>
-                                                <span class="badge badge-admin">Administrador</span>
+                                                <span class="inline-block px-2 py-1 text-xs text-white bg-admin rounded">Administrador</span>
                                             <?php else: ?>
-                                                <span class="badge badge-doctor">Doctor</span>
+                                                <span class="inline-block px-2 py-1 text-xs text-white bg-primary rounded">Doctor</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
+                                        <td class="px-4 py-3">
                                             <?php if ($row['activo']): ?>
-                                                <span class="badge badge-active">Activo</span>
+                                                <span class="inline-block px-2 py-1 text-xs text-white bg-approved rounded">Activo</span>
                                             <?php else: ?>
-                                                <span class="badge badge-inactive">Inactivo</span>
+                                                <span class="inline-block px-2 py-1 text-xs text-white bg-rejected rounded">Inactivo</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
-                                        <td>
+                                        <td class="px-4 py-3"><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
+                                        <td class="px-4 py-3">
                                             <?php 
                                             if ($row['ultima_sesion']) {
                                                 echo date('d/m/Y H:i', strtotime($row['ultima_sesion']));
                                             } else {
-                                                echo '<span class="text-muted">Nunca</span>';
+                                                echo '<span class="text-gray-500">Nunca</span>';
                                             }
                                             ?>
                                         </td>
-                                        <td>
+                                        <td class="px-4 py-3">
                                             <?php if ($row['id'] !== $_SESSION['doctor_id']): // No permitir desactivar tu propia cuenta ?>
                                                 <a href="gestionar_doctores.php?toggle_id=<?php echo $row['id']; ?>&estado=<?php echo $row['activo']; ?>" 
-                                                class="btn btn-sm <?php echo $row['activo'] ? 'btn-deactivate' : 'btn-activate'; ?>">
+                                                class="inline-block px-2 py-1 text-xs text-white rounded mr-1 <?php echo $row['activo'] ? 'bg-rejected' : 'bg-approved'; ?>">
                                                     <?php if ($row['activo']): ?>
                                                         <i class="bi bi-person-x"></i> Desactivar
                                                     <?php else: ?>
@@ -309,7 +183,7 @@ $result = $conn->query($sql);
                                                 </a>
                                             <?php endif; ?>
                                             
-                                            <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                            <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" class="inline-block px-2 py-1 text-xs text-white bg-primary rounded">
                                                 <i class="bi bi-pencil"></i> Editar
                                             </a>
                                         </td>
@@ -320,7 +194,7 @@ $result = $conn->query($sql);
                         </div>
 
                         <?php if ($result->num_rows === 0): ?>
-                        <div class="alert alert-info">
+                        <div class="p-4 mt-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700">
                             <i class="bi bi-info-circle"></i> No hay doctores registrados.
                         </div>
                         <?php endif; ?>
@@ -330,7 +204,8 @@ $result = $conn->query($sql);
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Alpine.js para interactividad, alternativa ligera a jQuery/Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
 <?php

@@ -35,27 +35,32 @@ $doctores = $result_doctores->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2c6e8f',
+                        secondary: '#48a5c5',
+                        accent: '#e9f5fb',
+                        pending: '#7c97ab',
+                        approved: '#4a8573',
+                        rejected: '#a17a7a',
+                        light: '#f8f9fa',
+                        dark: '#345464',
+                        users: '#5a7d9a',
+                        admin: '#3d4a54',
+                        active: '#4a8573',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/public/assets/css/admin-style.css">
     <style>
-        :root {
-            --color-primary: #2c6e8f;
-            --color-secondary: #48a5c5;
-            --color-accent: #e9f5fb;
-            --color-pending: #7c97ab;
-            --color-approved: #4a8573;
-            --color-rejected: #a17a7a;
-            --color-light: #f8f9fa;
-            --color-dark: #345464;
-            --color-users: #5a7d9a;
-            --color-admin: #3d4a54;
-            --color-active: #4a8573;
-        }
-        
-        body {
-            background-color: var(--color-light);
-            color: var(--color-dark);
-        }
+        /* Eliminar estas líneas porque ya están en admin-style.css */
         
         .custom-navbar {
             background-color: #ffffff;
@@ -246,43 +251,46 @@ $doctores = $result_doctores->fetch_assoc();
         }
     </style>
 </head>
-<body>
-    <nav class="custom-navbar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo">
-            <div class="d-flex align-items-center">
-                <span class="me-3 text-dark">
+<body class="bg-light">
+    <nav class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
+            <div class="flex items-center">
+                <span class="mr-4 text-dark">
                     <i class="bi bi-person-badge-fill"></i> 
                     Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
                 </span>
-                <a href="cerrar_sesion.php" class="btn btn-outline-primary">
+                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
                     <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
+    <div class="container mx-auto px-4 mt-6">
+        <div class="flex flex-wrap">
             <!-- Menú lateral -->
-            <div class="col-md-3 col-lg-2">
-                <div class="card">
-                    <div class="card-header-primary">
-                        <h5 class="mb-0"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
+            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
+                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
                     </div>
-                    <div class="card-body p-0">
-                        <nav class="nav flex-column admin-menu p-2">
-                            <a class="nav-link active" href="admin_panel.php">
-                                <i class="bi bi-house-door"></i> Dashboard
+                    <div class="p-0">
+                        <nav class="flex flex-col p-2">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white bg-primary text-white" href="admin_panel.php">
+                                <i class="bi bi-house-door w-6 text-center"></i> Dashboard
                             </a>
-                            <a class="nav-link" href="gestionar_doctores.php">
-                                <i class="bi bi-people"></i> Gestionar Doctores
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="formularios_pendientes.php">
+                                <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
                             </a>
-                            <a class="nav-link" href="formularios_pendientes.php">
-                                <i class="bi bi-file-earmark-text"></i> Formularios
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="gestionar_doctores.php">
+                                <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
                             </a>
-                            <a class="nav-link" href="configuracion.php">
-                                <i class="bi bi-gear"></i> Configuración
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="estadisticas.php">
+                                <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
+                            </a>
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="configuracion.php">
+                                <i class="bi bi-gear w-6 text-center"></i> Configuración
                             </a>
                         </nav>
                     </div>
@@ -290,43 +298,43 @@ $doctores = $result_doctores->fetch_assoc();
             </div>
 
             <!-- Contenido principal -->
-            <div class="col-md-9 col-lg-10">
-                <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard de Administración</h2>
+            <div class="w-full md:w-3/4 lg:w-5/6 content-container">
+                <h2 class="mb-4 text-xl font-bold"><i class="bi bi-speedometer2"></i> Dashboard de Administración</h2>
                 
                 <!-- Resumen -->
-                <div class="row mb-4">
+                <div class="flex flex-wrap -mx-2 mb-6">
                     <!-- Estadísticas de formularios -->
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-header-primary">
-                                <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Formularios</h5>
+                    <div class="w-full md:w-1/2 px-2 mb-4">
+                        <div class="bg-white rounded-lg shadow-sm h-full">
+                            <div class="bg-primary text-white p-4 rounded-t-lg">
+                                <h5 class="m-0 font-medium"><i class="bi bi-file-earmark-text"></i> Formularios</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-pending">
-                                            <i class="bi bi-hourglass-split fs-3"></i>
+                            <div class="p-4">
+                                <div class="flex flex-wrap -mx-2">
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-pending text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-hourglass-split text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $conteo['pendientes']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $conteo['pendientes']; ?></h3>
                                         <p>Pendientes</p>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-approved">
-                                            <i class="bi bi-check-circle fs-3"></i>
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-approved text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-check-circle text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $conteo['aprobados']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $conteo['aprobados']; ?></h3>
                                         <p>Aprobados</p>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-rejected">
-                                            <i class="bi bi-x-circle fs-3"></i>
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-rejected text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-x-circle text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $conteo['rechazados']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $conteo['rechazados']; ?></h3>
                                         <p>Rechazados</p>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="formularios_pendientes.php" class="btn btn-primary">
+                                    <a href="formularios_pendientes.php" class="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">
                                         <i class="bi bi-arrow-right"></i> Ver formularios
                                     </a>
                                 </div>
@@ -335,37 +343,37 @@ $doctores = $result_doctores->fetch_assoc();
                     </div>
                     
                     <!-- Estadísticas de doctores -->
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-header-users">
-                                <h5 class="mb-0"><i class="bi bi-people"></i> Usuarios</h5>
+                    <div class="w-full md:w-1/2 px-2 mb-4">
+                        <div class="bg-white rounded-lg shadow-sm h-full">
+                            <div class="bg-users text-white p-4 rounded-t-lg">
+                                <h5 class="m-0 font-medium"><i class="bi bi-people"></i> Usuarios</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-users">
-                                            <i class="bi bi-person-check fs-3"></i>
+                            <div class="p-4">
+                                <div class="flex flex-wrap -mx-2">
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-users text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-person-check text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $doctores['total_doctores']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $doctores['total_doctores']; ?></h3>
                                         <p>Total Usuarios</p>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-admin">
-                                            <i class="bi bi-person-lock fs-3"></i>
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-admin text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-person-lock text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $doctores['total_admins']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $doctores['total_admins']; ?></h3>
                                         <p>Administradores</p>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="icon-box icon-active">
-                                            <i class="bi bi-person-check fs-3"></i>
+                                    <div class="w-1/3 px-2 text-center">
+                                        <div class="flex items-center justify-center bg-active text-white p-4 rounded-lg mb-4">
+                                            <i class="bi bi-person-check text-2xl"></i>
                                         </div>
-                                        <h3><?php echo $doctores['activos']; ?></h3>
+                                        <h3 class="text-xl font-bold"><?php echo $doctores['activos']; ?></h3>
                                         <p>Activos</p>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="gestionar_doctores.php" class="btn btn-users">
+                                    <a href="gestionar_doctores.php" class="inline-block px-4 py-2 bg-users text-white rounded hover:bg-opacity-90">
                                         <i class="bi bi-person-plus"></i> Gestionar doctores
                                     </a>
                                 </div>
@@ -375,33 +383,33 @@ $doctores = $result_doctores->fetch_assoc();
                 </div>
                 
                 <!-- Acciones rápidas -->
-                <div class="card mb-4">
-                    <div class="card-header-primary">
-                        <h5 class="mb-0"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
+                <div class="bg-white rounded-lg shadow-sm mb-6">
+                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                        <h5 class="m-0 font-medium"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <a href="nuevo_doctor.php" class="btn action-btn action-btn-new w-100 h-100 d-flex flex-column justify-content-center align-items-center p-4">
-                                    <i class="bi bi-person-plus fs-1"></i>
+                    <div class="p-4">
+                        <div class="flex flex-wrap -mx-2">
+                            <div class="w-full md:w-1/4 px-2 mb-4">
+                                <a href="nuevo_doctor.php" class="flex flex-col items-center justify-center p-6 bg-approved text-white rounded-lg border-l-4 border-approved-dark h-full hover:shadow-lg transition-shadow">
+                                    <i class="bi bi-person-plus text-4xl"></i>
                                     <span class="mt-2">Nuevo Doctor</span>
                                 </a>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <a href="formularios_pendientes.php" class="btn action-btn action-btn-pending w-100 h-100 d-flex flex-column justify-content-center align-items-center p-4">
-                                    <i class="bi bi-hourglass-split fs-1"></i>
+                            <div class="w-full md:w-1/4 px-2 mb-4">
+                                <a href="formularios_pendientes.php" class="flex flex-col items-center justify-center p-6 bg-pending text-white rounded-lg border-l-4 border-pending-dark h-full hover:shadow-lg transition-shadow">
+                                    <i class="bi bi-hourglass-split text-4xl"></i>
                                     <span class="mt-2">Pendientes</span>
                                 </a>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <a href="estadisticas.php" class="btn action-btn action-btn-stats w-100 h-100 d-flex flex-column justify-content-center align-items-center p-4">
-                                    <i class="bi bi-bar-chart fs-1"></i>
+                            <div class="w-full md:w-1/4 px-2 mb-4">
+                                <a href="estadisticas.php" class="flex flex-col items-center justify-center p-6 bg-users text-white rounded-lg border-l-4 border-users-dark h-full hover:shadow-lg transition-shadow">
+                                    <i class="bi bi-bar-chart text-4xl"></i>
                                     <span class="mt-2">Estadísticas</span>
                                 </a>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <a href="configuracion.php" class="btn action-btn action-btn-config w-100 h-100 d-flex flex-column justify-content-center align-items-center p-4">
-                                    <i class="bi bi-gear fs-1"></i>
+                            <div class="w-full md:w-1/4 px-2 mb-4">
+                                <a href="configuracion.php" class="flex flex-col items-center justify-center p-6 bg-admin text-white rounded-lg border-l-4 border-admin-dark h-full hover:shadow-lg transition-shadow">
+                                    <i class="bi bi-gear text-4xl"></i>
                                     <span class="mt-2">Configuración</span>
                                 </a>
                             </div>
@@ -412,7 +420,8 @@ $doctores = $result_doctores->fetch_assoc();
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Alpine.js para interactividad, alternativa ligera a jQuery/Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
 <?php
