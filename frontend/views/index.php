@@ -25,7 +25,7 @@
     <style>
       /* Estilos generales del body */
       body {
-        background: #ffffff;
+        background:rgb(0, 0, 0);
         margin: 0;
         font-family: 'Poppins', sans-serif;
         color: #333;
@@ -223,11 +223,40 @@
           transform: translateY(0);
       }
   }
+
+  /* Estilo para el botón de inicio de sesión */
+  .login-button {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      padding: 0.5rem 1rem;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      color: #374151;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-button:hover {
+      background-color: #f3f4f6;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+  }
+
+  .login-button i {
+      font-size: 1rem;
+  }
     </style>
   </head>
   <body>
   <nav class="custom-navbar">
-    <img src="/public/assets/img/logo2.png" alt="Logo">
+    <img src="/public/assets/img/logo.jpg" alt="Logo">
   </nav>
 
   <div class="container animate__animated animate__fadeIn">  
@@ -237,8 +266,13 @@
     <!-- Sección de Datos Personales -->
     <div class="section">
     <h4 class="titulo-consentimiento">
-  Consentimiento de tratamiento
-</h4>
+      Consentimiento de tratamiento
+    </h4>
+    <div class="text-center mb-4">
+      <a href="login.php" class="inline-flex items-center text-sm text-gray-600 hover:text-gray-800 transition-colors">
+        <i class="bi bi-person-circle mr-1"></i> Acceso para doctores
+      </a>
+    </div>
 
     <h3 class="text-primary mb-4">Datos Personales</h3>
 
