@@ -41,227 +41,59 @@ $doctores = $result_doctores->fetch_assoc();
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2c6e8f',
-                        secondary: '#48a5c5',
-                        accent: '#e9f5fb',
-                        pending: '#7c97ab',
-                        approved: '#4a8573',
-                        rejected: '#a17a7a',
-                        light: '#f8f9fa',
-                        dark: '#345464',
-                        users: '#5a7d9a',
-                        admin: '#3d4a54',
-                        active: '#4a8573',
+                        blue: {
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb'
+                        },
+                        green: {
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80'
+                        },
+                        red: {
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171'
+                        },
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151'
+                        }
                     }
                 }
             }
         }
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/public/assets/css/admin-style.css">
     <style>
-        /* Eliminar estas líneas porque ya están en admin-style.css */
-        
-        .custom-navbar {
-            background-color: #ffffff;
-            color: var(--color-dark);
-            padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .custom-navbar img {
-            height: 50px;
-        }
-        
-        .card {
-            border-radius: 8px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
-            border: none;
-        }
-        
-        .card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .nav-pills .nav-link.active {
-            background-color: var(--color-primary);
-            color: white;
-        }
-        
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .admin-menu .nav-link {
-            color: var(--color-dark);
-            border-radius: 5px;
-            margin-bottom: 5px;
-            padding: 10px;
-        }
-        
-        .admin-menu .nav-link:hover, 
-        .admin-menu .nav-link.active {
-            background-color: var(--color-primary);
-            color: white;
-        }
-        
-        .admin-menu .nav-link i {
-            width: 25px;
-            text-align: center;
-        }
-        
-        .card-header-primary {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .card-header-users {
-            background-color: var(--color-users);
-            color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .btn-primary {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #1d5977;
-            border-color: #1d5977;
-        }
-        
-        .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-            color: white;
-        }
-        
-        .btn-users {
-            background-color: var(--color-users);
-            border-color: var(--color-users);
-            color: white;
-        }
-        
-        .btn-users:hover {
-            background-color: #486c89;
-            border-color: #486c89;
-            color: white;
-        }
-        
-        .icon-box {
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .icon-pending {
-            background-color: var(--color-pending);
-            color: white;
-        }
-        
-        .icon-approved {
-            background-color: var(--color-approved);
-            color: white;
-        }
-        
-        .icon-rejected {
-            background-color: var(--color-rejected);
-            color: white;
-        }
-        
-        .icon-users {
-            background-color: var(--color-users);
-            color: white;
-        }
-        
-        .icon-admin {
-            background-color: var(--color-admin);
-            color: white;
-        }
-        
-        .icon-active {
-            background-color: var(--color-active);
-            color: white;
-        }
-        
-        .action-btn {
-            height: 100%;
-            transition: all 0.2s;
-            border-radius: 8px;
-            border-left: 5px solid rgba(0,0,0,0.2);
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .action-btn-new {
-            background-color: var(--color-approved);
-            border-color: var(--color-approved);
-        }
-        
-        .action-btn-new:hover {
-            background-color: #3b7160;
-            border-color: #3b7160;
-        }
-        
-        .action-btn-pending {
-            background-color: var(--color-pending);
-            border-color: var(--color-pending);
-        }
-        
-        .action-btn-pending:hover {
-            background-color: #617d90;
-            border-color: #617d90;
-        }
-        
-        .action-btn-stats {
-            background-color: var(--color-users);
-            border-color: var(--color-users);
-        }
-        
-        .action-btn-stats:hover {
-            background-color: #486c89;
-            border-color: #486c89;
-        }
-        
-        .action-btn-config {
-            background-color: var(--color-admin);
-            border-color: var(--color-admin);
-        }
-        
-        .action-btn-config:hover {
-            background-color: #2e3841;
-            border-color: #2e3841;
+        [x-cloak] { 
+            display: none !important; 
         }
     </style>
 </head>
-<body class="bg-light">
-    <nav class="bg-white shadow-md py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
+<body class="bg-gray-50">
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
             <div class="flex items-center">
-                <span class="mr-4 text-dark">
+                <span class="mr-4 text-gray-600">
                     <i class="bi bi-person-badge-fill"></i> 
                     Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
                 </span>
-                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-400 text-blue-500 rounded-md hover:bg-blue-400 hover:text-white transition-colors">
+                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
@@ -272,24 +104,24 @@ $doctores = $result_doctores->fetch_assoc();
             <!-- Menú lateral -->
             <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
                 <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
-                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                    <div class="bg-blue-400 text-white p-4 rounded-t-lg">
                         <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
                     </div>
                     <div class="p-0">
                         <nav class="flex flex-col p-2">
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white bg-primary text-white" href="admin_panel.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white bg-blue-300 text-white" href="admin_panel.php">
                                 <i class="bi bi-house-door w-6 text-center"></i> Dashboard
                             </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="formularios_pendientes.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="formularios_pendientes.php">
                                 <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
                             </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="gestionar_doctores.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="gestionar_doctores.php">
                                 <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
                             </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="estadisticas.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="estadisticas.php">
                                 <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
                             </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="configuracion.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="configuracion.php">
                                 <i class="bi bi-gear w-6 text-center"></i> Configuración
                             </a>
                         </nav>
@@ -306,27 +138,27 @@ $doctores = $result_doctores->fetch_assoc();
                     <!-- Estadísticas de formularios -->
                     <div class="w-full md:w-1/2 px-2 mb-4">
                         <div class="bg-white rounded-lg shadow-sm h-full">
-                            <div class="bg-primary text-white p-4 rounded-t-lg">
+                            <div class="bg-blue-400 text-white p-4 rounded-t-lg">
                                 <h5 class="m-0 font-medium"><i class="bi bi-file-earmark-text"></i> Formularios</h5>
                             </div>
                             <div class="p-4">
                                 <div class="flex flex-wrap -mx-2">
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-pending text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-blue-300 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-hourglass-split text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $conteo['pendientes']; ?></h3>
                                         <p>Pendientes</p>
                                     </div>
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-approved text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-green-300 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-check-circle text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $conteo['aprobados']; ?></h3>
                                         <p>Aprobados</p>
                                     </div>
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-rejected text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-red-300 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-x-circle text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $conteo['rechazados']; ?></h3>
@@ -334,7 +166,7 @@ $doctores = $result_doctores->fetch_assoc();
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="formularios_pendientes.php" class="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">
+                                    <a href="formularios_pendientes.php" class="inline-block px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
                                         <i class="bi bi-arrow-right"></i> Ver formularios
                                     </a>
                                 </div>
@@ -345,27 +177,27 @@ $doctores = $result_doctores->fetch_assoc();
                     <!-- Estadísticas de doctores -->
                     <div class="w-full md:w-1/2 px-2 mb-4">
                         <div class="bg-white rounded-lg shadow-sm h-full">
-                            <div class="bg-users text-white p-4 rounded-t-lg">
+                            <div class="bg-blue-400 text-white p-4 rounded-t-lg">
                                 <h5 class="m-0 font-medium"><i class="bi bi-people"></i> Usuarios</h5>
                             </div>
                             <div class="p-4">
                                 <div class="flex flex-wrap -mx-2">
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-users text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-blue-300 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-person-check text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $doctores['total_doctores']; ?></h3>
                                         <p>Total Usuarios</p>
                                     </div>
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-admin text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-blue-500 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-person-lock text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $doctores['total_admins']; ?></h3>
                                         <p>Administradores</p>
                                     </div>
                                     <div class="w-1/3 px-2 text-center">
-                                        <div class="flex items-center justify-center bg-active text-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-center justify-center bg-green-300 text-white p-4 rounded-lg mb-4">
                                             <i class="bi bi-person-check text-2xl"></i>
                                         </div>
                                         <h3 class="text-xl font-bold"><?php echo $doctores['activos']; ?></h3>
@@ -373,7 +205,7 @@ $doctores = $result_doctores->fetch_assoc();
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="gestionar_doctores.php" class="inline-block px-4 py-2 bg-users text-white rounded hover:bg-opacity-90">
+                                    <a href="gestionar_doctores.php" class="inline-block px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
                                         <i class="bi bi-person-plus"></i> Gestionar doctores
                                     </a>
                                 </div>
@@ -384,31 +216,31 @@ $doctores = $result_doctores->fetch_assoc();
                 
                 <!-- Acciones rápidas -->
                 <div class="bg-white rounded-lg shadow-sm mb-6">
-                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                    <div class="bg-blue-400 text-white p-4 rounded-t-lg">
                         <h5 class="m-0 font-medium"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
                     </div>
                     <div class="p-4">
                         <div class="flex flex-wrap -mx-2">
                             <div class="w-full md:w-1/4 px-2 mb-4">
-                                <a href="nuevo_doctor.php" class="flex flex-col items-center justify-center p-6 bg-approved text-white rounded-lg border-l-4 border-approved-dark h-full hover:shadow-lg transition-shadow">
+                                <a href="nuevo_doctor.php" class="flex flex-col items-center justify-center p-6 bg-green-300 text-white rounded-lg border-l-4 border-green-400 h-full hover:shadow-lg transition-shadow">
                                     <i class="bi bi-person-plus text-4xl"></i>
                                     <span class="mt-2">Nuevo Doctor</span>
                                 </a>
                             </div>
                             <div class="w-full md:w-1/4 px-2 mb-4">
-                                <a href="formularios_pendientes.php" class="flex flex-col items-center justify-center p-6 bg-pending text-white rounded-lg border-l-4 border-pending-dark h-full hover:shadow-lg transition-shadow">
+                                <a href="formularios_pendientes.php" class="flex flex-col items-center justify-center p-6 bg-blue-300 text-white rounded-lg border-l-4 border-blue-400 h-full hover:shadow-lg transition-shadow">
                                     <i class="bi bi-hourglass-split text-4xl"></i>
                                     <span class="mt-2">Pendientes</span>
                                 </a>
                             </div>
                             <div class="w-full md:w-1/4 px-2 mb-4">
-                                <a href="estadisticas.php" class="flex flex-col items-center justify-center p-6 bg-users text-white rounded-lg border-l-4 border-users-dark h-full hover:shadow-lg transition-shadow">
+                                <a href="estadisticas.php" class="flex flex-col items-center justify-center p-6 bg-blue-300 text-white rounded-lg border-l-4 border-blue-400 h-full hover:shadow-lg transition-shadow">
                                     <i class="bi bi-bar-chart text-4xl"></i>
                                     <span class="mt-2">Estadísticas</span>
                                 </a>
                             </div>
                             <div class="w-full md:w-1/4 px-2 mb-4">
-                                <a href="configuracion.php" class="flex flex-col items-center justify-center p-6 bg-admin text-white rounded-lg border-l-4 border-admin-dark h-full hover:shadow-lg transition-shadow">
+                                <a href="configuracion.php" class="flex flex-col items-center justify-center p-6 bg-blue-400 text-white rounded-lg border-l-4 border-blue-500 h-full hover:shadow-lg transition-shadow">
                                     <i class="bi bi-gear text-4xl"></i>
                                     <span class="mt-2">Configuración</span>
                                 </a>
@@ -420,7 +252,7 @@ $doctores = $result_doctores->fetch_assoc();
         </div>
     </div>
 
-    <!-- Alpine.js para interactividad, alternativa ligera a jQuery/Bootstrap JS -->
+    <!-- Alpine.js para interactividad -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>

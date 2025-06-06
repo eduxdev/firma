@@ -10,9 +10,47 @@ if (!isset($_SESSION['doctor_id'])) {
 // Configuración de la base de datos
 require_once '../../backend/db/conection.php';
 
-// Obtener formularios aprobados
-$sql = "SELECT id, nombre, apellido, fecha_creacion, fecha_revision FROM formularios_consentimiento WHERE estado_revision = 'aprobado' ORDER BY fecha_revision DESC";
-$result = $conn->query($sql);
+// Obtener término de búsqueda
+$busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+
+// Configuración de paginación
+$registros_por_pagina = 10;
+$pagina_actual = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
+$offset = ($pagina_actual - 1) * $registros_por_pagina;
+
+// Obtener total de registros para la paginación con búsqueda
+$sql_total = "SELECT COUNT(*) as total FROM formularios_consentimiento 
+              WHERE estado_revision = 'aprobado'";
+if (!empty($busqueda)) {
+    $busqueda_param = "%$busqueda%";
+    $sql_total .= " AND (CONCAT(nombre, ' ', apellido) LIKE ?)";
+}
+$stmt_total = $conn->prepare($sql_total);
+if (!empty($busqueda)) {
+    $stmt_total->bind_param("s", $busqueda_param);
+}
+$stmt_total->execute();
+$result_total = $stmt_total->get_result();
+$total_registros = $result_total->fetch_assoc()['total'];
+$total_paginas = ceil($total_registros / $registros_por_pagina);
+
+// Obtener formularios aprobados con búsqueda
+$sql = "SELECT id, nombre, apellido, fecha_creacion, fecha_revision 
+        FROM formularios_consentimiento 
+        WHERE estado_revision = 'aprobado'";
+if (!empty($busqueda)) {
+    $sql .= " AND (CONCAT(nombre, ' ', apellido) LIKE ?)";
+}
+$sql .= " ORDER BY fecha_revision DESC LIMIT ? OFFSET ?";
+
+$stmt = $conn->prepare($sql);
+if (!empty($busqueda)) {
+    $stmt->bind_param("sii", $busqueda_param, $registros_por_pagina, $offset);
+} else {
+    $stmt->bind_param("ii", $registros_por_pagina, $offset);
+}
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Contar formularios por estado
 $sql_conteo = "SELECT 
@@ -30,242 +68,183 @@ $conteo = $result_conteo->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel del Doctor - Formularios Aprobados</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="//unpkg.com/alpinejs" defer></script>
     <style>
-        :root {
-            --color-primary: #2c6e8f;
-            --color-secondary: #48a5c5;
-            --color-accent: #e9f5fb;
-            --color-pending: #7c97ab;
-            --color-approved: #4a8573;
-            --color-rejected: #a17a7a;
-            --color-light: #f8f9fa;
-            --color-dark: #345464;
-        }
-        
-        body {
-            background-color: var(--color-light);
-            color: var(--color-dark);
-        }
-        
-        .custom-navbar {
-            background-color: #ffffff;
-            color: var(--color-dark);
-            padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .custom-navbar img {
-            height: 50px;
-        }
-        
-        .card {
-            border-radius: 8px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
-            border: none;
-        }
-        
-        .card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .card-pending {
-            background-color: var(--color-pending);
-            color: white;
-            border-left: 5px solid #5c7a91;
-        }
-        
-        .card-approved {
-            background-color: var(--color-approved);
-            color: white;
-            border-left: 5px solid #346755;
-        }
-        
-        .card-rejected {
-            background-color: var(--color-rejected);
-            color: white;
-            border-left: 5px solid #855e5e;
-        }
-        
-        .nav-pills .nav-link {
-            color: var(--color-dark);
-            padding: 8px 16px;
-            border-radius: 4px;
-        }
-        
-        .nav-pills .nav-link.active {
-            background-color: var(--color-primary);
-            color: white;
-        }
-        
-        .nav-pills .nav-link:hover:not(.active) {
-            background-color: var(--color-accent);
-        }
-        
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .btn-primary {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #1d5977;
-            border-color: #1d5977;
-        }
-        
-        .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        
-        .card-header-custom {
-            background-color: var(--color-approved);
-            color: white;
-            padding: 15px;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .btn-pdf {
-            background-color: var(--color-approved);
-            border-color: var(--color-approved);
-            color: white;
-        }
-        
-        .btn-pdf:hover {
-            background-color: #346755;
-            border-color: #346755;
-            color: white;
+        [x-cloak] { 
+            display: none !important; 
         }
     </style>
 </head>
-<body>
-    <nav class="custom-navbar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo">
-            <div class="d-flex align-items-center">
-                <span class="me-3 text-dark">Dr. <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></span>
-                <a href="cerrar_sesion.php" class="btn btn-outline-primary">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+<body class="bg-gray-50" x-data="{ showModal: false, formId: null }">
+    <!-- Modal de confirmación -->
+    <div x-cloak x-show="showModal" 
+         class="fixed inset-0 z-50">
+        <!-- Overlay -->
+        <div class="fixed inset-0 bg-black bg-opacity-50" @click="showModal = false"></div>
+
+        <!-- Modal -->
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto relative"
+                 @click.away="showModal = false">
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                        <i class="bi bi-exclamation-triangle text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Confirmar Eliminación</h3>
+                    <p class="text-sm text-gray-500 mb-6">¿Estás seguro de que deseas eliminar este formulario? Esta acción no se puede deshacer.</p>
+                </div>
+                <div class="flex justify-center space-x-3">
+                    <form action="borrar_formulario.php" method="POST">
+                        <input type="hidden" name="id" :value="formId">
+                        <input type="hidden" name="confirmar" value="1">
+                        <button type="submit" 
+                                class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-400 rounded-md hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500">
+                            Eliminar
+                        </button>
+                    </form>
+                    <button @click="showModal = false" 
+                            class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
+            <div class="flex items-center">
+                <span class="mr-4 text-gray-700">Dr. <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></span>
+                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors">
+                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container mx-auto px-4 mt-8">
         <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
-        <div class="mb-4">
-            <a href="admin_panel.php" class="btn btn-primary">
-                <i class="bi bi-arrow-left"></i> Volver al Dashboard
+        <div class="mb-6">
+            <a href="admin_panel.php" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                <i class="bi bi-arrow-left mr-2"></i> Volver al Dashboard
             </a>
         </div>
         <?php endif; ?>
         
         <!-- Resumen de formularios -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <a href="formularios_pendientes.php" class="text-decoration-none">
-                    <div class="card card-pending">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-hourglass-split me-2"></i>Pendientes</h5>
-                            <p class="card-text display-6"><?php echo $conteo['pendientes']; ?></p>
-                        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="formularios_pendientes.php" class="block">
+                <div class="bg-blue-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="p-6 border-l-4 border-blue-600">
+                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-hourglass-split mr-2"></i>Pendientes</h5>
+                        <p class="text-4xl font-bold"><?php echo $conteo['pendientes']; ?></p>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="formularios_aprobados.php" class="text-decoration-none">
-                    <div class="card card-approved">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-check-circle me-2"></i>Aprobados</h5>
-                            <p class="card-text display-6"><?php echo $conteo['aprobados']; ?></p>
-                        </div>
+                </div>
+            </a>
+            <a href="formularios_aprobados.php" class="block">
+                <div class="bg-green-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="p-6 border-l-4 border-green-600">
+                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-check-circle mr-2"></i>Aprobados</h5>
+                        <p class="text-4xl font-bold"><?php echo $conteo['aprobados']; ?></p>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="formularios_rechazados.php" class="text-decoration-none">
-                    <div class="card card-rejected">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-x-circle me-2"></i>Rechazados</h5>
-                            <p class="card-text display-6"><?php echo $conteo['rechazados']; ?></p>
-                        </div>
+                </div>
+            </a>
+            <a href="formularios_rechazados.php" class="block">
+                <div class="bg-red-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="p-6 border-l-4 border-red-600">
+                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-x-circle mr-2"></i>Rechazados</h5>
+                        <p class="text-4xl font-bold"><?php echo $conteo['rechazados']; ?></p>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
 
         <!-- Navegación de pestañas -->
-        <ul class="nav nav-pills mb-4">
-            <li class="nav-item">
-                <a class="nav-link" href="formularios_pendientes.php">
-                    <i class="bi bi-hourglass-split me-2"></i>Pendientes
+        <div class="flex flex-wrap items-center mb-6 border-b border-gray-200">
+            <nav class="flex space-x-4">
+                <a href="formularios_pendientes.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-t-md">
+                    <i class="bi bi-hourglass-split mr-2"></i>Pendientes
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="formularios_aprobados.php">
-                    <i class="bi bi-check-circle me-2"></i>Aprobados
+                <a href="formularios_aprobados.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-white bg-green-400 rounded-t-md">
+                    <i class="bi bi-check-circle mr-2"></i>Aprobados
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="formularios_rechazados.php">
-                    <i class="bi bi-x-circle me-2"></i>Rechazados
+                <a href="formularios_rechazados.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-t-md">
+                    <i class="bi bi-x-circle mr-2"></i>Rechazados
                 </a>
-            </li>
-            <li class="nav-item ms-auto">
-                <a class="nav-link" href="configuracion.php">
-                    <i class="bi bi-gear me-2"></i>Configuración
+            </nav>
+            <div class="ml-auto flex items-center space-x-4">
+                <!-- Campo de búsqueda -->
+                <form action="" method="GET" class="flex items-center">
+                    <div class="relative">
+                        <input type="text" 
+                               name="busqueda" 
+                               value="<?php echo htmlspecialchars($busqueda); ?>" 
+                               placeholder="Buscar por nombre..." 
+                               class="w-64 px-4 py-2 pr-10 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-3 text-gray-400 hover:text-gray-600">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <a href="configuracion.php" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md">
+                    <i class="bi bi-gear mr-2"></i>Configuración
                 </a>
-            </li>
-            <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
-            <li class="nav-item">
-                <a class="nav-link" href="admin_panel.php">
-                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
+                <a href="admin_panel.php" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md">
+                    <i class="bi bi-speedometer2 mr-2"></i>Dashboard
                 </a>
-            </li>
-            <?php endif; ?>
-        </ul>
-
-        <div class="card">
-            <div class="card-header-custom">
-                <h4><i class="bi bi-check-circle me-2"></i>Formularios Aprobados</h4>
+                <?php endif; ?>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="bg-green-400 text-white px-6 py-4 rounded-t-lg">
+                <h4 class="text-xl font-semibold"><i class="bi bi-check-circle mr-2"></i>Formularios Aprobados</h4>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Fecha de Creación</th>
-                                <th>Fecha de Aprobación</th>
-                                <th>Acciones</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Creación</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Aprobación</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             <?php while($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo $row['id']; ?></td>
-                                <td><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_revision'])); ?></td>
-                                <td>
-                                    <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i> Ver Detalles
-                                    </a>
-                                    <a href="generar_pdf.php?id=<?php echo $row['id']; ?>" class="btn btn-pdf btn-sm">
-                                        <i class="bi bi-file-pdf"></i> Generar PDF
-                                    </a>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?php echo date('d/m/Y H:i', strtotime($row['fecha_revision'])); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" 
+                                           class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                            <i class="bi bi-eye me-1"></i> Ver
+                                        </a>
+                                        <a href="generar_pdf.php?id=<?php echo $row['id']; ?>" 
+                                           target="_blank"
+                                           class="inline-flex items-center px-3 py-1.5 bg-green-400 text-white text-sm font-medium rounded-md hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                            <i class="bi bi-file-pdf me-1"></i> PDF
+                                        </a>
+                                        <button type="button" 
+                                                @click="showModal = true; formId = <?php echo $row['id']; ?>"
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-400 text-white text-sm font-medium rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition-colors">
+                                            <i class="bi bi-trash me-1"></i> Eliminar
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <?php endwhile; ?>
@@ -274,15 +253,40 @@ $conteo = $result_conteo->fetch_assoc();
                 </div>
 
                 <?php if ($result->num_rows == 0): ?>
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> No hay formularios aprobados.
+                <div class="bg-blue-50 text-blue-700 p-4 rounded-md mt-4">
+                    <i class="bi bi-info-circle mr-2"></i> No hay formularios aprobados.
                 </div>
+                <?php endif; ?>
+
+                <?php if ($total_paginas > 1): ?>
+                <nav class="flex justify-center mt-6" aria-label="Navegación de páginas">
+                    <ul class="flex space-x-2">
+                        <li>
+                            <a href="?pagina=<?php echo $pagina_actual - 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
+                               class="<?php echo ($pagina_actual <= 1) ? 'opacity-50 cursor-not-allowed' : ''; ?> px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                Anterior
+                            </a>
+                        </li>
+                        <?php for($i = 1; $i <= $total_paginas; $i++): ?>
+                        <li>
+                            <a href="?pagina=<?php echo $i; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
+                               class="<?php echo ($pagina_actual == $i) ? 'bg-blue-600 text-white' : 'text-blue-600 hover:bg-gray-50'; ?> px-3 py-2 text-sm font-medium border border-gray-300 rounded-md">
+                                <?php echo $i; ?>
+                            </a>
+                        </li>
+                        <?php endfor; ?>
+                        <li>
+                            <a href="?pagina=<?php echo $pagina_actual + 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
+                               class="<?php echo ($pagina_actual >= $total_paginas) ? 'opacity-50 cursor-not-allowed' : ''; ?> px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                Siguiente
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
                 <?php endif; ?>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <?php

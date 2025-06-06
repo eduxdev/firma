@@ -10,4 +10,4 @@ if (!isset($_SESSION['doctor_id'])) {
 // Redirigir a la página de formularios pendientes
 header('Location: formularios_pendientes.php');
 exit();
-?> 
+?>

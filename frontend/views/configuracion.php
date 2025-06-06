@@ -118,34 +118,49 @@ if (isset($_POST['cambiar_password'])) {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#2c6e8f',
-                        secondary: '#48a5c5',
-                        accent: '#e9f5fb',
-                        pending: '#7c97ab',
-                        approved: '#4a8573',
-                        rejected: '#a17a7a',
-                        light: '#f8f9fa',
-                        dark: '#345464',
-                        users: '#5a7d9a',
-                        admin: '#3d4a54',
-                        active: '#4a8573',
+                        blue: {
+                            400: '#60a5fa',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        },
+                        green: {
+                            400: '#4ade80',
+                            600: '#16a34a'
+                        },
+                        red: {
+                            400: '#f87171',
+                            600: '#dc2626'
+                        },
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827'
+                        }
                     }
                 }
             }
         }
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/public/assets/css/admin-style.css">
     <style>
-        /* Los estilos específicos de esta vista pueden permanecer aquí */
+        [x-cloak] { 
+            display: none !important; 
+        }
     </style>
 </head>
-<body class="bg-light">
-    <nav class="bg-white shadow-md py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
+<body class="bg-gray-50">
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
             <div class="flex items-center">
-                <span class="mr-4 text-dark">
+                <span class="mr-4 text-gray-700">
                     <?php if ($_SESSION['user_rol'] === 'admin'): ?>
                         <i class="bi bi-person-badge-fill"></i> 
                         Administrador: 
@@ -155,8 +170,8 @@ if (isset($_POST['cambiar_password'])) {
                     <?php endif; ?>
                     <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
                 </span>
-                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white rounded-md transition-colors">
+                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
                 </a>
             </div>
         </div>
@@ -167,17 +182,17 @@ if (isset($_POST['cambiar_password'])) {
             <!-- Menú lateral -->
             <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
                 <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-primary text-white rounded hover:bg-opacity-90">
+                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
                     <i class="bi bi-arrow-left"></i> Volver al Dashboard
                 </a>
                 <?php else: ?>
-                <a href="formularios_pendientes.php" class="inline-block px-4 py-2 mb-4 bg-primary text-white rounded hover:bg-opacity-90">
+                <a href="formularios_pendientes.php" class="inline-block px-4 py-2 mb-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
                     <i class="bi bi-arrow-left"></i> Volver a Formularios
                 </a>
                 <?php endif; ?>
                 
                 <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
-                    <div class="bg-primary text-white p-4 rounded-t-lg">
+                    <div class="bg-blue-600 text-white p-4 rounded-t-lg">
                         <h5 class="m-0 font-medium">
                             <?php if ($_SESSION['user_rol'] === 'admin'): ?>
                                 <i class="bi bi-speedometer2"></i> Panel Admin
@@ -189,20 +204,20 @@ if (isset($_POST['cambiar_password'])) {
                     <div class="p-0">
                         <nav class="flex flex-col p-2">
                             <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="admin_panel.php">
+                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="admin_panel.php">
                                     <i class="bi bi-house-door w-6 text-center"></i> Dashboard
                                 </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="formularios_pendientes.php">
+                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="formularios_pendientes.php">
                                     <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
                                 </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="gestionar_doctores.php">
+                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="gestionar_doctores.php">
                                     <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
                                 </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white" href="estadisticas.php">
+                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="estadisticas.php">
                                     <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
                                 </a>
                             <?php endif; ?>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-dark hover:bg-primary hover:text-white bg-primary text-white" href="configuracion.php">
+                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white bg-blue-600 text-white" href="configuracion.php">
                                 <i class="bi bi-gear w-6 text-center"></i> Configuración
                             </a>
                         </nav>
@@ -216,7 +231,7 @@ if (isset($_POST['cambiar_password'])) {
                 <nav class="flex mb-6" aria-label="breadcrumb">
                     <ol class="flex">
                         <li class="mr-2">
-                            <a href="admin_panel.php" class="text-primary hover:underline">Dashboard</a>
+                            <a href="admin_panel.php" class="text-blue-600 hover:underline">Dashboard</a>
                             <span class="mx-1 text-gray-500">/</span>
                         </li>
                         <li class="text-gray-600">Configuración</li>
@@ -228,7 +243,7 @@ if (isset($_POST['cambiar_password'])) {
 
                 <!-- Mensajes de éxito o error para actualización de perfil -->
                 <?php if (!empty($success_perfil)): ?>
-                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-approved text-approved rounded flex items-center">
+                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-400 text-green-700 rounded flex items-center">
                         <i class="bi bi-check-circle-fill mr-2"></i> <?php echo $success_perfil; ?>
                         <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
                             <i class="bi bi-x"></i>
@@ -237,7 +252,7 @@ if (isset($_POST['cambiar_password'])) {
                 <?php endif; ?>
                 
                 <?php if (!empty($error_perfil)): ?>
-                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-rejected text-rejected rounded flex items-center">
+                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-400 text-red-700 rounded flex items-center">
                         <i class="bi bi-exclamation-triangle-fill mr-2"></i> <?php echo $error_perfil; ?>
                         <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
                             <i class="bi bi-x"></i>
@@ -247,7 +262,7 @@ if (isset($_POST['cambiar_password'])) {
                 
                 <!-- Mensajes de éxito o error para cambio de contraseña -->
                 <?php if (!empty($success_password)): ?>
-                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-approved text-approved rounded flex items-center">
+                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-400 text-green-700 rounded flex items-center">
                         <i class="bi bi-check-circle-fill mr-2"></i> <?php echo $success_password; ?>
                         <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
                             <i class="bi bi-x"></i>
@@ -256,7 +271,7 @@ if (isset($_POST['cambiar_password'])) {
                 <?php endif; ?>
                 
                 <?php if (!empty($error_password)): ?>
-                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-rejected text-rejected rounded flex items-center">
+                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-400 text-red-700 rounded flex items-center">
                         <i class="bi bi-exclamation-triangle-fill mr-2"></i> <?php echo $error_password; ?>
                         <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
                             <i class="bi bi-x"></i>
@@ -268,15 +283,14 @@ if (isset($_POST['cambiar_password'])) {
                     <div class="w-full md:w-1/2 px-3 mb-6">
                         <!-- Información del Usuario -->
                         <div class="bg-white rounded-lg shadow-sm mb-6">
-                            <div class="bg-users text-white p-4 rounded-t-lg">
+                            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
                                 <h5 class="m-0 font-medium"><i class="bi bi-person-circle"></i> Información del Usuario</h5>
                             </div>
                             <div class="p-6">
                                 <p class="mb-2"><strong>Nombre:</strong> <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></p>
-                                <p class="mb-2"><strong>Rol:</strong> <?php echo $_SESSION['user_rol'] === 'admin' ? 'Administrador' : 'Doctor'; ?></p>
-                                <p class="mb-4"><strong>ID:</strong> <?php echo $_SESSION['doctor_id']; ?></p>
+                                <p class="mb-4"><strong>Rol:</strong> <?php echo $_SESSION['user_rol'] === 'admin' ? 'Administrador' : 'Doctor'; ?></p>
                                 <div class="w-full">
-                                    <button class="w-full px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90" 
+                                    <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
                                             onclick="document.getElementById('editarPerfilModal').classList.toggle('hidden')">
                                         <i class="bi bi-pencil-square"></i> Editar Perfil
                                     </button>
@@ -288,7 +302,7 @@ if (isset($_POST['cambiar_password'])) {
                     <div class="w-full md:w-1/2 px-3 mb-6">
                         <!-- Seguridad -->
                         <div class="bg-white rounded-lg shadow-sm mb-6">
-                            <div class="bg-admin text-white p-4 rounded-t-lg">
+                            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
                                 <h5 class="m-0 font-medium"><i class="bi bi-shield-lock"></i> Seguridad</h5>
                             </div>
                             <div class="p-6">
@@ -296,7 +310,7 @@ if (isset($_POST['cambiar_password'])) {
                                     <h5 class="text-lg font-medium mb-1">Cambiar Contraseña</h5>
                                     <p class="text-gray-600 mb-4">Actualiza tu contraseña para mayor seguridad</p>
                                     <div class="w-full">
-                                        <button class="w-full px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90"
+                                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                                                 onclick="document.getElementById('cambiarPasswordModal').classList.toggle('hidden')">
                                             <i class="bi bi-key"></i> Cambiar Contraseña
                                         </button>
@@ -313,7 +327,7 @@ if (isset($_POST['cambiar_password'])) {
     <!-- Modal Editar Perfil -->
     <div id="editarPerfilModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div class="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
+            <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
                 <h5 class="m-0 font-medium"><i class="bi bi-person-circle"></i> Editar Perfil</h5>
                 <button type="button" class="text-white" onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">
                     <i class="bi bi-x-lg"></i>
@@ -323,24 +337,24 @@ if (isset($_POST['cambiar_password'])) {
                 <div class="p-6">
                     <div class="mb-4">
                         <label for="nombre" class="block text-gray-700 mb-2">Nombre</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
                     </div>
                     <div class="mb-4">
                         <label for="apellido" class="block text-gray-700 mb-2">Apellido</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="apellido" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="block text-gray-700 mb-2">Correo Electrónico</label>
-                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="email" name="email" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
                     </div>
                 </div>
                 <div class="bg-gray-100 p-4 rounded-b-lg flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600" 
+                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600 transition-colors" 
                             onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" name="editar_perfil" class="px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">Guardar Cambios</button>
+                    <button type="submit" name="editar_perfil" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Guardar Cambios</button>
                 </div>
             </form>
         </div>
@@ -349,7 +363,7 @@ if (isset($_POST['cambiar_password'])) {
     <!-- Modal Cambiar Contraseña -->
     <div id="cambiarPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div class="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
+            <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
                 <h5 class="m-0 font-medium"><i class="bi bi-key"></i> Cambiar Contraseña</h5>
                 <button type="button" class="text-white" onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">
                     <i class="bi bi-x-lg"></i>
@@ -359,30 +373,30 @@ if (isset($_POST['cambiar_password'])) {
                 <div class="p-6">
                     <div class="mb-4">
                         <label for="password_actual" class="block text-gray-700 mb-2">Contraseña Actual</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="password_actual" name="password_actual" required>
                     </div>
                     <div class="mb-4">
                         <label for="password_nueva" class="block text-gray-700 mb-2">Nueva Contraseña</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="password_nueva" name="password_nueva" required>
                     </div>
                     <div class="mb-4">
                         <label for="password_confirmacion" class="block text-gray-700 mb-2">Confirmar Nueva Contraseña</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primary" 
+                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
                                id="password_confirmacion" name="password_confirmacion" required>
                     </div>
                 </div>
                 <div class="bg-gray-100 p-4 rounded-b-lg flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600"
+                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600 transition-colors"
                             onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" name="cambiar_password" class="px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">Actualizar Contraseña</button>
+                    <button type="submit" name="cambiar_password" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Actualizar Contraseña</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Alpine.js para interactividad, alternativa ligera a jQuery/Bootstrap JS -->
+    <!-- Alpine.js para interactividad -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
