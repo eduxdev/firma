@@ -10,6 +10,37 @@ if (!isset($_SESSION['doctor_id'])) {
 // Configuración de la base de datos
 require_once '../../backend/db/conection.php';
 
+// Procesar eliminación de formulario si se recibe la solicitud
+if (isset($_POST['eliminar_formulario']) && isset($_POST['form_id'])) {
+    $form_id = (int)$_POST['form_id'];
+    
+    // Verificar que el formulario existe y está pendiente
+    $check_sql = "SELECT id FROM formularios_consentimiento WHERE id = ? AND estado_revision = 'pendiente'";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("i", $form_id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+    
+    if ($check_result->num_rows > 0) {
+        // Eliminar el formulario
+        $delete_sql = "DELETE FROM formularios_consentimiento WHERE id = ?";
+        $delete_stmt = $conn->prepare($delete_sql);
+        $delete_stmt->bind_param("i", $form_id);
+        
+        if ($delete_stmt->execute()) {
+            $_SESSION['success'] = "El formulario ha sido eliminado correctamente.";
+        } else {
+            $_SESSION['error'] = "Error al eliminar el formulario.";
+        }
+    } else {
+        $_SESSION['error'] = "El formulario no existe o no está pendiente.";
+    }
+    
+    // Redirigir para evitar reenvío del formulario
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
 // Obtener término de búsqueda
 $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
 
@@ -83,21 +114,39 @@ $scripts_adicionales = '
     <title>Formularios Pendientes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="//unpkg.com/alpinejs" defer></script>
     <style>
         .main-content {
             margin-left: 16rem;
             min-height: 100vh;
             background-color: #f8f9fa;
         }
+        [x-cloak] { 
+            display: none !important; 
+        }
     </style>
 </head>
-<body class="h-full bg-[#f8f9fa]">
+<body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false, formId: null, formNombre: '' }">
     <?php include 'menu_lateral.php'; ?>
     
     <div class="main-content">
         <?php include 'header.php'; ?>
 
         <main class="p-6">
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                    <i class="bi bi-check-circle me-2"></i><?php echo $_SESSION['success']; ?>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                    <i class="bi bi-exclamation-circle me-2"></i><?php echo $_SESSION['error']; ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+
             <!-- Estadísticas de Formularios -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <!-- Formularios Pendientes - Activo -->
@@ -232,7 +281,7 @@ $scripts_adicionales = '
                                                 <i class="bi bi-eye me-2"></i> Ver
                                             </a>
                                             <button type="button" 
-                                                    @click="showModal = true; formId = <?php echo $row['id']; ?>"
+                                                    @click="showModal = true; formId = <?php echo $row['id']; ?>; formNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
                                                     class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
                                                 <i class="bi bi-trash me-2"></i> Eliminar
                                             </button>
@@ -286,6 +335,53 @@ $scripts_adicionales = '
                 <?php endif; ?>
             </div>
         </main>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div x-cloak x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Overlay de fondo oscuro -->
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="showModal = false"></div>
+
+        <!-- Contenedor del modal -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                     @click.away="showModal = false">
+                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <i class="bi bi-exclamation-triangle text-red-600 text-xl"></i>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">
+                                    Confirmar Eliminación
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        ¿Estás seguro de que deseas eliminar el formulario de <span x-text="formNombre" class="font-medium"></span>? Esta acción no se puede deshacer.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <form action="" method="POST" class="inline-block">
+                            <input type="hidden" name="form_id" :value="formId">
+                            <input type="hidden" name="eliminar_formulario" value="1">
+                            <button type="submit" 
+                                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+                                Eliminar
+                            </button>
+                        </form>
+                        <button type="button" 
+                                @click="showModal = false"
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

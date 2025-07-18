@@ -67,7 +67,7 @@ function enviarNotificacionNuevoFormulario($datos_formulario) {
 
                 <div class='info'>
                     <p>Por favor, ingrese al sistema para revisar el formulario completo y tomar las acciones necesarias.</p>
-                    <p><a href='http://localhost/firma/frontend/views/formularios_pendientes.php'>Click aquí para ver los formularios pendientes</a></p>
+                    <p><a href='http://localhost/firma/frontend/views/login.php'>Click aquí para ver los formularios pendientes</a></p>
                 </div>
 
                 <div class='footer'>
