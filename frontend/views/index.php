@@ -610,14 +610,23 @@
     </div>
 
     <div class="mb-3">
-      <label>¿Es usted alérgico(a)? *</label><br>
-      <input type="radio" name="alergico" value="Si" required onclick="toggleField('medicamento_alergico', true)"> Si
-      <input type="radio" name="alergico" value="No" required onclick="toggleField('medicamento_alergico', false)"> No
+      <label>¿Es usted alérgico(a)? <span class="text-danger">*</span></label><br>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="alergico" value="Si" required onclick="toggleField('medicamento_alergico', true)">
+        <label class="form-check-label">Si</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="alergico" value="No" required onclick="toggleField('medicamento_alergico', false)">
+        <label class="form-check-label">No</label>
+      </div>
+      <div class="text-danger small mt-1">Campo obligatorio</div>
     </div>
 
     <div class="mb-3">
-      <label>Si su respuesta es si especifique:</label>
-      <input type="text" class="form-control" name="medicamento_alergico" id="medicamento_alergico" disabled required>
+      <label>Si su respuesta es si especifique: <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" name="medicamento_alergico" id="medicamento_alergico" disabled 
+             placeholder="Por favor, especifique sus alergias">
+      <div class="text-danger small mt-1">Campo obligatorio si seleccionó "Si"</div>
     </div>
 
     <div class="mb-3">
@@ -847,14 +856,17 @@
 
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Configurar fecha máxima
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelector('input[name="fecha_nacimiento"]').setAttribute('max', today);
-
-    // Event listener para cálculo de edad
-    document.querySelector('input[name="fecha_nacimiento"]').addEventListener('change', calcularEdad);
-  });
+  function toggleField(fieldId, enable) {
+    const field = document.getElementById(fieldId);
+    field.disabled = !enable;
+    if (enable) {
+      field.required = true;
+      field.focus();
+    } else {
+      field.required = false;
+      field.value = '';
+    }
+  }
 
   function calcularEdad() {
     const fechaInput = document.querySelector('input[name="fecha_nacimiento"]');
@@ -889,19 +901,47 @@
     }
 
     edadInput.value = edad;
-
-    // Eliminamos la línea que modificaba el select de menor_edad
   }
-</script>
 
-<script>
-  function toggleField(fieldId, isEnabled) {
-    var field = document.getElementById(fieldId);
-    field.disabled = !isEnabled;
-    if (!isEnabled) {
-      field.value = ''; // Limpiar campo si se deshabilita
-    }
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Configurar fecha máxima
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelector('input[name="fecha_nacimiento"]').setAttribute('max', today);
+
+    // Event listener para cálculo de edad
+    document.querySelector('input[name="fecha_nacimiento"]').addEventListener('change', calcularEdad);
+
+    // Validación adicional para el campo de alergias
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+      const alergicoSi = document.querySelector('input[name="alergico"][value="Si"]');
+      const alergicoNo = document.querySelector('input[name="alergico"][value="No"]');
+      const especificacion = document.getElementById('medicamento_alergico');
+
+      // Verificar si se seleccionó una opción de alérgico
+      if (!alergicoSi.checked && !alergicoNo.checked) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Campo requerido',
+          text: 'Por favor, indique si es alérgico o no.'
+        });
+        return;
+      }
+
+      // Si seleccionó "Sí", verificar que haya especificado las alergias
+      if (alergicoSi.checked && !especificacion.value.trim()) {
+        e.preventDefault();
+        Swal.fire({
+          icon: 'error',
+          title: 'Campo requerido',
+          text: 'Por favor, especifique sus alergias.'
+        });
+        especificacion.focus();
+        return;
+      }
+    });
+  });
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
