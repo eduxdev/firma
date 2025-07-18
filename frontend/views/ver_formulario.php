@@ -81,235 +81,430 @@ if ($formulario['estado_revision'] === 'aprobado') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
-<body class="bg-gray-100">
-    <!-- Barra de navegación -->
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
-                <a href="<?php echo $pagina_volver; ?>" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg flex items-center transition duration-150">
-                    <i class="bi bi-arrow-left mr-2"></i> Volver
-                </a>
+<body class="min-h-screen bg-[#fafafa]">
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full border-b bg-white/75 backdrop-blur-lg z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="text-sm text-muted-foreground">
+                <h1 class="text-lg font-semibold tracking-tight text-foreground">Revisión de Formulario</h1>
+                <p class="text-sm text-gray-500">Revise y apruebe el consentimiento médico</p>
             </div>
+            <a href="<?php echo $pagina_volver; ?>" 
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]">
+                <i class="bi bi-arrow-left mr-2"></i>
+                Volver
+            </a>
         </div>
     </nav>
 
-    <div class="container mx-auto px-6 py-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Revisar Formulario</h2>
+    <!-- Espaciador para el navbar -->
+    <div class="h-16"></div>
 
+    <div class="container mx-auto p-6">
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Columna izquierda y central - Información del paciente -->
+            <div class="col-span-2 space-y-6">
         <!-- Datos Personales -->
-        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Datos Personales</h3>
-            <div class="grid grid-cols-2 gap-8">
-                <div>
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-700 mb-4">Información Básica</h4>
-                        <div class="space-y-3">
-                            <p><span class="font-semibold">Nombre:</span> <?php echo htmlspecialchars($formulario['nombre'] . ' ' . $formulario['apellido']); ?></p>
-                            <p><span class="font-semibold">Fecha de Nacimiento:</span> <?php echo date('d/m/Y', strtotime($formulario['fecha_nacimiento'])); ?></p>
-                            <p><span class="font-semibold">Edad:</span> <?php echo $formulario['edad']; ?> años</p>
-                            <p><span class="font-semibold">Género:</span> <?php echo $formulario['genero']; ?></p>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="font-semibold tracking-tight text-lg">Datos Personales</h3>
+                        <p class="text-sm text-muted-foreground">Información básica del paciente</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Información Básica</h4>
+                                    <div class="text-sm">
+                                        <dl class="space-y-2">
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Nombre:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['nombre'] . ' ' . $formulario['apellido']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Fecha de Nacimiento:</dt>
+                                                <dd class="inline ml-1"><?php echo date('d/m/Y', strtotime($formulario['fecha_nacimiento'])); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Edad:</dt>
+                                                <dd class="inline ml-1"><?php echo $formulario['edad']; ?> años</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Género:</dt>
+                                                <dd class="inline ml-1"><?php echo $formulario['genero']; ?></dd>
+                                            </div>
+                                        </dl>
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-700 mb-4">Contacto</h4>
-                        <div class="space-y-3">
-                            <p><span class="font-semibold">Correo:</span> <?php echo htmlspecialchars($formulario['correo']); ?></p>
-                            <p><span class="font-semibold">Teléfono Celular:</span> <?php echo htmlspecialchars($formulario['telefono_celular']); ?></p>
-                            <p><span class="font-semibold">Teléfono Casa:</span> <?php echo htmlspecialchars($formulario['telefono_casa']); ?></p>
-                            <p><span class="font-semibold">Teléfono Trabajo:</span> <?php echo htmlspecialchars($formulario['telefono_trabajo']); ?></p>
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Contacto</h4>
+                                    <div class="text-sm">
+                                        <dl class="space-y-2">
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Correo:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['correo']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Teléfono Celular:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_celular']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Teléfono Casa:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_casa']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Teléfono Trabajo:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_trabajo']); ?></dd>
+                                            </div>
+                                        </dl>
                         </div>
                     </div>
                 </div>
 
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Dirección</h4>
+                                    <div class="text-sm">
+                                        <dl class="space-y-2">
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Dirección:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['direccion']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Ciudad:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['ciudad']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Estado:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['estado']); ?></dd>
+                                            </div>
                 <div>
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-700 mb-4">Dirección</h4>
-                        <div class="space-y-3">
-                            <p><span class="font-semibold">Dirección:</span> <?php echo htmlspecialchars($formulario['direccion']); ?></p>
-                            <p><span class="font-semibold">Ciudad:</span> <?php echo htmlspecialchars($formulario['ciudad']); ?></p>
-                            <p><span class="font-semibold">Estado:</span> <?php echo htmlspecialchars($formulario['estado']); ?></p>
-                            <p><span class="font-semibold">Código Postal:</span> <?php echo htmlspecialchars($formulario['zipcode']); ?></p>
+                                                <dt class="text-muted-foreground inline">Código Postal:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['zipcode']); ?></dd>
+                                            </div>
+                                        </dl>
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-700 mb-4">Contacto de Emergencia</h4>
-                        <div class="space-y-3">
-                            <p><span class="font-semibold">Nombre:</span> <?php echo htmlspecialchars($formulario['contacto_emergencia']); ?></p>
-                            <p><span class="font-semibold">Teléfono:</span> <?php echo htmlspecialchars($formulario['telefono_emergencia']); ?></p>
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Contacto de Emergencia</h4>
+                                    <div class="text-sm">
+                                        <dl class="space-y-2">
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Nombre:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['contacto_emergencia']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Teléfono:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_emergencia']); ?></dd>
+                                            </div>
+                                        </dl>
                         </div>
                     </div>
 
                     <?php if ($formulario['menor_edad'] === 'Si'): ?>
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium text-gray-700 mb-4">Información del Tutor</h4>
-                        <div class="space-y-3">
-                            <p><span class="font-semibold">Nombre:</span> <?php echo htmlspecialchars($formulario['nombre_tutor']); ?></p>
-                            <p><span class="font-semibold">Teléfono:</span> <?php echo htmlspecialchars($formulario['telefono_tutor']); ?></p>
-                            <p><span class="font-semibold">Relación:</span> <?php echo htmlspecialchars($formulario['relacion']); ?></p>
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Información del Tutor</h4>
+                                    <div class="text-sm">
+                                        <dl class="space-y-2">
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Nombre:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['nombre_tutor']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Teléfono:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_tutor']); ?></dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-muted-foreground inline">Relación:</dt>
+                                                <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['relacion']); ?></dd>
+                                            </div>
+                                        </dl>
                         </div>
                     </div>
                     <?php endif; ?>
+                            </div>
                 </div>
             </div>
         </div>
 
         <!-- Información Médica -->
-        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Información Médica</h3>
-            
-            <div class="grid grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-4">Condiciones Médicas</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <p><span class="font-semibold">Embarazada:</span> <?php echo $formulario['embarazada']; ?></p>
-                        <p><span class="font-semibold">Diabético:</span> <?php echo $formulario['diabetico']; ?></p>
-                        <p><span class="font-semibold">Fumador:</span> <?php echo $formulario['fumador']; ?></p>
-                        <p><span class="font-semibold">Drogas:</span> <?php echo $formulario['drogas']; ?></p>
-                        <p><span class="font-semibold">Renal:</span> <?php echo $formulario['renal']; ?></p>
-                        <p><span class="font-semibold">Insuf. Cardíaca:</span> <?php echo $formulario['insuficiencia']; ?></p>
-                        <p><span class="font-semibold">Anticoagulantes:</span> <?php echo $formulario['anticoagulantes']; ?></p>
-                        <p><span class="font-semibold">Cáncer:</span> <?php echo $formulario['cancer']; ?></p>
-                        <p>
-                            <span class="font-semibold">Alérgico:</span> <?php echo $formulario['alergico']; ?>
-                            <?php if ($formulario['alergico'] === 'Si'): ?>
-                                <br><span class="font-semibold">Especificación de alergias:</span> <?php echo htmlspecialchars($formulario['medicamento_alergico']); ?>
-                            <?php endif; ?>
-                        </p>
-                        <p>
-                            <span class="font-semibold">Condición médica:</span> <?php echo $formulario['condicion_medica']; ?>
-                            <?php if ($formulario['condicion_medica'] === 'Si'): ?>
-                                <br><span class="font-semibold">Explicación:</span> <?php echo htmlspecialchars($formulario['condicion_explicacion']); ?>
-                            <?php endif; ?>
-                        </p>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="font-semibold tracking-tight text-lg">Información Médica</h3>
+                        <p class="text-sm text-muted-foreground">Condiciones y antecedentes médicos</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <?php
+                                    $condiciones = [
+                                        'embarazada' => 'Embarazada',
+                                        'diabetico' => 'Diabético',
+                                        'fumador' => 'Fumador',
+                                        'drogas' => 'Drogas',
+                                        'renal' => 'Renal',
+                                        'insuficiencia' => 'Insuf. Cardíaca',
+                                        'anticoagulantes' => 'Anticoagulantes',
+                                        'cancer' => 'Cáncer'
+                                    ];
+                                    foreach ($condiciones as $key => $label): ?>
+                                    <div class="rounded-lg border p-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm font-medium"><?php echo $label; ?></span>
+                                            <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario[$key] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                                <?php echo $formulario[$key]; ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
                     </div>
 
                     <?php if ($formulario['drogas'] === 'Si'): ?>
-                        <div class="mt-4">
-                            <p><span class="font-semibold">Frecuencia de uso de drogas:</span> <?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></p>
+                                <div class="rounded-lg bg-red-50 border border-red-200 p-4">
+                                    <div class="flex items-center gap-2 text-red-700 text-sm font-medium">
+                                        <i class="bi bi-exclamation-triangle"></i>
+                                        <span>Frecuencia de uso de drogas</span>
+                                    </div>
+                                    <p class="mt-1 text-sm text-red-600"><?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></p>
                         </div>
                     <?php endif; ?>
                 </div>
 
-                <div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-4">Medicamentos y Suplementos</h4>
-                    <div class="space-y-6">
-                        <div>
-                            <p class="font-semibold mb-2">Medicamentos Recetados:</p>
-                            <p class="bg-gray-50 p-3 rounded"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_recetados'])); ?></p>
+                            <div class="space-y-4">
+                                <div class="rounded-lg border p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-medium">Alergias</h4>
+                                        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario['alergico'] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                            <?php echo $formulario['alergico']; ?>
+                                        </span>
+                                    </div>
+                                    <?php if ($formulario['alergico'] === 'Si'): ?>
+                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></p>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="rounded-lg border p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-medium">Condición Médica</h4>
+                                        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario['condicion_medica'] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                            <?php echo $formulario['condicion_medica']; ?>
+                                        </span>
+                                    </div>
+                                    <?php if ($formulario['condicion_medica'] === 'Si'): ?>
+                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($formulario['condicion_explicacion']); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-semibold mb-2">Medicamentos de Venta Libre:</p>
-                            <p class="bg-gray-50 p-3 rounded"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_venta_libre'])); ?></p>
+                    </div>
+                </div>
+
+                <!-- Medicamentos y Suplementos -->
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="font-semibold tracking-tight text-lg">Medicamentos y Suplementos</h3>
+                        <p class="text-sm text-muted-foreground">Medicamentos actuales y suplementos</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="grid gap-4">
+                            <div class="rounded-lg border p-4">
+                                <h4 class="font-medium mb-2">Medicamentos Recetados</h4>
+                                <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_recetados'])); ?></p>
+                            </div>
+                            <div class="rounded-lg border p-4">
+                                <h4 class="font-medium mb-2">Medicamentos de Venta Libre</h4>
+                                <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_venta_libre'])); ?></p>
                         </div>
-                        <div>
-                            <p class="font-semibold mb-2">Suplementos:</p>
-                            <p class="bg-gray-50 p-3 rounded"><?php echo nl2br(htmlspecialchars($formulario['suplementos'])); ?></p>
-                        </div>
+                            <div class="rounded-lg border p-4">
+                                <h4 class="font-medium mb-2">Suplementos</h4>
+                                <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['suplementos'])); ?></p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Quejas y Afirmaciones -->
-        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Quejas y Afirmaciones</h3>
-            
-            <div class="grid grid-cols-2 gap-8">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="font-semibold tracking-tight text-lg">Quejas y Afirmaciones</h3>
+                        <p class="text-sm text-muted-foreground">Motivos de consulta y expectativas</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="grid grid-cols-2 gap-6">
                 <div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-4">Quejas Principales</h4>
-                    <ul class="list-disc list-inside space-y-2">
+                                <div class="rounded-lg border p-4">
+                                    <h4 class="font-medium mb-2">Quejas Principales</h4>
+                                    <ul class="space-y-1 text-sm text-gray-600">
                     <?php foreach ($quejas as $queja): ?>
-                            <li class="text-gray-700"><?php echo htmlspecialchars($queja); ?></li>
+                                        <li class="flex items-center gap-2">
+                                            <i class="bi bi-dot"></i>
+                                            <?php echo htmlspecialchars($queja); ?>
+                                        </li>
                     <?php endforeach; ?>
                     <?php if (!empty($formulario['otros_quejas'])): ?>
-                            <li class="text-gray-700">Otras: <?php echo htmlspecialchars($formulario['otros_quejas']); ?></li>
+                                        <li class="flex items-center gap-2">
+                                            <i class="bi bi-dot"></i>
+                                            Otras: <?php echo htmlspecialchars($formulario['otros_quejas']); ?>
+                                        </li>
                     <?php endif; ?>
                 </ul>
+                                </div>
                 </div>
 
                 <div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-4">Afirmaciones</h4>
-                    <ul class="list-disc list-inside space-y-2">
+                                <div class="rounded-lg border p-4">
+                                    <h4 class="font-medium mb-2">Afirmaciones</h4>
+                                    <ul class="space-y-1 text-sm text-gray-600">
                     <?php foreach ($afirmaciones as $afirmacion): ?>
-                            <li class="text-gray-700"><?php echo htmlspecialchars($afirmacion); ?></li>
+                                        <li class="flex items-center gap-2">
+                                            <i class="bi bi-dot"></i>
+                                            <?php echo htmlspecialchars($afirmacion); ?>
+                                        </li>
                     <?php endforeach; ?>
                     <?php if (!empty($formulario['otros_afirmaciones'])): ?>
-                            <li class="text-gray-700">Otras: <?php echo htmlspecialchars($formulario['otros_afirmaciones']); ?></li>
+                                        <li class="flex items-center gap-2">
+                                            <i class="bi bi-dot"></i>
+                                            Otras: <?php echo htmlspecialchars($formulario['otros_afirmaciones']); ?>
+                                        </li>
                     <?php endif; ?>
                 </ul>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
 
-        <!-- Firmas y Aprobación -->
-        <div class="bg-white rounded-xl shadow-md p-8">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Firmas y Aprobación</h3>
-            
-            <div class="grid grid-cols-2 gap-8">
-                <!-- Firma del Paciente -->
-                <div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-4">Firma del Paciente</h4>
-                    <div class="border rounded-lg p-4 bg-gray-50">
-                        <img src="<?php echo $formulario['firma_paciente']; ?>" alt="Firma del Paciente" class="max-h-32 mx-auto">
+            <!-- Columna derecha - Panel de Aprobación -->
+            <div>
+                <div class="sticky top-24 rounded-lg border bg-card text-card-foreground shadow-sm">
+                    <div class="p-6">
+                        <h3 class="font-semibold tracking-tight text-lg">Revisión y Aprobación</h3>
+                        <p class="text-sm text-muted-foreground">Complete el proceso de revisión</p>
                     </div>
-                </div>
+                    
+                    <form method="POST" onsubmit="return validarFormulario()" class="p-6 pt-0 space-y-6">
+                        <!-- Firma del Paciente -->
+                        <div>
+                            <h4 class="font-medium mb-3">Firma del Paciente</h4>
+                            <div class="rounded-lg border bg-muted p-4">
+                                <img src="<?php echo $formulario['firma_paciente']; ?>" alt="Firma del Paciente" class="max-h-32 mx-auto">
+                            </div>
+                        </div>
 
-                <!-- Firma del Doctor y Decisión -->
-                <div>
-                    <form method="POST" onsubmit="return validarFormulario()">
-                        <!-- Área de Decisión -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-medium text-gray-700 mb-4">Decisión</h4>
-                            <div class="flex gap-4">
-                                <label class="flex-1 relative">
+                        <!-- Decisión -->
+                        <div>
+                            <h4 class="font-medium mb-3">Decisión</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="relative">
                                     <input type="radio" name="estado" value="aprobado" class="peer sr-only" required>
-                                    <div class="border-2 border-gray-200 rounded-lg p-4 cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50">
+                                    <div class="rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] active:translate-y-[1px] peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:shadow-md">
                                         <div class="flex items-center justify-center gap-2">
-                                            <i class="bi bi-check-circle text-xl text-green-600"></i>
-                                            <span class="font-medium">Aprobar</span>
-                </div>
-            </div>
+                                            <i class="bi bi-check-circle text-xl text-green-600 peer-checked:text-green-700"></i>
+                                            <span class="font-medium peer-checked:text-green-700">Aprobar</span>
+                                        </div>
+                                    </div>
                                 </label>
-                                <label class="flex-1 relative">
+                                <label class="relative">
                                     <input type="radio" name="estado" value="rechazado" class="peer sr-only" required>
-                                    <div class="border-2 border-gray-200 rounded-lg p-4 cursor-pointer transition-all hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50">
+                                    <div class="rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] active:translate-y-[1px] peer-checked:border-red-500 peer-checked:bg-red-50 peer-checked:shadow-md">
                                         <div class="flex items-center justify-center gap-2">
-                                            <i class="bi bi-x-circle text-xl text-red-600"></i>
-                                            <span class="font-medium">Rechazar</span>
-        </div>
-            </div>
+                                            <i class="bi bi-x-circle text-xl text-red-600 peer-checked:text-red-700"></i>
+                                            <span class="font-medium peer-checked:text-red-700">Rechazar</span>
+                                        </div>
+                                    </div>
                                 </label>
-            </div>
-        </div>
+                            </div>
+                        </div>
 
-                        <!-- Área de Firma -->
-                        <div class="mb-6">
-                            <h4 class="text-lg font-medium text-gray-700 mb-4">Firma del Profesional de la Salud</h4>
+                        <!-- Comentarios -->
+                        <div>
+                            <h4 class="font-medium mb-3">Comentarios</h4>
+                            <textarea 
+                                name="comentarios" 
+                                rows="4" 
+                                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200"
+                                placeholder="Agregue sus observaciones aquí..."></textarea>
+                        </div>
+
+                        <!-- Firma del Doctor -->
+                        <div>
+                            <h4 class="font-medium mb-3">Su Firma</h4>
                             <div class="relative">
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-gray-400 transition-colors">
+                                <div class="rounded-lg border-2 border-dashed border-muted bg-background hover:border-muted transition-all duration-200">
                                     <canvas id="firma-doctor" class="w-full h-40"></canvas>
                                 </div>
-                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400 pointer-events-none firma-placeholder">
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none firma-placeholder">
                                     <div class="text-center">
                                         <i class="bi bi-pen text-3xl"></i>
                                         <p class="mt-2">Firme aquí</p>
                                     </div>
-                </div>
-                                <button type="button" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 transition-colors" onclick="borrarFirmaDoctor()">
+                                </div>
+                                <button type="button" class="absolute top-2 right-2 text-muted-foreground hover:text-destructive transition-all duration-200" onclick="borrarFirmaDoctor()">
                                     <i class="bi bi-trash"></i>
                                 </button>
-                    </div>
+                            </div>
                         </div>
                         <input type="hidden" name="firma_doctor" id="firma_doctor" required>
 
                         <!-- Botón de Envío -->
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-lg flex items-center justify-center text-lg font-medium transition duration-150 shadow-md hover:shadow-lg">
-                            <i class="bi bi-check-circle mr-2"></i> Finalizar Revisión
+                        <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full bg-blue-600 shadow-sm hover:shadow-md hover:translate-y-[-1px] active:translate-y-[1px] text-white">
+                            <i class="bi bi-check-circle mr-2"></i>
+                            Finalizar Revisión
                         </button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Declaraciones Legales -->
+        <div class="mt-6">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="p-6">
+                    <h3 class="font-semibold tracking-tight text-lg">Declaraciones Legales</h3>
+                    <p class="text-sm text-muted-foreground">Declaraciones aceptadas por el paciente</p>
+                </div>
+                <div class="p-6 pt-0">
+                    <div class="rounded-lg border p-4">
+                        <p class="text-sm text-gray-800 mb-4">El paciente ha aceptado y confirmado todas las siguientes declaraciones legales:</p>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                He informado al profesional de cualquier alergia conocida a medicamentos u otras sustancias.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Entiendo que la terapia de infusión intravenosa no ha sido evaluada por la FDA.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                He informado al profesional de todos los medicamentos y suplementos actuales.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Entiendo mi derecho a ser informado durante el procedimiento.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Comprendo los riesgos y beneficios del procedimiento.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Verifico que toda la información presentada es verdadera.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Acepto la responsabilidad del pago de servicios no cubiertos.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="bi bi-check-circle text-green-600"></i>
+                                Acepto las condiciones sobre la información completa y cargos adicionales.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -328,7 +523,6 @@ if ($formulario['estado_revision'] === 'aprobado') {
 
             firmaPlaceholder = document.querySelector('.firma-placeholder');
 
-            // Ocultar placeholder cuando se empiece a firmar
             signaturePad.addEventListener('beginStroke', function() {
                 firmaPlaceholder.style.display = 'none';
             });
@@ -360,7 +554,6 @@ if ($formulario['estado_revision'] === 'aprobado') {
 
             document.getElementById('firma_doctor').value = signaturePad.toDataURL();
             
-            // Si el estado es "aprobado", abrir el PDF en una nueva ventana
             const estadoSelect = document.querySelector('input[name="estado"]:checked');
             if (estadoSelect && estadoSelect.value === 'aprobado') {
                 const formData = new FormData(document.querySelector('form'));
@@ -372,8 +565,7 @@ if ($formulario['estado_revision'] === 'aprobado') {
                     if (response.ok) {
                         const urlParams = new URLSearchParams(window.location.search);
                         const id = urlParams.get('id');
-                        window.open(`generar_pdf.php?id=${id}`, '_blank');
-                        window.location.href = 'formularios_aprobados.php';
+                        window.location.href = `generar_pdf.php?id=${id}`;
                     }
                 });
                 return false;

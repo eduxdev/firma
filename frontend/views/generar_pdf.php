@@ -47,227 +47,310 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Consentimiento Médico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista Previa del Consentimiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         @page {
-            margin: 2cm;
+            margin: 1.5cm;
             size: letter;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        .page {
-            max-width: 21cm;
-            margin: 0 auto;
-            padding: 2cm 1.5cm;
-            background: white;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #eee;
-        }
-        .section {
-            margin-bottom: 1.5rem;
-            page-break-inside: avoid;
-        }
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
-        }
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.75rem;
-        }
-        .data-item {
-            margin-bottom: 0.5rem;
-        }
-        .data-label {
-            font-weight: bold;
-            color: #555;
-        }
-        .signatures {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 2rem;
-            page-break-inside: avoid;
-        }
-        .signature-box {
-            flex: 1;
-            max-width: 300px;
-            text-align: center;
-            margin: 0 1rem;
-        }
-        .signature-line {
-            border-top: 1px solid #000;
-            margin-top: 0.5rem;
-            padding-top: 0.5rem;
-            font-weight: bold;
-        }
-        .signature-image {
-            height: 100px;
-            object-fit: contain;
-            margin: 0 auto;
         }
         @media print {
             .no-print {
                 display: none !important;
             }
             body {
-                background: white;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             .page {
-                padding: 0;
-                margin: 0;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                max-width: none !important;
+            }
+            .container {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .grid {
+                break-inside: avoid;
+                display: grid !important;
+            }
+            .rounded-lg {
+                border-radius: 0.5rem !important;
+            }
+            .border {
+                border-color: #ddd !important;
+            }
+            .shadow-sm {
+                box-shadow: none !important;
+            }
+            .mb-8 {
+                margin-bottom: 0.75rem !important;
+            }
+            .p-8 {
+                padding: 0.75rem !important;
+            }
+            .p-4 {
+                padding: 0.5rem !important;
+            }
+            .gap-8 {
+                gap: 0.75rem !important;
+            }
+            .gap-6 {
+                gap: 0.5rem !important;
+            }
+            .gap-4 {
+                gap: 0.375rem !important;
+            }
+            .gap-3 {
+                gap: 0.25rem !important;
+            }
+            .text-sm {
+                font-size: 9pt !important;
+                line-height: 1.2 !important;
+            }
+            .text-xs {
+                font-size: 8pt !important;
+                line-height: 1.1 !important;
+            }
+            h1 {
+                font-size: 14pt !important;
+                margin-bottom: 0.5rem !important;
+            }
+            h2 {
+                font-size: 12pt !important;
+                margin-bottom: 0.5rem !important;
+            }
+            h3 {
+                font-size: 10pt !important;
+                margin-bottom: 0.25rem !important;
+            }
+            .grid-cols-2 {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            .space-y-2 > * + * {
+                margin-top: 0.2rem !important;
+            }
+            .space-y-4 > * + * {
+                margin-top: 0.4rem !important;
+            }
+            dl.space-y-2 {
+                margin-bottom: 0.4rem !important;
+            }
+            .pb-2 {
+                padding-bottom: 0.25rem !important;
+            }
+            .mb-4 {
+                margin-bottom: 0.5rem !important;
+            }
+            .mb-2 {
+                margin-bottom: 0.25rem !important;
+            }
+            /* Ajustes para las firmas */
+            .grid.grid-cols-2.gap-8.mt-8 {
+                margin-top: 0.75rem !important;
+                page-break-inside: avoid;
+            }
+            .h-24 {
+                height: 4rem !important;
+            }
+            /* Ajustes para los badges de estado */
+            .rounded-full {
+                border-radius: 9999px !important;
+                padding: 0.1rem 0.3rem !important;
+            }
+            /* Optimización de espacios en listas */
+            ul.space-y-1 {
+                margin: 0 !important;
+                padding-left: 0.5rem !important;
+            }
+            .bi {
+                font-size: 0.8em !important;
+            }
+            /* Ajuste para condiciones médicas */
+            .grid.grid-cols-2.gap-3 {
+                gap: 0.25rem !important;
+            }
+            /* Reducir espacio entre secciones pero mantener legibilidad */
+            .section + .section {
+                margin-top: 0.5rem !important;
             }
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <!-- Botón de cancelar -->
-    <a href="?id=<?php echo $id; ?>&cancelar=true" class="no-print fixed top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow flex items-center space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-        <span>Cerrar</span>
-    </a>
+<body class="min-h-screen bg-[#fafafa]">
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full border-b bg-white/75 backdrop-blur-lg z-50 no-print">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="text-sm text-muted-foreground">
+                <h1 class="text-lg font-semibold tracking-tight text-foreground">Vista Previa del Consentimiento</h1>
+                <p class="text-sm text-gray-500">Revise el documento antes de imprimir</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="formularios_aprobados.php" 
+                   class="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]">
+                    <i class="bi bi-arrow-left mr-2"></i>
+                    Volver
+                </a>
+                <button onclick="window.print()" 
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-blue-600 text-white px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-blue-700 active:translate-y-[1px]">
+                    <i class="bi bi-printer mr-2"></i>
+                    Imprimir
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    <div class="page">
-        <div class="header">
-            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-16 mx-auto mb-4">
-            <h1 class="text-2xl font-bold">Consentimiento Médico</h1>
-            <p class="text-gray-600"><?php echo date('d/m/Y'); ?></p>
+    <!-- Espaciador para el navbar -->
+    <div class="h-16 no-print"></div>
+
+    <div class="container mx-auto p-6">
+        <div class="page bg-white rounded-lg border shadow-sm p-8 max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-gray-900">Consentimiento Médico</h1>
         </div>
 
         <!-- Datos Personales -->
-        <div class="section">
-            <h2 class="section-title">Datos Personales</h2>
-            <div class="data-grid">
-                <div class="data-item">
-                    <span class="data-label">Nombre:</span>
-                    <span><?php echo htmlspecialchars($formulario['nombre'] . ' ' . $formulario['apellido']); ?></span>
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Datos Personales</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="font-medium mb-2">Información Básica</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div>
+                                    <dt class="text-gray-600 inline">Nombre:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['nombre'] . ' ' . $formulario['apellido']); ?></dd>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Fecha Nac.:</span>
-                    <span><?php echo date('d/m/Y', strtotime($formulario['fecha_nacimiento'])); ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Fecha Nac.:</dt>
+                                    <dd class="inline ml-1"><?php echo date('d/m/Y', strtotime($formulario['fecha_nacimiento'])); ?></dd>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Edad:</span>
-                    <span><?php echo $formulario['edad']; ?> años</span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Edad:</dt>
+                                    <dd class="inline ml-1"><?php echo $formulario['edad']; ?> años</dd>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Género:</span>
-                    <span><?php echo $formulario['genero']; ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Género:</dt>
+                                    <dd class="inline ml-1"><?php echo $formulario['genero']; ?></dd>
                 </div>
+                            </dl>
             </div>
 
-            <!-- Información de Contacto -->
-            <div class="mt-4">
-                <h3 class="font-semibold mb-2">Información de Contacto</h3>
-                <div class="data-grid">
-                    <div class="data-item">
-                        <span class="data-label">Correo:</span>
-                        <span><?php echo htmlspecialchars($formulario['correo']); ?></span>
+                        <div>
+                            <h3 class="font-medium mb-2">Información de Contacto</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div>
+                                    <dt class="text-gray-600 inline">Correo:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['correo']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Tel. Celular:</span>
-                        <span><?php echo htmlspecialchars($formulario['telefono_celular']); ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Tel. Celular:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_celular']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Tel. Casa:</span>
-                        <span><?php echo htmlspecialchars($formulario['telefono_casa']); ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Tel. Casa:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_casa']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Tel. Trabajo:</span>
-                        <span><?php echo htmlspecialchars($formulario['telefono_trabajo']); ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Tel. Trabajo:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_trabajo']); ?></dd>
                     </div>
+                            </dl>
+            </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="font-medium mb-2">Dirección</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div>
+                                    <dt class="text-gray-600 inline">Dirección:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['direccion']); ?></dd>
+                    </div>
+                                <div>
+                                    <dt class="text-gray-600 inline">Ciudad:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['ciudad']); ?></dd>
+                    </div>
+                                <div>
+                                    <dt class="text-gray-600 inline">Estado:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['estado']); ?></dd>
+                    </div>
+                                <div>
+                                    <dt class="text-gray-600 inline">Código Postal:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['zipcode']); ?></dd>
                 </div>
+                            </dl>
             </div>
 
-            <!-- Dirección -->
-            <div class="mt-4">
-                <h3 class="font-semibold mb-2">Dirección</h3>
-                <div class="data-grid">
-                    <div class="data-item">
-                        <span class="data-label">Dirección:</span>
-                        <span><?php echo htmlspecialchars($formulario['direccion']); ?></span>
+                        <div>
+                            <h3 class="font-medium mb-2">Contacto de Emergencia</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div>
+                                    <dt class="text-gray-600 inline">Nombre:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['contacto_emergencia']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Ciudad:</span>
-                        <span><?php echo htmlspecialchars($formulario['ciudad']); ?></span>
+                                <div>
+                                    <dt class="text-gray-600 inline">Teléfono:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_emergencia']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Estado:</span>
-                        <span><?php echo htmlspecialchars($formulario['estado']); ?></span>
-                    </div>
-                    <div class="data-item">
-                        <span class="data-label">Código Postal:</span>
-                        <span><?php echo htmlspecialchars($formulario['zipcode']); ?></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contacto de Emergencia -->
-            <div class="mt-4">
-                <h3 class="font-semibold mb-2">Contacto de Emergencia</h3>
-                <div class="data-grid">
-                    <div class="data-item">
-                        <span class="data-label">Nombre:</span>
-                        <span><?php echo htmlspecialchars($formulario['contacto_emergencia']); ?></span>
-                    </div>
-                    <div class="data-item">
-                        <span class="data-label">Teléfono:</span>
-                        <span><?php echo htmlspecialchars($formulario['telefono_emergencia']); ?></span>
-                    </div>
-                </div>
+                            </dl>
             </div>
 
             <?php if ($formulario['menor_edad'] === 'Si'): ?>
-            <div class="mt-4">
-                <h3 class="font-semibold mb-2">Información del Tutor</h3>
-                <div class="data-grid">
-                    <div class="data-item">
-                        <span class="data-label">Nombre:</span>
-                        <span><?php echo htmlspecialchars($formulario['nombre_tutor']); ?></span>
+                        <div>
+                            <h3 class="font-medium mb-2">Información del Tutor</h3>
+                            <dl class="space-y-2 text-sm">
+                                <div>
+                                    <dt class="text-gray-600 inline">Nombre:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['nombre_tutor']); ?></dd>
+                                </div>
+                                <div>
+                                    <dt class="text-gray-600 inline">Teléfono:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['telefono_tutor']); ?></dd>
+                                </div>
+                                <div>
+                                    <dt class="text-gray-600 inline">Relación:</dt>
+                                    <dd class="inline ml-1"><?php echo htmlspecialchars($formulario['relacion']); ?></dd>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Teléfono:</span>
-                        <span><?php echo htmlspecialchars($formulario['telefono_tutor']); ?></span>
+                            </dl>
                     </div>
-                    <div class="data-item">
-                        <span class="data-label">Relación:</span>
-                        <span><?php echo htmlspecialchars($formulario['relacion']); ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
-            <?php endif; ?>
         </div>
 
         <!-- Quejas y Afirmaciones -->
-        <div class="section">
-            <h2 class="section-title">Quejas y Afirmaciones</h2>
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Quejas y Afirmaciones</h2>
             <div class="grid grid-cols-2 gap-6">
                 <?php if (!empty($quejas)): ?>
                 <div>
-                    <h3 class="font-semibold mb-2">Quejas Principales:</h3>
-                    <ul class="list-disc list-inside space-y-1">
+                        <h3 class="font-medium mb-2">Quejas Principales:</h3>
+                        <ul class="space-y-1 text-sm">
                         <?php foreach ($quejas as $queja): ?>
-                            <li><?php echo htmlspecialchars($queja); ?></li>
+                                <li class="flex items-center gap-2">
+                                    <i class="bi bi-dot"></i>
+                                    <?php echo htmlspecialchars($queja); ?>
+                                </li>
                         <?php endforeach; ?>
                         <?php if (!empty($formulario['otros_quejas'])): ?>
-                            <li>Otras: <?php echo htmlspecialchars($formulario['otros_quejas']); ?></li>
+                                <li class="flex items-center gap-2">
+                                    <i class="bi bi-dot"></i>
+                                    Otras: <?php echo htmlspecialchars($formulario['otros_quejas']); ?>
+                                </li>
                         <?php endif; ?>
                     </ul>
                 </div>
@@ -275,13 +358,19 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
 
                 <?php if (!empty($afirmaciones)): ?>
                 <div>
-                    <h3 class="font-semibold mb-2">Afirmaciones:</h3>
-                    <ul class="list-disc list-inside space-y-1">
+                        <h3 class="font-medium mb-2">Afirmaciones:</h3>
+                        <ul class="space-y-1 text-sm">
                         <?php foreach ($afirmaciones as $afirmacion): ?>
-                            <li><?php echo htmlspecialchars($afirmacion); ?></li>
+                                <li class="flex items-center gap-2">
+                                    <i class="bi bi-dot"></i>
+                                    <?php echo htmlspecialchars($afirmacion); ?>
+                                </li>
                         <?php endforeach; ?>
                         <?php if (!empty($formulario['otros_afirmaciones'])): ?>
-                            <li>Otras: <?php echo htmlspecialchars($formulario['otros_afirmaciones']); ?></li>
+                                <li class="flex items-center gap-2">
+                                    <i class="bi bi-dot"></i>
+                                    Otras: <?php echo htmlspecialchars($formulario['otros_afirmaciones']); ?>
+                                </li>
                         <?php endif; ?>
                     </ul>
                 </div>
@@ -290,134 +379,166 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
         </div>
 
         <!-- Información Médica -->
-        <div class="section">
-            <h2 class="section-title">Información Médica</h2>
-            <div class="data-grid">
-                <div class="data-item">
-                    <span class="data-label">Embarazada:</span>
-                    <span><?php echo $formulario['embarazada']; ?></span>
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Información Médica</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <?php
+                            $condiciones = [
+                                'embarazada' => 'Embarazada',
+                                'diabetico' => 'Diabético',
+                                'fumador' => 'Fumador',
+                                'drogas' => 'Drogas',
+                                'renal' => 'Renal',
+                                'insuficiencia' => 'Insuf. Cardíaca',
+                                'anticoagulantes' => 'Anticoagulantes',
+                                'cancer' => 'Cáncer'
+                            ];
+                            foreach ($condiciones as $key => $label): ?>
+                            <div class="rounded-lg border p-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium"><?php echo $label; ?></span>
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario[$key] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                        <?php echo $formulario[$key]; ?>
+                                    </span>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Diabético:</span>
-                    <span><?php echo $formulario['diabetico']; ?></span>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Fumador:</span>
-                    <span><?php echo $formulario['fumador']; ?></span>
+                            <?php endforeach; ?>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Drogas:</span>
-                    <span><?php echo $formulario['drogas']; ?></span>
+
+                        <?php if ($formulario['drogas'] === 'Si'): ?>
+                        <div class="mt-4 rounded-lg bg-red-50 border border-red-200 p-4">
+                            <div class="flex items-center gap-2 text-red-700 text-sm font-medium">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <span>Frecuencia de uso de drogas</span>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Renal:</span>
-                    <span><?php echo $formulario['renal']; ?></span>
+                            <p class="mt-1 text-sm text-red-600"><?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></p>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Insuf. Cardíaca:</span>
-                    <span><?php echo $formulario['insuficiencia']; ?></span>
+                        <?php endif; ?>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Anticoagulantes:</span>
-                    <span><?php echo $formulario['anticoagulantes']; ?></span>
+
+                    <div class="space-y-4">
+                        <div class="rounded-lg border p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-medium">Alergias</h3>
+                                <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario['alergico'] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                    <?php echo $formulario['alergico']; ?>
+                                </span>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Cáncer:</span>
-                    <span><?php echo $formulario['cancer']; ?></span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Alérgico:</span>
-                    <span><?php echo $formulario['alergico']; ?></span>
                     <?php if ($formulario['alergico'] === 'Si'): ?>
-                        <br><span class="data-label">Especificación de alergias:</span>
-                        <span><?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></span>
+                            <p class="text-sm text-gray-600"><?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></p>
                     <?php endif; ?>
                 </div>
-                <div class="data-item">
-                    <span class="data-label">Condición médica:</span>
-                    <span><?php echo $formulario['condicion_medica']; ?></span>
+
+                        <div class="rounded-lg border p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-medium">Condición Médica</h3>
+                                <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold <?php echo $formulario['condicion_medica'] === 'Si' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'; ?>">
+                                    <?php echo $formulario['condicion_medica']; ?>
+                                </span>
+                            </div>
                     <?php if ($formulario['condicion_medica'] === 'Si'): ?>
-                        <br><span class="data-label">Explicación:</span>
-                        <span><?php echo htmlspecialchars($formulario['condicion_explicacion']); ?></span>
+                            <p class="text-sm text-gray-600"><?php echo htmlspecialchars($formulario['condicion_explicacion']); ?></p>
                     <?php endif; ?>
                 </div>
             </div>
-            <?php if ($formulario['drogas'] === 'Si'): ?>
-                <div class="mt-4">
-                    <span class="data-label">Frecuencia de uso de drogas:</span>
-                    <span><?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></span>
                 </div>
-            <?php endif; ?>
         </div>
 
         <!-- Medicamentos y Suplementos -->
-        <div class="section">
-            <h2 class="section-title">Medicamentos y Suplementos</h2>
-            <div class="space-y-4">
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Medicamentos y Suplementos</h2>
+                <div class="grid gap-4">
                 <?php if (!empty($formulario['medicamentos_recetados'])): ?>
-                <div>
-                    <h3 class="font-semibold mb-1">Medicamentos Recetados:</h3>
-                    <p class="pl-4"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_recetados'])); ?></p>
+                    <div class="rounded-lg border p-4">
+                        <h3 class="font-medium mb-2">Medicamentos Recetados</h3>
+                        <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_recetados'])); ?></p>
                 </div>
                 <?php endif; ?>
                 <?php if (!empty($formulario['medicamentos_venta_libre'])): ?>
-                <div>
-                    <h3 class="font-semibold mb-1">Medicamentos de Venta Libre:</h3>
-                    <p class="pl-4"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_venta_libre'])); ?></p>
+                    <div class="rounded-lg border p-4">
+                        <h3 class="font-medium mb-2">Medicamentos de Venta Libre</h3>
+                        <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['medicamentos_venta_libre'])); ?></p>
                 </div>
                 <?php endif; ?>
                 <?php if (!empty($formulario['suplementos'])): ?>
-                <div>
-                    <h3 class="font-semibold mb-1">Suplementos:</h3>
-                    <p class="pl-4"><?php echo nl2br(htmlspecialchars($formulario['suplementos'])); ?></p>
+                    <div class="rounded-lg border p-4">
+                        <h3 class="font-medium mb-2">Suplementos</h3>
+                        <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['suplementos'])); ?></p>
                 </div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Declaraciones Legales -->
-        <div class="section">
-            <h2 class="section-title">Declaraciones Legales</h2>
-            <div class="mt-4">
-                <p class="text-gray-800">El paciente ha aceptado y confirmado todas las siguientes declaraciones legales:</p>
-                <ul class="list-disc list-inside space-y-2 mt-4 pl-4">
-                    <li>He informado al profesional de cualquier alergia conocida a medicamentos u otras sustancias.</li>
-                    <li>Entiendo que la terapia de infusión intravenosa no ha sido evaluada por la FDA.</li>
-                    <li>He informado al profesional de todos los medicamentos y suplementos actuales.</li>
-                    <li>Entiendo mi derecho a ser informado durante el procedimiento.</li>
-                    <li>Comprendo los riesgos y beneficios del procedimiento.</li>
-                    <li>Verifico que toda la información presentada es verdadera.</li>
-                    <li>Acepto la responsabilidad del pago de servicios no cubiertos.</li>
-                    <li>Acepto las condiciones sobre la información completa y cargos adicionales.</li>
-                </ul>
+            <!-- Declaraciones Legales -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Declaraciones Legales</h2>
+                <div class="rounded-lg border p-4">
+                    <p class="text-sm text-gray-800 mb-4">El paciente ha aceptado y confirmado todas las siguientes declaraciones legales:</p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            He informado al profesional de cualquier alergia conocida a medicamentos u otras sustancias.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Entiendo que la terapia de infusión intravenosa no ha sido evaluada por la FDA.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            He informado al profesional de todos los medicamentos y suplementos actuales.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Entiendo mi derecho a ser informado durante el procedimiento.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Comprendo los riesgos y beneficios del procedimiento.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Verifico que toda la información presentada es verdadera.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Acepto la responsabilidad del pago de servicios no cubiertos.
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="bi bi-check text-green-600"></i>
+                            Acepto las condiciones sobre la información completa y cargos adicionales.
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
 
         <?php if (!empty($formulario['comentarios_doctor'])): ?>
-        <div class="section">
-            <h2 class="section-title">Observaciones del Doctor</h2>
-            <p class="pl-4"><?php echo nl2br(htmlspecialchars($formulario['comentarios_doctor'])); ?></p>
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b">Observaciones del Doctor</h2>
+                <div class="rounded-lg border p-4">
+                    <p class="text-sm text-gray-600 whitespace-pre-line"><?php echo nl2br(htmlspecialchars($formulario['comentarios_doctor'])); ?></p>
+                </div>
         </div>
         <?php endif; ?>
 
         <!-- Firmas -->
-        <div class="signatures">
-            <div class="signature-box">
-                <img src="<?php echo $formulario['firma_paciente']; ?>" alt="Firma del Paciente" class="signature-image">
-                <div class="signature-line">Firma del Paciente</div>
+            <div class="grid grid-cols-2 gap-8 mt-8">
+                <div class="text-center">
+                    <div class="border rounded-lg p-4 bg-gray-50 mb-2">
+                        <img src="<?php echo $formulario['firma_paciente']; ?>" alt="Firma del Paciente" class="h-24 mx-auto object-contain">
+                    </div>
+                    <p class="text-sm font-medium text-gray-900">Firma del Paciente</p>
+                </div>
+                <div class="text-center">
+                    <div class="border rounded-lg p-4 bg-gray-50 mb-2">
+                        <img src="<?php echo $formulario['firma_doctor']; ?>" alt="Firma del Doctor" class="h-24 mx-auto object-contain">
+                    </div>
+                    <p class="text-sm font-medium text-gray-900">Firma del Profesional de la Salud</p>
             </div>
-            <div class="signature-box">
-                <img src="<?php echo $formulario['firma_doctor']; ?>" alt="Firma del Doctor" class="signature-image">
-                <div class="signature-line">Firma del Profesional de la Salud</div>
             </div>
         </div>
     </div>
-
-    <script>
-        window.onload = function() {
-            window.print();
-        }
-    </script>
 </body>
 </html>
 <?php
