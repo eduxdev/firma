@@ -13,8 +13,7 @@ if (!isset($_GET['id'])) {
     exit();
 }
 
-// Configuración de la base de datos
-include '../../backend/db/conection.php'; 
+include '../../backend/db/conection.php';
 
 // Obtener datos del formulario
 $id = (int)$_GET['id'];
@@ -69,8 +68,13 @@ if ($formulario['estado_revision'] === 'aprobado') {
 } elseif ($formulario['estado_revision'] === 'rechazado') {
     $pagina_volver = 'formularios_rechazados.php';
 }
-?>
 
+// Configuración para el header
+$titulo = "Revisión de Formulario";
+$subtitulo = "Revise y apruebe el consentimiento médico";
+$url_volver = $pagina_volver;
+$scripts_adicionales = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -82,25 +86,9 @@ if ($formulario['estado_revision'] === 'aprobado') {
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body class="min-h-screen bg-[#fafafa]">
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full border-b bg-white/75 backdrop-blur-lg z-50">
-        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="text-sm text-muted-foreground">
-                <h1 class="text-lg font-semibold tracking-tight text-foreground">Revisión de Formulario</h1>
-                <p class="text-sm text-gray-500">Revise y apruebe el consentimiento médico</p>
-            </div>
-            <a href="<?php echo $pagina_volver; ?>" 
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]">
-                <i class="bi bi-arrow-left mr-2"></i>
-                Volver
-            </a>
-        </div>
-    </nav>
+<?php include 'header.php'; ?>
 
-    <!-- Espaciador para el navbar -->
-    <div class="h-16"></div>
-
-    <div class="container mx-auto p-6">
+<div class="container mx-auto p-6">
         <div class="grid grid-cols-3 gap-6">
             <!-- Columna izquierda y central - Información del paciente -->
             <div class="col-span-2 space-y-6">

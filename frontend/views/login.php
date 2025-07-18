@@ -5,117 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Panel del Doctor</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Agregamos Font Awesome para el ícono del ojo -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
-        .mesh-background {
-            background-color: #f8fafc;
-            background-image: 
-                radial-gradient(at 40% 20%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
-                radial-gradient(at 80% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
-                radial-gradient(at 80% 50%, rgba(147, 51, 234, 0.1) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
-                radial-gradient(at 80% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
-            position: relative;
+        body {
+            background-color: #0a0a0a;
         }
-        .mesh-background::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234338ca' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
-            pointer-events: none;
+        .auth-card {
+            background-color: #141414;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-field {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .input-field:focus {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .primary-button {
+            background-color: white;
+            color: black;
+            transition: all 0.2s ease;
+        }
+        .primary-button:hover {
+            opacity: 0.9;
+        }
+        .secondary-button {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .secondary-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="h-full mesh-background">
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 relative">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <!-- Botón Regresar -->
-            <div class="mb-4 text-left">
-                <a href="/" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-all duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Regresar
-                </a>
+<body class="h-full">
+    <div class="min-h-screen grid place-items-center p-4">
+        <div class="w-full max-w-sm auth-card p-6 space-y-6">
+            <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-xl font-semibold text-white">Panel del Doctor</h1>
+                </div>
+                <p class="text-sm text-gray-400">Ingrese sus credenciales para acceder al sistema</p>
             </div>
 
-            <img class="mx-auto h-16 w-auto rounded-full shadow-lg bg-white p-2" src="/public/assets/img/logo.jpg" alt="Logo">
-            <h2 class="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                Iniciar Sesión
-            </h2>
-        </div>
-
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white/80 backdrop-blur-sm px-8 py-10 shadow-xl rounded-xl border border-gray-100">
-                <?php if (isset($_GET['error'])): ?>
-                <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-800 border border-red-100">
-                    <?php 
-                    $error = $_GET['error'];
-                    switch($error) {
-                        case 'invalid':
-                            echo 'Correo o contraseña incorrectos';
-                            break;
-                        case 'inactive':
-                            echo 'Su cuenta está desactivada';
-                            break;
-                        default:
-                            echo 'Error al iniciar sesión';
-                    }
-                    ?>
+            <?php if (isset($_GET['error'])): ?>
+            <div class="rounded-md bg-red-900/20 px-4 py-3 text-sm text-red-400">
+                <div class="flex items-center gap-2">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <span>Credenciales incorrectas. Por favor, intente de nuevo.</span>
                 </div>
-                <?php endif; ?>
+            </div>
+            <?php endif; ?>
 
-                <form class="space-y-6" method="POST" action="procesar_login.php">
-                    <div>
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">
-                            Correo Electrónico
-                        </label>
-                        <div class="mt-2">
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                required
-                                class="block w-full rounded-lg border border-gray-200 py-2 px-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm sm:leading-6 bg-white/50 backdrop-blur-sm"
-                            >
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">
-                            Contraseña
-                        </label>
-                        <div class="mt-2 relative">
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                class="block w-full rounded-lg border border-gray-200 py-2 px-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm sm:leading-6 bg-white/50 backdrop-blur-sm"
-                            >
-                            <button 
-                                type="button" 
-                                onclick="togglePassword()"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 cursor-pointer"
-                            >
-                                <i class="fas fa-eye" id="togglePassword"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            class="flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-lg hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-200 hover:shadow-xl hover:scale-[1.02]"
+            <form method="POST" action="procesar_login.php" class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-white/90" for="email">
+                        Correo Electrónico
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="input-field w-full h-10 px-3 rounded-md text-sm focus:outline-none pl-9"
+                            placeholder="Ingrese su correo electrónico"
                         >
-                            Iniciar Sesión
+                        <i class="bi bi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-white/90" for="password">
+                        Contraseña
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            class="input-field w-full h-10 px-3 rounded-md text-sm focus:outline-none pl-9"
+                            placeholder="Ingrese su contraseña"
+                        >
+                        <i class="bi bi-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <button 
+                            type="button"
+                            onclick="togglePassword()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        >
+                            <i class="bi bi-eye" id="toggleIcon"></i>
                         </button>
                     </div>
-                </form>
+                </div>
+
+                <div class="space-y-3 pt-2">
+                    <button type="submit" class="primary-button w-full h-10 rounded-md font-medium flex items-center justify-center gap-2">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Iniciar Sesión
+                    </button>
+                </div>
+            </form>
+
+            <div class="pt-4 border-t border-white/10">
+                <a href="index.php" class="secondary-button w-full h-10 rounded-md font-medium flex items-center justify-center gap-2">
+                    <i class="bi bi-arrow-left"></i>
+                    Volver al Inicio
+                </a>
             </div>
         </div>
     </div>
@@ -123,16 +125,16 @@
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('togglePassword');
+            const toggleIcon = document.getElementById('toggleIcon');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.remove('bi-eye');
+                toggleIcon.classList.add('bi-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                toggleIcon.classList.remove('bi-eye-slash');
+                toggleIcon.classList.add('bi-eye');
             }
         }
     </script>

@@ -33,15 +33,53 @@ if (!$formulario) {
 $quejas = json_decode($formulario['quejas'], true) ?? [];
 $afirmaciones = json_decode($formulario['afirmaciones'], true) ?? [];
 
-// Generar nombre del archivo
-$nombre_archivo = 'consentimiento_' . $formulario['nombre'] . '_' . $formulario['apellido'] . '_' . date('Y-m-d') . '.pdf';
-$nombre_archivo = str_replace(' ', '_', $nombre_archivo);
-
 // Si se solicita cancelar, redirigir a la página de formularios aprobados
 if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
     header('Location: formularios_aprobados.php');
     exit();
 }
+
+// Configuración para el header
+$titulo = "Vista Previa del Consentimiento";
+$subtitulo = "Revise el documento antes de imprimir";
+$url_volver = "formularios_aprobados.php";
+$botones_adicionales = [
+    [
+        'tipo' => 'button',
+        'onclick' => 'window.print()',
+        'icono' => 'printer',
+        'texto' => 'Imprimir',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium bg-blue-600 text-white px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-blue-700 active:translate-y-[1px]'
+    ]
+];
+
+// Estilos adicionales para impresión
+$scripts_adicionales = '
+<style>
+    @page {
+        margin: 1.5cm;
+        size: letter;
+    }
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .page {
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            width: 100% !important;
+            max-width: none !important;
+        }
+        /* ... resto de los estilos de impresión ... */
+    }
+</style>';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -191,34 +229,11 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
     </style>
 </head>
 <body class="min-h-screen bg-[#fafafa]">
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full border-b bg-white/75 backdrop-blur-lg z-50 no-print">
-        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="text-sm text-muted-foreground">
-                <h1 class="text-lg font-semibold tracking-tight text-foreground">Vista Previa del Consentimiento</h1>
-                <p class="text-sm text-gray-500">Revise el documento antes de imprimir</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="formularios_aprobados.php" 
-                   class="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]">
-                    <i class="bi bi-arrow-left mr-2"></i>
-                    Volver
-                </a>
-                <button onclick="window.print()" 
-                        class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-blue-600 text-white px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-blue-700 active:translate-y-[1px]">
-                    <i class="bi bi-printer mr-2"></i>
-                    Imprimir
-                </button>
-            </div>
-        </div>
-    </nav>
+<?php include 'header.php'; ?>
 
-    <!-- Espaciador para el navbar -->
-    <div class="h-16 no-print"></div>
-
-    <div class="container mx-auto p-6">
-        <div class="page bg-white rounded-lg border shadow-sm p-8 max-w-4xl mx-auto">
-            <div class="text-center mb-8">
+<div class="container mx-auto p-6">
+    <div class="page bg-white rounded-lg border shadow-sm p-8 max-w-4xl mx-auto">
+        <div class="text-center mb-8">
                 <h1 class="text-2xl font-bold text-gray-900">Consentimiento Médico</h1>
         </div>
 
@@ -539,6 +554,7 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
 <?php

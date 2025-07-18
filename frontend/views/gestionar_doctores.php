@@ -51,8 +51,29 @@ if (isset($_GET['toggle_id']) && isset($_GET['estado'])) {
 // Obtener la lista de doctores
 $sql = "SELECT id, nombre, apellido, email, rol, activo, fecha_creacion, ultima_sesion FROM usuarios ORDER BY fecha_creacion DESC";
 $result = $conn->query($sql);
-?>
 
+// Configuración para el header
+$titulo = "Gestionar Doctores";
+$subtitulo = "Administración de usuarios del sistema";
+$botones_adicionales = [
+    [
+        'tipo' => 'link',
+        'url' => 'cerrar_sesion.php',
+        'icono' => 'box-arrow-right',
+        'texto' => 'Cerrar Sesión',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
+    ]
+];
+
+// Scripts adicionales para el header
+$scripts_adicionales = '
+<script src="//unpkg.com/alpinejs" defer></script>
+<style>
+    [x-cloak] { 
+        display: none !important; 
+    }
+</style>';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,22 +131,9 @@ $result = $conn->query($sql);
     </style>
 </head>
 <body class="bg-gray-50" x-data="{ showModal: false, doctorId: null, doctorNombre: '' }">
-    <nav class="bg-white shadow">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
-            <div class="flex items-center">
-                <span class="mr-4 text-gray-600">
-                    <i class="bi bi-person-badge-fill"></i> 
-                    Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
-                </span>
-                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-400 text-blue-500 hover:bg-blue-400 hover:text-white rounded-md transition-colors">
-                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
-                </a>
-            </div>
-        </div>
-    </nav>
+<?php include 'header.php'; ?>
 
-    <div class="container mx-auto px-4 mt-6">
+<div class="container mx-auto px-4 mt-6">
         <?php if (isset($_SESSION['error'])): ?>
         <div class="bg-red-100 border-l-4 border-red-300 text-red-700 p-4 mb-4">
             <i class="bi bi-exclamation-circle"></i> <?php echo $_SESSION['error']; ?>

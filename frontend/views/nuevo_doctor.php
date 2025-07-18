@@ -58,8 +58,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
+// Configuración para el header
+$titulo = "Nuevo Doctor";
+$subtitulo = "Registro de nuevo usuario del sistema";
+$botones_adicionales = [
+    [
+        'tipo' => 'link',
+        'url' => 'cerrar_sesion.php',
+        'icono' => 'box-arrow-right',
+        'texto' => 'Cerrar Sesión',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
+    ]
+];
+
+// Scripts adicionales para el header
+$scripts_adicionales = '
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<style>
+    [x-cloak] { 
+        display: none !important; 
+    }
+</style>';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -198,22 +219,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body class="bg-light">
-    <nav class="bg-white shadow-md py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
-            <div class="flex items-center">
-                <span class="mr-4 text-dark">
-                    <i class="bi bi-person-badge-fill"></i> 
-                    Administrador: <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
-                </span>
-                <a href="cerrar_sesion.php" class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                </a>
-            </div>
-        </div>
-    </nav>
+<?php include 'header.php'; ?>
 
-    <div class="container mx-auto px-4 mt-6">
+<div class="container mx-auto px-4 mt-6">
         <div class="flex flex-wrap">
             <!-- Menú lateral -->
             <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">

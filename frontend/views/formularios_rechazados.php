@@ -60,8 +60,30 @@ $sql_conteo = "SELECT
 FROM formularios_consentimiento";
 $result_conteo = $conn->query($sql_conteo);
 $conteo = $result_conteo->fetch_assoc();
-?>
 
+// Configuración para el header
+$titulo = "Formularios Rechazados";
+$subtitulo = "Historial de consentimientos rechazados";
+$url_volver = "admin_panel.php";
+$botones_adicionales = [
+    [
+        'tipo' => 'link',
+        'url' => 'cerrar_sesion.php',
+        'icono' => 'box-arrow-right',
+        'texto' => 'Cerrar Sesión',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
+    ]
+];
+
+// Scripts adicionales para el header
+$scripts_adicionales = '
+<script src="//unpkg.com/alpinejs" defer></script>
+<style>
+    [x-cloak] { 
+        display: none !important; 
+    }
+</style>';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -70,63 +92,11 @@ $conteo = $result_conteo->fetch_assoc();
     <title>Panel del Doctor - Formularios Rechazados</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="//unpkg.com/alpinejs" defer></script>
-    <style>
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
 </head>
 <body class="bg-gray-50" x-data="{ showModal: false, formId: null }">
-    <!-- Modal de confirmación -->
-    <div x-cloak x-show="showModal" 
-         class="fixed inset-0 z-50">
-        <!-- Overlay -->
-        <div class="fixed inset-0 bg-black bg-opacity-50" @click="showModal = false"></div>
+<?php include 'header.php'; ?>
 
-        <!-- Modal -->
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto relative"
-                 @click.away="showModal = false">
-                <div class="text-center">
-                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                        <i class="bi bi-exclamation-triangle text-red-400 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Confirmar Eliminación</h3>
-                    <p class="text-sm text-gray-500 mb-6">¿Estás seguro de que deseas eliminar este formulario? Esta acción no se puede deshacer.</p>
-                </div>
-                <div class="flex justify-center space-x-3">
-                    <form action="borrar_formulario.php" method="POST">
-                        <input type="hidden" name="id" :value="formId">
-                        <input type="hidden" name="confirmar" value="1">
-                        <button type="submit" 
-                                class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-400 rounded-md hover:bg-red-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500">
-                            Eliminar
-                        </button>
-                    </form>
-                    <button @click="showModal = false" 
-                            class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500">
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="bg-white shadow">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
-            <div class="flex items-center">
-                <span class="mr-4 text-gray-700">Dr. <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></span>
-                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors">
-                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mx-auto px-4 mt-8">
+<div class="container mx-auto px-4 mt-8">
         <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
         <div class="mb-6">
             <a href="admin_panel.php" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">

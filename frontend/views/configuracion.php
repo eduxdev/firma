@@ -104,8 +104,29 @@ if (isset($_POST['cambiar_password'])) {
         }
     }
 }
-?>
 
+// Configuración para el header
+$titulo = "Configuración";
+$subtitulo = "Ajustes de cuenta y preferencias";
+$botones_adicionales = [
+    [
+        'tipo' => 'link',
+        'url' => 'cerrar_sesion.php',
+        'icono' => 'box-arrow-right',
+        'texto' => 'Cerrar Sesión',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
+    ]
+];
+
+// Scripts adicionales para el header
+$scripts_adicionales = '
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<style>
+    [x-cloak] { 
+        display: none !important; 
+    }
+</style>';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -156,28 +177,9 @@ if (isset($_POST['cambiar_password'])) {
     </style>
 </head>
 <body class="bg-gray-50">
-    <nav class="bg-white shadow">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <img src="/public/assets/img/logo.jpg" alt="Logo" class="h-12">
-            <div class="flex items-center">
-                <span class="mr-4 text-gray-700">
-                    <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                        <i class="bi bi-person-badge-fill"></i> 
-                        Administrador: 
-                    <?php else: ?>
-                        <i class="bi bi-person-vcard"></i> 
-                        Doctor: 
-                    <?php endif; ?>
-                    <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?>
-                </span>
-                <a href="cerrar_sesion.php" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white rounded-md transition-colors">
-                    <i class="bi bi-box-arrow-right mr-2"></i> Cerrar Sesión
-                </a>
-            </div>
-        </div>
-    </nav>
+<?php include 'header.php'; ?>
 
-    <div class="container mx-auto px-4 mt-6">
+<div class="container mx-auto px-4 mt-6">
         <div class="flex flex-wrap">
             <!-- Menú lateral -->
             <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
