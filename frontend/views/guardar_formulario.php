@@ -1,6 +1,7 @@
 <?php
 // Configuración de la base de datos
 require_once '../../backend/db/conection.php';
+require_once '../../backend/db/mail_config.php';
 
 // Formatear la fecha de nacimiento
 $dia = $_POST['fecha_nacimiento_dia'];
@@ -85,6 +86,17 @@ $stmt->bind_param("ssssssssssssssssssssssssssssssssssssssss",
 );
 
 if ($stmt->execute()) {
+    // Enviar notificación por correo
+    $datos_formulario = [
+        'nombre' => $_POST['nombre'],
+        'apellido' => $_POST['apellido'],
+        'fecha_nacimiento' => $fecha_nacimiento,
+        'correo' => $_POST['correo'],
+        'telefono_celular' => $_POST['telefono_celular']
+    ];
+    
+    enviarNotificacionNuevoFormulario($datos_formulario);
+
     // Éxito - redirigir a página de confirmación
     header('Location: confirmacion.php');
     exit();

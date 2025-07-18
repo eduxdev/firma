@@ -108,15 +108,7 @@ if (isset($_POST['cambiar_password'])) {
 // Configuración para el header
 $titulo = "Configuración";
 $subtitulo = "Ajustes de cuenta y preferencias";
-$botones_adicionales = [
-    [
-        'tipo' => 'link',
-        'url' => 'cerrar_sesion.php',
-        'icono' => 'box-arrow-right',
-        'texto' => 'Cerrar Sesión',
-        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
-    ]
-];
+
 
 // Scripts adicionales para el header
 $scripts_adicionales = '
@@ -167,12 +159,12 @@ $scripts_adicionales = '
             <?php endif; ?>
 
             <!-- Encabezado de la página -->
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Configuración</h2>
-                    <p class="text-sm text-gray-500 mt-1">Ajustes de cuenta y preferencias</p>
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Configuración</h2>
+                        <p class="text-sm text-gray-500 mt-1">Ajustes de cuenta y preferencias</p>
+                    </div>
                 </div>
-            </div>
 
             <!-- Mensajes de éxito o error para actualización de perfil -->
             <?php if (!empty($success_perfil)): ?>
@@ -293,42 +285,59 @@ $scripts_adicionales = '
             <form method="POST" action="">
                 <div class="p-6 space-y-4">
                     <div>
-                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="nombre" 
-                               name="nombre" 
-                               value="<?php echo htmlspecialchars($usuario['nombre']); ?>" 
-                               required>
+                        <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-person text-gray-400"></i>
+                            </span>
+                            <input type="text" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="nombre" 
+                                   name="nombre" 
+                                   value="<?php echo htmlspecialchars($usuario['nombre']); ?>" 
+                                   required>
+                        </div>
                     </div>
                     <div>
-                        <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
-                        <input type="text" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="apellido" 
-                               name="apellido" 
-                               value="<?php echo htmlspecialchars($usuario['apellido']); ?>" 
-                               required>
+                        <label for="apellido" class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-person text-gray-400"></i>
+                            </span>
+                            <input type="text" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="apellido" 
+                                   name="apellido" 
+                                   value="<?php echo htmlspecialchars($usuario['apellido']); ?>" 
+                                   required>
+                        </div>
                     </div>
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-                        <input type="email" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="email" 
-                               name="email" 
-                               value="<?php echo htmlspecialchars($usuario['email']); ?>" 
-                               required>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-envelope text-gray-400"></i>
+                            </span>
+                            <input type="email" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="email" 
+                                   name="email" 
+                                   value="<?php echo htmlspecialchars($usuario['email']); ?>" 
+                                   required>
+                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
                     <button type="button" 
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                             onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">
+                        <i class="bi bi-x-circle mr-2"></i>
                         Cancelar
                     </button>
                     <button type="submit" 
                             name="editar_perfil" 
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                        <i class="bi bi-check-circle mr-2"></i>
                         Guardar Cambios
                     </button>
                 </div>
@@ -350,39 +359,56 @@ $scripts_adicionales = '
             <form method="POST" action="">
                 <div class="p-6 space-y-4">
                     <div>
-                        <label for="password_actual" class="block text-sm font-medium text-gray-700">Contraseña Actual</label>
-                        <input type="password" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="password_actual" 
-                               name="password_actual" 
-                               required>
+                        <label for="password_actual" class="block text-sm font-medium text-gray-700 mb-1">Contraseña Actual</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-lock text-gray-400"></i>
+                            </span>
+                            <input type="password" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="password_actual" 
+                                   name="password_actual" 
+                                   required>
+                        </div>
                     </div>
                     <div>
-                        <label for="password_nueva" class="block text-sm font-medium text-gray-700">Nueva Contraseña</label>
-                        <input type="password" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="password_nueva" 
-                               name="password_nueva" 
-                               required>
+                        <label for="password_nueva" class="block text-sm font-medium text-gray-700 mb-1">Nueva Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-key text-gray-400"></i>
+                            </span>
+                            <input type="password" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="password_nueva" 
+                                   name="password_nueva" 
+                                   required>
+                        </div>
                     </div>
                     <div>
-                        <label for="password_confirmacion" class="block text-sm font-medium text-gray-700">Confirmar Nueva Contraseña</label>
-                        <input type="password" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                               id="password_confirmacion" 
-                               name="password_confirmacion" 
-                               required>
+                        <label for="password_confirmacion" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-key-fill text-gray-400"></i>
+                            </span>
+                            <input type="password" 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 text-sm" 
+                                   id="password_confirmacion" 
+                                   name="password_confirmacion" 
+                                   required>
+                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
                     <button type="button" 
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                             onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">
+                        <i class="bi bi-x-circle mr-2"></i>
                         Cancelar
                     </button>
                     <button type="submit" 
                             name="cambiar_password" 
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                        <i class="bi bi-check-circle mr-2"></i>
                         Actualizar Contraseña
                     </button>
                 </div>

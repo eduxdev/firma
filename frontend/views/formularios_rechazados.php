@@ -65,15 +65,7 @@ $conteo = $result_conteo->fetch_assoc();
 $titulo = "Formularios Rechazados";
 $subtitulo = "Historial de consentimientos rechazados";
 $url_volver = "admin_panel.php";
-$botones_adicionales = [
-    [
-        'tipo' => 'link',
-        'url' => 'cerrar_sesion.php',
-        'icono' => 'box-arrow-right',
-        'texto' => 'Cerrar Sesión',
-        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:shadow-md hover:translate-y-[-1px] hover:bg-gray-50 active:translate-y-[1px]'
-    ]
-];
+
 
 // Scripts adicionales para el header
 $scripts_adicionales = '
