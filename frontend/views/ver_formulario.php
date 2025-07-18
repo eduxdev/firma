@@ -73,10 +73,19 @@ if ($formulario['estado_revision'] === 'aprobado') {
 $titulo = "Revisión de Formulario";
 $subtitulo = "Revise y apruebe el consentimiento médico";
 $url_volver = $pagina_volver;
+$botones_adicionales = [
+    [
+        'tipo' => 'link',
+        'url' => $pagina_volver,
+        'icono' => 'arrow-left',
+        'texto' => 'Volver',
+        'clase' => 'inline-flex items-center justify-center rounded-md text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2'
+    ]
+];
 $scripts_adicionales = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,12 +93,22 @@ $scripts_adicionales = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        .main-content {
+            margin-left: 16rem;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-[#fafafa]">
-<?php include 'header.php'; ?>
+<body class="h-full bg-[#f8f9fa]">
+    <?php include 'menu_lateral.php'; ?>
+    
+    <div class="main-content">
+        <?php include 'header.php'; ?>
 
-<div class="container mx-auto p-6">
-        <div class="grid grid-cols-3 gap-6">
+        <main class="p-6">
+            <div class="grid grid-cols-3 gap-6">
             <!-- Columna izquierda y central - Información del paciente -->
             <div class="col-span-2 space-y-6">
         <!-- Datos Personales -->
@@ -446,10 +465,10 @@ $scripts_adicionales = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@
                     </form>
                 </div>
             </div>
-        </div>
+        </main>
 
         <!-- Declaraciones Legales -->
-        <div class="mt-6">
+        <div class="p-6">
             <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
                 <div class="p-6">
                     <h3 class="font-semibold tracking-tight text-lg">Declaraciones Legales</h3>

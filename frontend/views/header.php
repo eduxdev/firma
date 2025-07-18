@@ -9,13 +9,13 @@ $scripts_adicionales = $scripts_adicionales ?? '';
 <?php echo $scripts_adicionales; ?>
 
 <!-- Header -->
-<header class="sticky top-0 z-30 w-full border-b border-gray-800/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<header class="sticky top-0 z-30 w-full border-b border-gray-800/10 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
     <div class="flex h-16 items-center gap-4 px-6">
         <!-- Título y Subtítulo -->
         <div class="flex-1">
-            <h1 class="text-lg font-semibold"><?php echo $titulo; ?></h1>
+            <h1 class="text-lg font-semibold text-gray-800"><?php echo $titulo; ?></h1>
             <?php if ($subtitulo): ?>
-                <p class="text-sm text-muted-foreground"><?php echo $subtitulo; ?></p>
+                <p class="text-sm text-gray-500"><?php echo $subtitulo; ?></p>
             <?php endif; ?>
         </div>
 

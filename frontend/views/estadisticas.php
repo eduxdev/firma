@@ -120,7 +120,7 @@ $scripts_adicionales = '
 </style>';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -165,161 +165,201 @@ $scripts_adicionales = '
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        .main-content {
+            margin-left: 16rem;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
         [x-cloak] { 
             display: none !important; 
         }
     </style>
 </head>
-<body class="bg-gray-50">
-<?php include 'header.php'; ?>
+<body class="h-full bg-[#f8f9fa]">
+    <?php include 'menu_lateral.php'; ?>
+    
+    <div class="main-content">
+        <?php include 'header.php'; ?>
 
-<div class="container mx-auto px-4 mt-6">
-        <div class="flex flex-wrap">
-            <!-- Menú lateral -->
-            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
-                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                    <i class="bi bi-arrow-left"></i> Volver al Dashboard
-                </a>
-                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
-                    <div class="bg-blue-600 text-white p-4 rounded-t-lg">
-                        <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
-                    </div>
-                    <div class="p-0">
-                        <nav class="flex flex-col p-2">
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="admin_panel.php">
-                                <i class="bi bi-house-door w-6 text-center"></i> Dashboard
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="formularios_pendientes.php">
-                                <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="gestionar_doctores.php">
-                                <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white bg-blue-600 text-white" href="estadisticas.php">
-                                <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="configuracion.php">
-                                <i class="bi bi-gear w-6 text-center"></i> Configuración
-                            </a>
-                        </nav>
-                    </div>
+        <main class="p-6">
+            <!-- Encabezado de la página -->
+            <div class="flex justify-between items-center mb-6">
+                
+                <div class="flex gap-3">
+                    <a href="exportar_estadisticas.php" 
+                       class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                        <i class="bi bi-download me-2"></i> Exportar Datos
+                    </a>
                 </div>
             </div>
-
-            <!-- Contenido principal -->
-            <div class="w-full md:w-3/4 lg:w-5/6 content-container">
-                <h2 class="text-2xl font-bold mb-6"><i class="bi bi-bar-chart"></i> Estadísticas del Sistema</h2>
-                
-                <!-- Resumen de Estadísticas -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-2 text-blue-600 flex items-center">
-                            <i class="bi bi-file-text mr-2"></i> Total Formularios
-                        </h3>
-                        <p class="text-4xl font-bold">
-                            <?php echo $formularios['pendientes'] + $formularios['aprobados'] + $formularios['rechazados']; ?>
-                        </p>
+            
+            <!-- Resumen de Estadísticas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Formularios -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-blue-100 text-blue-700 rounded-lg">
+                                    <i class="bi bi-file-text text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Formularios</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800">
+                                <?php echo $formularios['pendientes'] + $formularios['aprobados'] + $formularios['rechazados']; ?>
+                            </span>
+                        </div>
                         <div class="flex justify-between mt-4 text-sm">
-                            <span class="text-blue-400"><i class="bi bi-hourglass-split"></i> <?php echo $formularios['pendientes']; ?> pendientes</span>
-                            <span class="text-green-400"><i class="bi bi-check-circle"></i> <?php echo $formularios['aprobados']; ?> aprobados</span>
-                            <span class="text-red-400"><i class="bi bi-x-circle"></i> <?php echo $formularios['rechazados']; ?> rechazados</span>
+                            <span class="text-blue-600"><i class="bi bi-hourglass-split"></i> <?php echo $formularios['pendientes']; ?> pendientes</span>
+                            <span class="text-green-600"><i class="bi bi-check-circle"></i> <?php echo $formularios['aprobados']; ?> aprobados</span>
+                            <span class="text-red-600"><i class="bi bi-x-circle"></i> <?php echo $formularios['rechazados']; ?> rechazados</span>
                         </div>
                     </div>
-                    
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-2 text-blue-600 flex items-center">
-                            <i class="bi bi-people mr-2"></i> Total Usuarios
-                        </h3>
-                        <p class="text-4xl font-bold">
-                            <?php echo $usuarios['total_doctores']; ?>
-                        </p>
+                </div>
+                
+                <!-- Total Usuarios -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                                    <i class="bi bi-people text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Usuarios</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800"><?php echo $usuarios['total_doctores']; ?></span>
+                        </div>
                         <div class="flex justify-between mt-4 text-sm">
                             <span class="text-blue-600"><i class="bi bi-person-gear"></i> <?php echo $usuarios['total_admins']; ?> administradores</span>
-                            <span class="text-blue-400"><i class="bi bi-person-badge"></i> <?php echo $usuarios['total_docs']; ?> doctores</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-2 text-green-400 flex items-center">
-                            <i class="bi bi-activity mr-2"></i> Tasa de Aprobación
-                        </h3>
-                        <p class="text-4xl font-bold">
-                            <?php 
-                                $total = $formularios['pendientes'] + $formularios['aprobados'] + $formularios['rechazados'];
-                                echo $total > 0 ? round(($formularios['aprobados'] / $total) * 100) : 0; 
-                            ?>%
-                        </p>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
-                            <div class="bg-green-400 h-2.5 rounded-full" style="width: <?php echo $total > 0 ? round(($formularios['aprobados'] / $total) * 100) : 0; ?>%"></div>
+                            <span class="text-blue-600"><i class="bi bi-person-badge"></i> <?php echo $usuarios['total_docs']; ?> doctores</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Gráficos principales -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Gráfico de estado de formularios -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-4">Estado de Formularios</h3>
-                        <div class="h-64">
-                            <canvas id="chartFormularios"></canvas>
+                <!-- Tasa de Aprobación -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-amber-100 text-amber-700 rounded-lg">
+                                    <i class="bi bi-activity text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Tasa de Aprobación</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800">
+                                <?php 
+                                    $total = $formularios['pendientes'] + $formularios['aprobados'] + $formularios['rechazados'];
+                                    echo $total > 0 ? round(($formularios['aprobados'] / $total) * 100) : 0; 
+                                ?>%
+                            </span>
                         </div>
-                    </div>
-                    
-                    <!-- Gráfico de distribución de usuarios -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-4">Distribución de Usuarios</h3>
-                        <div class="h-64">
-                            <canvas id="chartUsuarios"></canvas>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: <?php echo $total > 0 ? round(($formularios['aprobados'] / $total) * 100) : 0; ?>%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Gráfico de tendencia por mes -->
-                <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-                    <h3 class="text-lg font-semibold mb-4">Tendencia de Formularios (Últimos 6 meses)</h3>
-                    <div class="h-80">
-                        <canvas id="chartTendencia"></canvas>
-                    </div>
-                </div>
-                
-                <!-- Fila adicional: Estado de usuarios y Top doctores -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Gráfico de estado de usuarios -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-4">Estado de Usuarios</h3>
-                        <div class="h-64">
-                            <canvas id="chartEstadoUsuarios"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Top doctores -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-lg font-semibold mb-4">Doctores Recientes</h3>
-                        <?php if ($result_doctores->num_rows > 0): ?>
-                            <ul class="space-y-4">
-                                <?php while ($doctor = $result_doctores->fetch_assoc()): ?>
-                                <li class="flex items-center">
-                                    <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
-                                        <i class="bi bi-person"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h4 class="font-medium"><?php echo htmlspecialchars($doctor['nombre'] . ' ' . $doctor['apellido']); ?></h4>
-                                        <div class="flex items-center">
-                                            <span class="text-sm text-gray-600">Desde: <?php echo date('d/m/Y', strtotime($doctor['fecha_creacion'])); ?></span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <?php endwhile; ?>
-                            </ul>
-                        <?php else: ?>
-                            <p class="text-gray-500 italic">No hay datos suficientes</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                
             </div>
-        </div>
+            
+            <!-- Gráficos principales -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Gráfico de estado de formularios -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Estado de Formularios</h3>
+                        <div class="flex gap-2">
+                            <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
+                                <i class="bi bi-calendar3 me-1"></i> Este mes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartFormularios"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Gráfico de distribución de usuarios -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Distribución de Usuarios</h3>
+                        <div class="flex gap-2">
+                            <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
+                                <i class="bi bi-calendar3 me-1"></i> Este mes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartUsuarios"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gráfico de tendencia por mes -->
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Tendencia de Formularios</h3>
+                    <div class="flex gap-2">
+                        <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
+                            <i class="bi bi-calendar3 me-1"></i> Últimos 6 meses
+                        </button>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="chartTendencia"></canvas>
+                </div>
+            </div>
+            
+            <!-- Fila adicional: Estado de usuarios y Top doctores -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Gráfico de estado de usuarios -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Estado de Usuarios</h3>
+                        <div class="flex gap-2">
+                            <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
+                                <i class="bi bi-calendar3 me-1"></i> Este mes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartEstadoUsuarios"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Top doctores -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Doctores Recientes</h3>
+                        <div class="flex gap-2">
+                            <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
+                                <i class="bi bi-calendar3 me-1"></i> Este mes
+                            </button>
+                        </div>
+                    </div>
+                    <?php if ($result_doctores->num_rows > 0): ?>
+                        <ul class="space-y-4">
+                            <?php while ($doctor = $result_doctores->fetch_assoc()): ?>
+                            <li class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900"><?php echo htmlspecialchars($doctor['nombre'] . ' ' . $doctor['apellido']); ?></h4>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        <span>Desde: <?php echo date('d/m/Y', strtotime($doctor['fecha_creacion'])); ?></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <?php endwhile; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p class="text-gray-500 italic text-center">No hay datos suficientes</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Scripts para gráficos -->

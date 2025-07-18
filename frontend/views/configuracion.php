@@ -128,235 +128,209 @@ $scripts_adicionales = '
 </style>';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        blue: {
-                            400: '#60a5fa',
-                            600: '#2563eb',
-                            700: '#1d4ed8'
-                        },
-                        green: {
-                            400: '#4ade80',
-                            600: '#16a34a'
-                        },
-                        red: {
-                            400: '#f87171',
-                            600: '#dc2626'
-                        },
-                        gray: {
-                            50: '#f9fafb',
-                            100: '#f3f4f6',
-                            200: '#e5e7eb',
-                            300: '#d1d5db',
-                            400: '#9ca3af',
-                            500: '#6b7280',
-                            600: '#4b5563',
-                            700: '#374151',
-                            800: '#1f2937',
-                            900: '#111827'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="//unpkg.com/alpinejs" defer></script>
     <style>
+        .main-content {
+            margin-left: 16rem;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
         [x-cloak] { 
             display: none !important; 
         }
     </style>
 </head>
-<body class="bg-gray-50">
-<?php include 'header.php'; ?>
+<body class="h-full bg-[#f8f9fa]">
+    <?php include 'menu_lateral.php'; ?>
+    
+    <div class="main-content">
+        <?php include 'header.php'; ?>
 
-<div class="container mx-auto px-4 mt-6">
-        <div class="flex flex-wrap">
-            <!-- Menú lateral -->
-            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
-                <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                    <i class="bi bi-arrow-left"></i> Volver al Dashboard
-                </a>
-                <?php else: ?>
-                <a href="formularios_pendientes.php" class="inline-block px-4 py-2 mb-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                    <i class="bi bi-arrow-left"></i> Volver a Formularios
-                </a>
-                <?php endif; ?>
-                
-                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
-                    <div class="bg-blue-600 text-white p-4 rounded-t-lg">
-                        <h5 class="m-0 font-medium">
-                            <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                                <i class="bi bi-speedometer2"></i> Panel Admin
-                            <?php else: ?>
-                                <i class="bi bi-menu-button-wide"></i> Menú Doctor
-                            <?php endif; ?>
-                        </h5>
-                    </div>
-                    <div class="p-0">
-                        <nav class="flex flex-col p-2">
-                            <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="admin_panel.php">
-                                    <i class="bi bi-house-door w-6 text-center"></i> Dashboard
-                                </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="formularios_pendientes.php">
-                                    <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
-                                </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="gestionar_doctores.php">
-                                    <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
-                                </a>
-                                <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white" href="estadisticas.php">
-                                    <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
-                                </a>
-                            <?php endif; ?>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-700 hover:bg-blue-600 hover:text-white bg-blue-600 text-white" href="configuracion.php">
-                                <i class="bi bi-gear w-6 text-center"></i> Configuración
-                            </a>
-                        </nav>
-                    </div>
+        <main class="p-6">
+            <?php if ($_SESSION['user_rol'] === 'admin'): ?>
+            <nav class="flex mb-6" aria-label="breadcrumb">
+                <ol class="flex items-center space-x-2">
+                    <li>
+                        <a href="admin_panel.php" class="text-blue-600 hover:text-blue-700">Dashboard</a>
+                    </li>
+                    <li class="text-gray-500">/</li>
+                    <li class="text-gray-600">Configuración</li>
+                </ol>
+            </nav>
+            <?php endif; ?>
+
+            <!-- Encabezado de la página -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Configuración</h2>
+                    <p class="text-sm text-gray-500 mt-1">Ajustes de cuenta y preferencias</p>
                 </div>
             </div>
+
+            <!-- Mensajes de éxito o error para actualización de perfil -->
+            <?php if (!empty($success_perfil)): ?>
+                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center">
+                    <i class="bi bi-check-circle me-2"></i><?php echo $success_perfil; ?>
+                    <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($error_perfil)): ?>
+                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded flex items-center">
+                    <i class="bi bi-exclamation-circle me-2"></i><?php echo $error_perfil; ?>
+                    <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Mensajes de éxito o error para cambio de contraseña -->
+            <?php if (!empty($success_password)): ?>
+                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center">
+                    <i class="bi bi-check-circle me-2"></i><?php echo $success_password; ?>
+                    <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($error_password)): ?>
+                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded flex items-center">
+                    <i class="bi bi-exclamation-circle me-2"></i><?php echo $error_password; ?>
+                    <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            <?php endif; ?>
 
             <!-- Contenido principal -->
-            <div class="w-full md:w-3/4 lg:w-5/6 content-container">
-                <?php if ($_SESSION['user_rol'] === 'admin'): ?>
-                <nav class="flex mb-6" aria-label="breadcrumb">
-                    <ol class="flex">
-                        <li class="mr-2">
-                            <a href="admin_panel.php" class="text-blue-600 hover:underline">Dashboard</a>
-                            <span class="mx-1 text-gray-500">/</span>
-                        </li>
-                        <li class="text-gray-600">Configuración</li>
-                    </ol>
-                </nav>
-                <?php endif; ?>
-                
-                <h2 class="mb-6 text-xl font-bold"><i class="bi bi-gear"></i> Configuración</h2>
-
-                <!-- Mensajes de éxito o error para actualización de perfil -->
-                <?php if (!empty($success_perfil)): ?>
-                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-400 text-green-700 rounded flex items-center">
-                        <i class="bi bi-check-circle-fill mr-2"></i> <?php echo $success_perfil; ?>
-                        <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                <?php endif; ?>
-                
-                <?php if (!empty($error_perfil)): ?>
-                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-400 text-red-700 rounded flex items-center">
-                        <i class="bi bi-exclamation-triangle-fill mr-2"></i> <?php echo $error_perfil; ?>
-                        <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                <?php endif; ?>
-                
-                <!-- Mensajes de éxito o error para cambio de contraseña -->
-                <?php if (!empty($success_password)): ?>
-                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-400 text-green-700 rounded flex items-center">
-                        <i class="bi bi-check-circle-fill mr-2"></i> <?php echo $success_password; ?>
-                        <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                <?php endif; ?>
-                
-                <?php if (!empty($error_password)): ?>
-                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-400 text-red-700 rounded flex items-center">
-                        <i class="bi bi-exclamation-triangle-fill mr-2"></i> <?php echo $error_password; ?>
-                        <button type="button" class="ml-auto" onclick="this.parentElement.remove();">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                <?php endif; ?>
-
-                <div class="flex flex-wrap -mx-3">
-                    <div class="w-full md:w-1/2 px-3 mb-6">
-                        <!-- Información del Usuario -->
-                        <div class="bg-white rounded-lg shadow-sm mb-6">
-                            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
-                                <h5 class="m-0 font-medium"><i class="bi bi-person-circle"></i> Información del Usuario</h5>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Información del Usuario -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Información del Usuario</h3>
+                                <p class="text-sm text-gray-500 mt-1">Datos personales de la cuenta</p>
                             </div>
-                            <div class="p-6">
-                                <p class="mb-2"><strong>Nombre:</strong> <?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></p>
-                                <p class="mb-4"><strong>Rol:</strong> <?php echo $_SESSION['user_rol'] === 'admin' ? 'Administrador' : 'Doctor'; ?></p>
-                                <div class="w-full">
-                                    <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
-                                            onclick="document.getElementById('editarPerfilModal').classList.toggle('hidden')">
-                                        <i class="bi bi-pencil-square"></i> Editar Perfil
-                                    </button>
-                                </div>
+                            <button class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-950 disabled:pointer-events-none disabled:opacity-50"
+                                    onclick="document.getElementById('editarPerfilModal').classList.toggle('hidden')">
+                                <i class="bi bi-pencil-square me-2"></i> Editar Perfil
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Nombre completo</h4>
+                                <p class="mt-1 text-base text-gray-900"><?php echo htmlspecialchars($_SESSION['doctor_nombre'] . ' ' . $_SESSION['doctor_apellido']); ?></p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Correo electrónico</h4>
+                                <p class="mt-1 text-base text-gray-900"><?php echo htmlspecialchars($usuario['email']); ?></p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Rol</h4>
+                                <p class="mt-1 text-base text-gray-900"><?php echo $_SESSION['user_rol'] === 'admin' ? 'Administrador' : 'Doctor'; ?></p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="w-full md:w-1/2 px-3 mb-6">
-                        <!-- Seguridad -->
-                        <div class="bg-white rounded-lg shadow-sm mb-6">
-                            <div class="bg-blue-600 text-white p-4 rounded-t-lg">
-                                <h5 class="m-0 font-medium"><i class="bi bi-shield-lock"></i> Seguridad</h5>
+                </div>
+
+                <!-- Seguridad -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Seguridad</h3>
+                                <p class="text-sm text-gray-500 mt-1">Gestión de contraseña y seguridad</p>
                             </div>
-                            <div class="p-6">
-                                <div class="mb-3">
-                                    <h5 class="text-lg font-medium mb-1">Cambiar Contraseña</h5>
-                                    <p class="text-gray-600 mb-4">Actualiza tu contraseña para mayor seguridad</p>
-                                    <div class="w-full">
-                                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                                                onclick="document.getElementById('cambiarPasswordModal').classList.toggle('hidden')">
-                                            <i class="bi bi-key"></i> Cambiar Contraseña
-                                        </button>
-                                    </div>
-                                </div>
+                            <button class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-950 disabled:pointer-events-none disabled:opacity-50"
+                                    onclick="document.getElementById('cambiarPasswordModal').classList.toggle('hidden')">
+                                <i class="bi bi-key me-2"></i> Cambiar Contraseña
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Última actualización de contraseña</h4>
+                                <p class="mt-1 text-base text-gray-900">No disponible</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Estado de la cuenta</h4>
+                                <p class="mt-1 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800">
+                                    <i class="bi bi-shield-check me-1"></i> Activa
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Modal Editar Perfil -->
     <div id="editarPerfilModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h5 class="m-0 font-medium"><i class="bi bi-person-circle"></i> Editar Perfil</h5>
-                <button type="button" class="text-white" onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Editar Perfil</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
             </div>
             <form method="POST" action="">
-                <div class="p-6">
-                    <div class="mb-4">
-                        <label for="nombre" class="block text-gray-700 mb-2">Nombre</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="nombre" 
+                               name="nombre" 
+                               value="<?php echo htmlspecialchars($usuario['nombre']); ?>" 
+                               required>
                     </div>
-                    <div class="mb-4">
-                        <label for="apellido" class="block text-gray-700 mb-2">Apellido</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="apellido" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required>
+                    <div>
+                        <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
+                        <input type="text" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="apellido" 
+                               name="apellido" 
+                               value="<?php echo htmlspecialchars($usuario['apellido']); ?>" 
+                               required>
                     </div>
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-700 mb-2">Correo Electrónico</label>
-                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="email" name="email" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                        <input type="email" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="email" 
+                               name="email" 
+                               value="<?php echo htmlspecialchars($usuario['email']); ?>" 
+                               required>
                     </div>
                 </div>
-                <div class="bg-gray-100 p-4 rounded-b-lg flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600 transition-colors" 
-                            onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" name="editar_perfil" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Guardar Cambios</button>
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button" 
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            onclick="document.getElementById('editarPerfilModal').classList.add('hidden')">
+                        Cancelar
+                    </button>
+                    <button type="submit" 
+                            name="editar_perfil" 
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Guardar Cambios
+                    </button>
                 </div>
             </form>
         </div>
@@ -365,41 +339,56 @@ $scripts_adicionales = '
     <!-- Modal Cambiar Contraseña -->
     <div id="cambiarPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h5 class="m-0 font-medium"><i class="bi bi-key"></i> Cambiar Contraseña</h5>
-                <button type="button" class="text-white" onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Cambiar Contraseña</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
             </div>
             <form method="POST" action="">
-                <div class="p-6">
-                    <div class="mb-4">
-                        <label for="password_actual" class="block text-gray-700 mb-2">Contraseña Actual</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="password_actual" name="password_actual" required>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="password_actual" class="block text-sm font-medium text-gray-700">Contraseña Actual</label>
+                        <input type="password" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="password_actual" 
+                               name="password_actual" 
+                               required>
                     </div>
-                    <div class="mb-4">
-                        <label for="password_nueva" class="block text-gray-700 mb-2">Nueva Contraseña</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="password_nueva" name="password_nueva" required>
+                    <div>
+                        <label for="password_nueva" class="block text-sm font-medium text-gray-700">Nueva Contraseña</label>
+                        <input type="password" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="password_nueva" 
+                               name="password_nueva" 
+                               required>
                     </div>
-                    <div class="mb-4">
-                        <label for="password_confirmacion" class="block text-gray-700 mb-2">Confirmar Nueva Contraseña</label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-600" 
-                               id="password_confirmacion" name="password_confirmacion" required>
+                    <div>
+                        <label for="password_confirmacion" class="block text-sm font-medium text-gray-700">Confirmar Nueva Contraseña</label>
+                        <input type="password" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               id="password_confirmacion" 
+                               name="password_confirmacion" 
+                               required>
                     </div>
                 </div>
-                <div class="bg-gray-100 p-4 rounded-b-lg flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded mr-2 hover:bg-gray-600 transition-colors"
-                            onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">Cancelar</button>
-                    <button type="submit" name="cambiar_password" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Actualizar Contraseña</button>
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button" 
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            onclick="document.getElementById('cambiarPasswordModal').classList.add('hidden')">
+                        Cancelar
+                    </button>
+                    <button type="submit" 
+                            name="cambiar_password" 
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Actualizar Contraseña
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Alpine.js para interactividad -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 </html>
 <?php

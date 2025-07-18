@@ -75,210 +75,263 @@ $scripts_adicionales = '
 </style>';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Doctores - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        blue: {
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb'
-                        },
-                        green: {
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            300: '#86efac',
-                            400: '#4ade80'
-                        },
-                        red: {
-                            100: '#fee2e2',
-                            200: '#fecaca',
-                            300: '#fca5a5',
-                            400: '#f87171'
-                        },
-                        gray: {
-                            50: '#f9fafb',
-                            100: '#f3f4f6',
-                            200: '#e5e7eb',
-                            300: '#d1d5db',
-                            400: '#9ca3af',
-                            500: '#6b7280',
-                            600: '#4b5563',
-                            700: '#374151'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="//unpkg.com/alpinejs" defer></script>
     <style>
-        /* Los estilos específicos de esta vista pueden permanecer aquí */
+        .main-content {
+            margin-left: 16rem;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
         [x-cloak] { 
             display: none !important; 
         }
     </style>
 </head>
-<body class="bg-gray-50" x-data="{ showModal: false, doctorId: null, doctorNombre: '' }">
-<?php include 'header.php'; ?>
+<body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false, doctorId: null, doctorNombre: '' }">
+    <?php include 'menu_lateral.php'; ?>
+    
+    <div class="main-content">
+        <?php include 'header.php'; ?>
 
-<div class="container mx-auto px-4 mt-6">
-        <?php if (isset($_SESSION['error'])): ?>
-        <div class="bg-red-100 border-l-4 border-red-300 text-red-700 p-4 mb-4">
-            <i class="bi bi-exclamation-circle"></i> <?php echo $_SESSION['error']; ?>
-        </div>
-        <?php unset($_SESSION['error']); endif; ?>
+        <main class="p-6">
+            <?php if (isset($_SESSION['error'])): ?>
+            <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                <i class="bi bi-exclamation-circle me-2"></i><?php echo $_SESSION['error']; ?>
+            </div>
+            <?php unset($_SESSION['error']); endif; ?>
 
-        <?php if (isset($_SESSION['success'])): ?>
-        <div class="bg-green-100 border-l-4 border-green-300 text-green-700 p-4 mb-4">
-            <i class="bi bi-check-circle"></i> <?php echo $_SESSION['success']; ?>
-        </div>
-        <?php unset($_SESSION['success']); endif; ?>
+            <?php if (isset($_SESSION['success'])): ?>
+            <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                <i class="bi bi-check-circle me-2"></i><?php echo $_SESSION['success']; ?>
+            </div>
+            <?php unset($_SESSION['success']); endif; ?>
 
-        <div class="flex flex-wrap">
-            <!-- Menú lateral -->
-            <div class="w-full md:w-1/4 lg:w-1/6 pr-4 sidebar-container">
-                <a href="admin_panel.php" class="inline-block px-4 py-2 mb-4 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
-                    <i class="bi bi-arrow-left"></i> Volver al Dashboard
-                </a>
-                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow mb-6">
-                    <div class="bg-blue-400 text-white p-4 rounded-t-lg">
-                        <h5 class="m-0 font-medium"><i class="bi bi-speedometer2"></i> Panel Admin</h5>
+            <!-- Estadísticas de Usuarios -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- Total Doctores -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-blue-100 text-blue-700 rounded-lg">
+                                    <i class="bi bi-people text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Total Doctores</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800"><?php echo $result->num_rows; ?></span>
+                        </div>
+                        
                     </div>
-                    <div class="p-0">
-                        <nav class="flex flex-col p-2">
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="admin_panel.php">
-                                <i class="bi bi-house-door w-6 text-center"></i> Dashboard
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="formularios_pendientes.php">
-                                <i class="bi bi-file-earmark-text w-6 text-center"></i> Formularios
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white bg-blue-300 text-white" href="gestionar_doctores.php">
-                                <i class="bi bi-people w-6 text-center"></i> Gestionar Doctores
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="estadisticas.php">
-                                <i class="bi bi-bar-chart w-6 text-center"></i> Estadísticas
-                            </a>
-                            <a class="py-2 px-3 rounded mb-1 flex items-center text-gray-600 hover:bg-blue-300 hover:text-white" href="configuracion.php">
-                                <i class="bi bi-gear w-6 text-center"></i> Configuración
-                            </a>
-                        </nav>
+                </div>
+
+                <!-- Doctores Activos -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                                    <i class="bi bi-person-check text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Doctores Activos</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800">
+                                <?php 
+                                $activos = 0;
+                                mysqli_data_seek($result, 0);
+                                while ($row = $result->fetch_assoc()) {
+                                    if ($row['activo']) $activos++;
+                                }
+                                echo $activos;
+                                mysqli_data_seek($result, 0);
+                                ?>
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Doctores Inactivos -->
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-red-100 text-red-700 rounded-lg">
+                                    <i class="bi bi-person-x text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Doctores Inactivos</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800"><?php echo $result->num_rows - $activos; ?></span>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
 
-            <!-- Contenido principal -->
-            <div class="w-full md:w-3/4 lg:w-5/6 content-container">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold"><i class="bi bi-people"></i> Gestionar Doctores</h2>
-                    <a href="nuevo_doctor.php" class="px-4 py-2 bg-green-300 text-white rounded-md hover:bg-green-400 transition-colors">
-                        <i class="bi bi-person-plus"></i> Nuevo Doctor
-                    </a>
+            <!-- Lista de Doctores -->
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">Lista de Doctores</h2>
+                            <p class="text-sm text-gray-500 mt-1">Gestión de usuarios del sistema</p>
+                        </div>
+                        <a href="nuevo_doctor.php" class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium bg-green-600 text-white shadow-sm hover:bg-green-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-950 disabled:pointer-events-none disabled:opacity-50">
+                            <i class="bi bi-person-plus me-2"></i> Nuevo Doctor
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-sm">
-                    <div class="bg-blue-400 text-white p-4 rounded-t-lg">
-                        <h5 class="m-0 font-medium"><i class="bi bi-list-ul"></i> Lista de Doctores</h5>
-                    </div>
-                    <div class="p-6">
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-auto">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left">Nombre</th>
-                                        <th class="px-4 py-2 text-left">Email</th>
-                                        <th class="px-4 py-2 text-left">Rol</th>
-                                        <th class="px-4 py-2 text-left">Estado</th>
-                                        <th class="px-4 py-2 text-left">Fecha Creación</th>
-                                        <th class="px-4 py-2 text-left">Última Sesión</th>
-                                        <th class="px-4 py-2 text-left">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($row = $result->fetch_assoc()): ?>
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-3"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></td>
-                                        <td class="px-4 py-3"><?php echo htmlspecialchars($row['email']); ?></td>
-                                        <td class="px-4 py-3">
-                                            <?php if ($row['rol'] === 'admin'): ?>
-                                                <span class="inline-block px-2 py-1 text-xs text-white bg-blue-400 rounded">Administrador</span>
-                                            <?php else: ?>
-                                                <span class="inline-block px-2 py-1 text-xs text-white bg-blue-300 rounded">Doctor</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <?php if ($row['activo']): ?>
-                                                <span class="inline-block px-2 py-1 text-xs text-white bg-green-300 rounded">Activo</span>
-                                            <?php else: ?>
-                                                <span class="inline-block px-2 py-1 text-xs text-white bg-red-300 rounded">Inactivo</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="px-4 py-3"><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
-                                        <td class="px-4 py-3">
-                                            <?php 
-                                            if ($row['ultima_sesion']) {
-                                                echo date('d/m/Y H:i', strtotime($row['ultima_sesion']));
-                                            } else {
-                                                echo '<span class="text-gray-500">Nunca</span>';
-                                            }
-                                            ?>
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <?php if ($row['id'] !== $_SESSION['doctor_id']): // No permitir desactivar tu propia cuenta ?>
-                                                <div class="flex items-center space-x-2">
-                                                    <a href="gestionar_doctores.php?toggle_id=<?php echo $row['id']; ?>&estado=<?php echo $row['activo']; ?>" 
-                                                    class="inline-block px-2 py-1 text-xs text-white rounded transition-colors <?php echo $row['activo'] ? 'bg-red-300 hover:bg-red-400' : 'bg-green-300 hover:bg-green-400'; ?>">
-                                                        <?php if ($row['activo']): ?>
-                                                            <i class="bi bi-person-x"></i> Desactivar
-                                                        <?php else: ?>
-                                                            <i class="bi bi-person-check"></i> Activar
-                                                        <?php endif; ?>
-                                                    </a>
-                                                    
-                                                    <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
-                                                       class="inline-block px-2 py-1 text-xs text-white bg-blue-400 rounded hover:bg-blue-500 transition-colors">
-                                                        <i class="bi bi-pencil"></i> Editar
-                                                    </a>
-
-                                                    <button type="button" 
-                                                            @click="showModal = true; doctorId = <?php echo $row['id']; ?>; doctorNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
-                                                            class="inline-block px-2 py-1 text-xs text-white bg-red-300 rounded hover:bg-red-400 transition-colors">
-                                                        <i class="bi bi-trash"></i> Eliminar
-                                                    </button>
-                                                </div>
-                                            <?php else: ?>
-                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
-                                                   class="inline-block px-2 py-1 text-xs text-white bg-blue-400 rounded hover:bg-blue-500 transition-colors">
-                                                    <i class="bi bi-pencil"></i> Editar
+                <div class="relative">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50/75 border-b border-gray-200">
+                            <tr>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Nombre</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Email</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Rol</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Estado</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Fecha Creación</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Última Sesión</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 border-b border-gray-200">
+                            <?php if ($result->num_rows > 0): ?>
+                                <?php while($row = $result->fetch_assoc()): ?>
+                                <tr class="hover:bg-gray-50/50">
+                                    <td class="p-4 px-6 align-middle">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
+                                                <i class="bi bi-person text-gray-600"></i>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle text-gray-700">
+                                        <?php echo htmlspecialchars($row['email']); ?>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle">
+                                        <?php if ($row['rol'] === 'admin'): ?>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                Administrador
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                Doctor
+                                            </span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle">
+                                        <?php if ($row['activo']): ?>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Activo
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                Inactivo
+                                            </span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle text-gray-700">
+                                        <div class="flex flex-col">
+                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
+                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle text-gray-700">
+                                        <?php if ($row['ultima_sesion']): ?>
+                                            <div class="flex flex-col">
+                                                <span><?php echo date('d/m/Y', strtotime($row['ultima_sesion'])); ?></span>
+                                                <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['ultima_sesion'])); ?></span>
+                                            </div>
+                                        <?php else: ?>
+                                            <span class="text-gray-400">Nunca</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle">
+                                        <?php if ($row['id'] !== $_SESSION['doctor_id']): ?>
+                                            <div class="flex items-center justify-end gap-2">
+                                                <a href="gestionar_doctores.php?toggle_id=<?php echo $row['id']; ?>&estado=<?php echo $row['activo']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium <?php echo $row['activo'] ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'; ?> text-white shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <?php if ($row['activo']): ?>
+                                                        <i class="bi bi-person-x me-2"></i> Desactivar
+                                                    <?php else: ?>
+                                                        <i class="bi bi-person-check me-2"></i> Activar
+                                                    <?php endif; ?>
                                                 </a>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                                
+                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-pencil me-2"></i> Editar
+                                                </a>
 
-                        <?php if ($result->num_rows === 0): ?>
-                        <div class="p-4 mt-4 bg-blue-100 border-l-4 border-blue-400 text-blue-700">
-                            <i class="bi bi-info-circle"></i> No hay doctores registrados.
-                        </div>
-                        <?php endif; ?>
-                    </div>
+                                                <button type="button" 
+                                                        @click="showModal = true; doctorId = <?php echo $row['id']; ?>; doctorNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
+                                                        class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-trash me-2"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="flex items-center justify-end">
+                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-pencil me-2"></i> Editar
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7" class="py-12">
+                                        <div class="text-center">
+                                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                                <i class="bi bi-inbox text-2xl"></i>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-gray-900 mb-1">No hay doctores</h3>
+                                            <p class="text-sm text-gray-500">No hay doctores registrados en el sistema.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Modal de confirmación de eliminación -->
@@ -291,7 +344,7 @@ $scripts_adicionales = '
             <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto relative">
                 <div class="text-center">
                     <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                        <i class="bi bi-exclamation-triangle text-red-400 text-2xl"></i>
+                        <i class="bi bi-exclamation-triangle text-red-600 text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-medium text-gray-900 mb-2">Confirmar Eliminación</h3>
                     <p class="text-sm text-gray-500 mb-6">
@@ -304,7 +357,7 @@ $scripts_adicionales = '
                         <input type="hidden" name="doctor_id" :value="doctorId">
                         <input type="hidden" name="eliminar_doctor" value="1">
                         <button type="submit" 
-                                class="px-4 py-2 bg-red-300 text-white text-sm font-medium rounded-md hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 transition-colors">
+                                class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
                             Eliminar
                         </button>
                     </form>

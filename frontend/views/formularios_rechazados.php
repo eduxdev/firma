@@ -85,184 +85,241 @@ $scripts_adicionales = '
 </style>';
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel del Doctor - Formularios Rechazados</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .main-content {
+            margin-left: 16rem;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
-<body class="bg-gray-50" x-data="{ showModal: false, formId: null }">
-<?php include 'header.php'; ?>
+<body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false, formId: null }">
+    <?php include 'menu_lateral.php'; ?>
+    
+    <div class="main-content">
+        <?php include 'header.php'; ?>
 
-<div class="container mx-auto px-4 mt-8">
-        <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
-        <div class="mb-6">
-            <a href="admin_panel.php" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                <i class="bi bi-arrow-left mr-2"></i> Volver al Dashboard
-            </a>
-        </div>
-        <?php endif; ?>
-        
-        <!-- Resumen de formularios -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <a href="formularios_pendientes.php" class="block">
-                <div class="bg-blue-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
-                    <div class="p-6 border-l-4 border-blue-600">
-                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-hourglass-split mr-2"></i>Pendientes</h5>
-                        <p class="text-4xl font-bold"><?php echo $conteo['pendientes']; ?></p>
+        <main class="p-6">
+            <!-- Estadísticas de Formularios -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- Formularios Pendientes - Inactivo -->
+                <a href="formularios_pendientes.php" class="block">
+                    <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-3 bg-amber-100 text-amber-700 rounded-lg">
+                                        <i class="bi bi-hourglass-split text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Pendientes</h3>
+                                </div>
+                                <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['pendientes']; ?></span>
+                            </div>
+                            <span class="inline-flex items-center text-sm text-amber-600 hover:text-amber-700">
+                                Ver formularios pendientes
+                                <i class="bi bi-arrow-right ml-2"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </a>
-            <a href="formularios_aprobados.php" class="block">
-                <div class="bg-green-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
-                    <div class="p-6 border-l-4 border-green-600">
-                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-check-circle mr-2"></i>Aprobados</h5>
-                        <p class="text-4xl font-bold"><?php echo $conteo['aprobados']; ?></p>
-                    </div>
-                </div>
-            </a>
-            <a href="formularios_rechazados.php" class="block">
-                <div class="bg-red-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
-                    <div class="p-6 border-l-4 border-red-600">
-                        <h5 class="text-lg font-semibold mb-2"><i class="bi bi-x-circle mr-2"></i>Rechazados</h5>
-                        <p class="text-4xl font-bold"><?php echo $conteo['rechazados']; ?></p>
-                    </div>
-                </div>
-            </a>
-        </div>
+                </a>
 
-        <!-- Navegación de pestañas -->
-        <div class="flex flex-wrap items-center mb-6 border-b border-gray-200">
-            <nav class="flex space-x-4">
-                <a href="formularios_pendientes.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-t-md">
-                    <i class="bi bi-hourglass-split mr-2"></i>Pendientes
-                </a>
-                <a href="formularios_aprobados.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-t-md">
-                    <i class="bi bi-check-circle mr-2"></i>Aprobados
-                </a>
-                <a href="formularios_rechazados.php<?php echo !empty($busqueda) ? '?busqueda=' . urlencode($busqueda) : ''; ?>" class="px-4 py-2 text-sm font-medium text-white bg-red-400 rounded-t-md">
-                    <i class="bi bi-x-circle mr-2"></i>Rechazados
-                </a>
-            </nav>
-            <div class="ml-auto flex items-center space-x-4">
-                <!-- Campo de búsqueda -->
-                <form action="" method="GET" class="flex items-center">
-                    <div class="relative">
-                        <input type="text" 
-                               name="busqueda" 
-                               value="<?php echo htmlspecialchars($busqueda); ?>" 
-                               placeholder="Buscar por nombre..." 
-                               class="w-64 px-4 py-2 pr-10 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-3 text-gray-400 hover:text-gray-600">
-                            <i class="bi bi-search"></i>
-                        </button>
+                <!-- Formularios Aprobados - Inactivo -->
+                <a href="formularios_aprobados.php" class="block">
+                    <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                                        <i class="bi bi-check-circle text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Aprobados</h3>
+                                </div>
+                                <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['aprobados']; ?></span>
+                            </div>
+                            <span class="inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                                Ver formularios aprobados
+                                <i class="bi bi-arrow-right ml-2"></i>
+                            </span>
+                        </div>
                     </div>
-                </form>
-                <a href="configuracion.php" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md">
-                    <i class="bi bi-gear mr-2"></i>Configuración
                 </a>
-                <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin'): ?>
-                <a href="admin_panel.php" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md">
-                    <i class="bi bi-speedometer2 mr-2"></i>Dashboard
-                </a>
-                <?php endif; ?>
+
+                <!-- Formularios Rechazados - Activo -->
+                <div class="bg-red-50 rounded-lg border-2 border-red-200 shadow-md hover:shadow-lg transition-all duration-200 ring-2 ring-red-100 ring-offset-2">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 bg-red-100 text-red-700 rounded-lg">
+                                    <i class="bi bi-x-circle text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-800">Rechazados</h3>
+                            </div>
+                            <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['rechazados']; ?></span>
+                        </div>
+                        <a href="formularios_rechazados.php" class="inline-flex items-center text-sm text-red-700 hover:text-red-800 font-medium">
+                            Ver formularios rechazados
+                            <i class="bi bi-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow-md">
-            <div class="bg-red-400 text-white px-6 py-4 rounded-t-lg">
-                <h4 class="text-xl font-semibold"><i class="bi bi-x-circle mr-2"></i>Formularios Rechazados</h4>
-            </div>
-            <div class="p-6">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+            <!-- Lista de Formularios -->
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">Formularios Rechazados</h2>
+                            <p class="text-sm text-gray-500 mt-1">Lista de todos los formularios rechazados</p>
+                        </div>
+                        <!-- Buscador -->
+                        <div class="flex items-center space-x-2">
+                            <form action="" method="GET" class="flex items-center">
+                                <div class="relative">
+                                    <input type="text" 
+                                           name="busqueda" 
+                                           value="<?php echo htmlspecialchars($busqueda); ?>" 
+                                           placeholder="Buscar por nombre..." 
+                                           class="h-9 w-64 px-3 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 placeholder:text-gray-500">
+                                    <button type="submit" class="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50/75 border-b border-gray-200">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Creación</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Rechazo</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Motivo</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Nombre</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Fecha de Creación</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Fecha de Rechazo</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <span>Motivo</span>
+                                    </div>
+                                </th>
+                                <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <?php while($row = $result->fetch_assoc()): ?>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    <?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?php echo date('d/m/Y H:i', strtotime($row['fecha_revision'])); ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <?php if (!empty($row['comentarios_doctor'])): ?>
-                                        <button type="button" 
-                                                class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
-                                                title="<?php echo htmlspecialchars($row['comentarios_doctor']); ?>">
-                                            <i class="bi bi-info-circle mr-1"></i> Ver motivo
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="text-gray-400">Sin comentarios</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <div class="flex items-center space-x-2">
-                                        <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" 
-                                           class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                                            <i class="bi bi-eye me-1"></i> Ver
-                                        </a>
-                                        <button type="button" 
-                                                @click="showModal = true; formId = <?php echo $row['id']; ?>"
-                                                class="inline-flex items-center px-3 py-1.5 bg-red-400 text-white text-sm font-medium rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition-colors">
-                                            <i class="bi bi-trash me-1"></i> Eliminar
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
+                        <tbody class="divide-y divide-gray-200 border-b border-gray-200">
+                            <?php if ($result->num_rows > 0): ?>
+                                <?php while($row = $result->fetch_assoc()): ?>
+                                <tr class="hover:bg-gray-50/50">
+                                    <td class="p-4 px-6 align-middle">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
+                                                <i class="bi bi-person text-gray-600"></i>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle text-gray-700">
+                                        <div class="flex flex-col">
+                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
+                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle text-gray-700">
+                                        <div class="flex flex-col">
+                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_revision'])); ?></span>
+                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_revision'])); ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle">
+                                        <?php if (!empty($row['comentarios_doctor'])): ?>
+                                            <span class="inline-block px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-full">
+                                                <?php echo htmlspecialchars($row['comentarios_doctor']); ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="text-gray-400">Sin comentarios</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-4 px-6 align-middle">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" 
+                                               class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                <i class="bi bi-eye me-2"></i> Ver
+                                            </a>
+                                            <button type="button" 
+                                                    @click="showModal = true; formId = <?php echo $row['id']; ?>"
+                                                    class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                                <i class="bi bi-trash me-2"></i> Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" class="py-12">
+                                        <div class="text-center">
+                                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                                <i class="bi bi-inbox text-2xl"></i>
+                                            </div>
+                                            <h3 class="text-lg font-medium text-gray-900 mb-1">No hay formularios</h3>
+                                            <p class="text-sm text-gray-500">No hay formularios rechazados en este momento.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
 
-                <?php if ($result->num_rows == 0): ?>
-                <div class="bg-blue-50 text-blue-700 p-4 rounded-md mt-4">
-                    <i class="bi bi-info-circle mr-2"></i> No hay formularios rechazados.
-                </div>
-                <?php endif; ?>
-
                 <?php if ($total_paginas > 1): ?>
-                <nav class="flex justify-center mt-6" aria-label="Navegación de páginas">
-                    <ul class="flex space-x-2">
-                        <li>
-                            <a href="?pagina=<?php echo $pagina_actual - 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
-                               class="<?php echo ($pagina_actual <= 1) ? 'opacity-50 cursor-not-allowed' : ''; ?> px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                Anterior
-                            </a>
-                        </li>
-                        <?php for($i = 1; $i <= $total_paginas; $i++): ?>
-                        <li>
+                <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                    <div class="text-sm text-gray-500">
+                        Página <span class="font-medium"><?php echo $pagina_actual; ?></span> de <span class="font-medium"><?php echo $total_paginas; ?></span>
+                    </div>
+                    <nav class="flex items-center space-x-2" aria-label="Navegación">
+                        <a href="?pagina=<?php echo $pagina_actual - 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
+                           class="<?php echo ($pagina_actual <= 1) ? 'pointer-events-none opacity-50' : ''; ?> inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                            <i class="bi bi-chevron-left me-2"></i>
+                            Anterior
+                        </a>
+                        <div class="flex items-center space-x-1">
+                            <?php for($i = 1; $i <= $total_paginas; $i++): ?>
                             <a href="?pagina=<?php echo $i; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
-                               class="<?php echo ($pagina_actual == $i) ? 'bg-blue-600 text-white' : 'text-blue-600 hover:bg-gray-50'; ?> px-3 py-2 text-sm font-medium border border-gray-300 rounded-md">
+                               class="<?php echo ($pagina_actual == $i) ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-white text-gray-900 hover:bg-gray-100'; ?> inline-flex items-center justify-center h-9 w-9 rounded-md text-sm font-medium border border-gray-200 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
                                 <?php echo $i; ?>
                             </a>
-                        </li>
-                        <?php endfor; ?>
-                        <li>
-                            <a href="?pagina=<?php echo $pagina_actual + 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
-                               class="<?php echo ($pagina_actual >= $total_paginas) ? 'opacity-50 cursor-not-allowed' : ''; ?> px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                Siguiente
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                            <?php endfor; ?>
+                        </div>
+                        <a href="?pagina=<?php echo $pagina_actual + 1; ?><?php echo !empty($busqueda) ? '&busqueda=' . urlencode($busqueda) : ''; ?>" 
+                           class="<?php echo ($pagina_actual >= $total_paginas) ? 'pointer-events-none opacity-50' : ''; ?> inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                            Siguiente
+                            <i class="bi bi-chevron-right ms-2"></i>
+                        </a>
+                    </nav>
+                </div>
                 <?php endif; ?>
             </div>
-        </div>
+        </main>
     </div>
 </body>
 </html>
