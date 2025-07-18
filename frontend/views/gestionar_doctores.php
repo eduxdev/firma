@@ -75,38 +75,29 @@ $scripts_adicionales = '
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="//unpkg.com/alpinejs" defer></script>
-    <style>
-        .main-content {
-            margin-left: 16rem;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
+    <?php include 'shared_styles.php'; ?>
 </head>
 <body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false, doctorId: null, doctorNombre: '' }">
     <?php include 'menu_lateral.php'; ?>
     
     <div class="main-content">
-        <?php include 'header.php'; ?>
+<?php include 'header.php'; ?>
 
-        <main class="p-6">
-            <?php if (isset($_SESSION['error'])): ?>
+        <main class="p-4 sm:p-6 lg:p-8">
+        <?php if (isset($_SESSION['error'])): ?>
             <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
                 <i class="bi bi-exclamation-circle me-2"></i><?php echo $_SESSION['error']; ?>
-            </div>
-            <?php unset($_SESSION['error']); endif; ?>
+        </div>
+        <?php unset($_SESSION['error']); endif; ?>
 
-            <?php if (isset($_SESSION['success'])): ?>
+        <?php if (isset($_SESSION['success'])): ?>
             <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
                 <i class="bi bi-check-circle me-2"></i><?php echo $_SESSION['success']; ?>
-            </div>
-            <?php unset($_SESSION['success']); endif; ?>
+        </div>
+        <?php unset($_SESSION['success']); endif; ?>
 
             <!-- Estadísticas de Usuarios -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                 <!-- Total Doctores -->
                 <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
                     <div class="p-6">
@@ -167,9 +158,9 @@ $scripts_adicionales = '
             </div>
 
             <!-- Lista de Doctores -->
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
-                <div class="p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
+                <div class="p-4 sm:p-6 border-b border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800">Lista de Doctores</h2>
                             <p class="text-sm text-gray-500 mt-1">Gestión de usuarios del sistema</p>
@@ -180,61 +171,176 @@ $scripts_adicionales = '
                     </div>
                 </div>
                 
+                <!-- Vista de tabla para pantallas grandes y tarjetas para móviles -->
                 <div class="relative">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50/75 border-b border-gray-200">
-                            <tr>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Nombre</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Email</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Rol</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Estado</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Fecha Creación</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Última Sesión</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 border-b border-gray-200">
-                            <?php if ($result->num_rows > 0): ?>
-                                <?php while($row = $result->fetch_assoc()): ?>
-                                <tr class="hover:bg-gray-50/50">
-                                    <td class="p-4 px-6 align-middle">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
-                                                <i class="bi bi-person text-gray-600"></i>
-                                            </div>
-                                            <div class="flex flex-col">
-                                                <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
-                                            </div>
+                    <!-- Vista de tabla (oculta en móviles) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50/75 border-b border-gray-200">
+                                <tr>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Nombre</span>
                                         </div>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle text-gray-700">
-                                        <?php echo htmlspecialchars($row['email']); ?>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle">
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Email</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Rol</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Estado</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Fecha Creación</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Última Sesión</span>
+                    </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
+                                    </tr>
+                                </thead>
+                            <tbody class="divide-y divide-gray-200 border-b border-gray-200">
+                                <?php if ($result->num_rows > 0): ?>
+                                    <?php while($row = $result->fetch_assoc()): ?>
+                                    <tr class="hover:bg-gray-50/50">
+                                        <td class="p-4 px-6 align-middle">
+                                            <div class="flex items-center gap-3">
+                                                <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
+                                                    <i class="bi bi-person text-gray-600"></i>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle text-gray-700">
+                                            <?php echo htmlspecialchars($row['email']); ?>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle">
+                                            <?php if ($row['rol'] === 'admin'): ?>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    Administrador
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                    Doctor
+                                                </span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle">
+                                            <?php if ($row['activo']): ?>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Activo
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    Inactivo
+                                                </span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle text-gray-700">
+                                            <div class="flex flex-col">
+                                                <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
+                                                <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle text-gray-700">
+                                            <?php if ($row['ultima_sesion']): ?>
+                                                <div class="flex flex-col">
+                                                    <span><?php echo date('d/m/Y', strtotime($row['ultima_sesion'])); ?></span>
+                                                    <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['ultima_sesion'])); ?></span>
+                                                </div>
+                                            <?php else: ?>
+                                                <span class="text-gray-400">Nunca</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle">
+                                            <?php if ($row['id'] !== $_SESSION['doctor_id']): ?>
+                                                <div class="flex items-center justify-end gap-2">
+                                                    <a href="gestionar_doctores.php?toggle_id=<?php echo $row['id']; ?>&estado=<?php echo $row['activo']; ?>" 
+                                                       class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium <?php echo $row['activo'] ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'; ?> text-white shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                        <?php if ($row['activo']): ?>
+                                                            <i class="bi bi-person-x me-2"></i> Desactivar
+                                                        <?php else: ?>
+                                                            <i class="bi bi-person-check me-2"></i> Activar
+                                                        <?php endif; ?>
+                                                    </a>
+                                                    
+                                                    <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                                       class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                        <i class="bi bi-pencil me-2"></i> Editar
+                                                    </a>
+
+                                                    <button type="button" 
+                                                            @click="showModal = true; doctorId = <?php echo $row['id']; ?>; doctorNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
+                                                            class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                                        <i class="bi bi-trash me-2"></i> Eliminar
+                                                    </button>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="flex items-center justify-end">
+                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                                       class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                        <i class="bi bi-pencil me-2"></i> Editar mi perfil
+                                                </a>
+                                                </div>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="7" class="py-12">
+                                            <div class="text-center">
+                                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                                    <i class="bi bi-inbox text-2xl"></i>
+                                                </div>
+                                                <h3 class="text-lg font-medium text-gray-900 mb-1">No hay doctores</h3>
+                                                <p class="text-sm text-gray-500">No hay doctores registrados en el sistema.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    <!-- Vista de tarjetas para móviles -->
+                    <div class="md:hidden">
+                        <?php if ($result->num_rows > 0): ?>
+                            <?php 
+                            // Reiniciar el puntero del resultado
+                            mysqli_data_seek($result, 0);
+                            ?>
+                            <div class="grid grid-cols-1 gap-4 p-4">
+                                <?php while($row = $result->fetch_assoc()): ?>
+                                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="h-10 w-10 rounded-full bg-gray-100/75 flex items-center justify-center">
+                                            <i class="bi bi-person text-gray-600"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="text-sm font-medium text-gray-900 truncate">
+                                                <?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>
+                                            </h3>
+                                            <p class="text-xs text-gray-500 truncate"><?php echo htmlspecialchars($row['email']); ?></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <!-- Rol -->
                                         <?php if ($row['rol'] === 'admin'): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                 Administrador
@@ -244,8 +350,8 @@ $scripts_adicionales = '
                                                 Doctor
                                             </span>
                                         <?php endif; ?>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle">
+
+                                        <!-- Estado -->
                                         <?php if ($row['activo']): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 Activo
@@ -255,26 +361,32 @@ $scripts_adicionales = '
                                                 Inactivo
                                             </span>
                                         <?php endif; ?>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle text-gray-700">
-                                        <div class="flex flex-col">
-                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
-                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 mb-4">
+                                        <div>
+                                            <div class="font-medium text-gray-700">Fecha Creación</div>
+                                            <div><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></div>
                                         </div>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle text-gray-700">
-                                        <?php if ($row['ultima_sesion']): ?>
-                                            <div class="flex flex-col">
-                                                <span><?php echo date('d/m/Y', strtotime($row['ultima_sesion'])); ?></span>
-                                                <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['ultima_sesion'])); ?></span>
+                                        <div>
+                                            <div class="font-medium text-gray-700">Última Sesión</div>
+                                            <div>
+                                                <?php if ($row['ultima_sesion']): ?>
+                                                    <?php echo date('d/m/Y H:i', strtotime($row['ultima_sesion'])); ?>
+                                                <?php else: ?>
+                                                    <span class="text-gray-400">Nunca</span>
+                                                <?php endif; ?>
                                             </div>
-                                        <?php else: ?>
-                                            <span class="text-gray-400">Nunca</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle">
-                                        <?php if ($row['id'] !== $_SESSION['doctor_id']): ?>
-                                            <div class="flex items-center justify-end gap-2">
+                                        </div>
+                                    </div>
+
+                                    <?php if ($row['id'] !== $_SESSION['doctor_id']): ?>
+                                        <div class="flex flex-col gap-2">
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-pencil me-2"></i> Editar
+                                                </a>
                                                 <a href="gestionar_doctores.php?toggle_id=<?php echo $row['id']; ?>&estado=<?php echo $row['activo']; ?>" 
                                                    class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium <?php echo $row['activo'] ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'; ?> text-white shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
                                                     <?php if ($row['activo']): ?>
@@ -283,44 +395,34 @@ $scripts_adicionales = '
                                                         <i class="bi bi-person-check me-2"></i> Activar
                                                     <?php endif; ?>
                                                 </a>
-                                                
-                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
-                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
-                                                    <i class="bi bi-pencil me-2"></i> Editar
-                                                </a>
-
-                                                <button type="button" 
-                                                        @click="showModal = true; doctorId = <?php echo $row['id']; ?>; doctorNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
-                                                        class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
-                                                    <i class="bi bi-trash me-2"></i> Eliminar
-                                                </button>
                                             </div>
-                                        <?php else: ?>
-                                            <div class="flex items-center justify-end">
-                                                <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
-                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
-                                                    <i class="bi bi-pencil me-2"></i> Editar
-                                                </a>
-                                            </div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="7" class="py-12">
-                                        <div class="text-center">
-                                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
-                                                <i class="bi bi-inbox text-2xl"></i>
-                                            </div>
-                                            <h3 class="text-lg font-medium text-gray-900 mb-1">No hay doctores</h3>
-                                            <p class="text-sm text-gray-500">No hay doctores registrados en el sistema.</p>
+                                            <button type="button" 
+                                                    @click="showModal = true; doctorId = <?php echo $row['id']; ?>; doctorNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
+                                                    class="w-full inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                                <i class="bi bi-trash me-2"></i> Eliminar
+                                            </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                    <?php else: ?>
+                                        <div class="flex justify-center">
+                                            <a href="editar_doctor.php?id=<?php echo $row['id']; ?>" 
+                                               class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                <i class="bi bi-pencil me-2"></i> Editar mi perfil
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <?php endwhile; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center py-12 px-4">
+                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                    <i class="bi bi-inbox text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No hay doctores</h3>
+                                <p class="text-sm text-gray-500">No hay doctores registrados en el sistema.</p>
+                        </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </main>

@@ -135,79 +135,98 @@ $submenu_item_inactive = "text-gray-600 hover:bg-gray-50 hover:text-gray-900";
 ?>
 
 <!-- Menú Lateral -->
-<aside class="fixed left-0 top-0 z-20 h-screen w-64 border-r border-gray-200 bg-white">
-    <div class="flex h-full flex-col">
-        <!-- Logo y Título -->
-        <div class="flex h-16 items-center px-6">
-            <a href="admin_panel.php" class="flex items-center gap-3">
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
-                    <i class="bi bi-heart-pulse text-xl"></i>
-                </div>
-                <span class="text-lg font-semibold text-gray-800">Panel Médico</span>
-            </a>
-        </div>
+<div x-data="{ menuAbierto: false }" @keydown.escape="menuAbierto = false">
+    <!-- Botón de menú móvil -->
+    <button @click="menuAbierto = !menuAbierto" 
+            type="button"
+            class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 focus:outline-none">
+        <i class="bi" :class="menuAbierto ? 'bi-x-lg' : 'bi-list'"></i>
+    </button>
 
-        <!-- Navegación -->
-        <nav class="flex-1 overflow-auto px-3 py-4">
-            <ul class="flex flex-col gap-1">
-                <?php foreach ($menu_items as $item): ?>
-                    <li>
-                        <?php if (isset($item['submenu'])): ?>
-                            <!-- Elemento con Submenú -->
-                            <div x-data="{ open: true }">
-                                <button @click="open = !open" 
-                                        class="<?php echo $menu_item_base . ' w-full justify-between ' . (in_array($menu_activo, array_column($item['submenu'], 'id')) ? $menu_item_active : $menu_item_inactive); ?>">
-                                    <div class="flex items-center gap-3">
-                                        <i class="bi <?php echo $item['icono']; ?> text-lg transition-transform group-hover:scale-110"></i>
-                                        <span><?php echo $item['titulo']; ?></span>
-                                    </div>
-                                    <i class="bi bi-chevron-down text-sm transition-transform" :class="{ 'rotate-180': !open }"></i>
-                                </button>
-                                
-                                <div x-show="open" 
-                                     x-transition:enter="transition ease-out duration-100" 
-                                     x-transition:enter-start="transform opacity-0 scale-95" 
-                                     x-transition:enter-end="transform opacity-100 scale-100" 
-                                     class="mt-1 space-y-1 px-3">
-                                    <?php foreach ($item['submenu'] as $subitem): ?>
-                                        <a href="<?php echo $subitem['url']; ?>" 
-                                           class="<?php echo $submenu_item_base . ' ' . ($menu_activo === $subitem['id'] ? $submenu_item_active : $submenu_item_inactive); ?>">
-                                            <div class="flex items-center gap-2">
-                                                <i class="bi <?php echo $subitem['icono']; ?>"></i>
-                                                <?php echo $subitem['titulo']; ?>
-                                            </div>
-                                            <?php if (isset($subitem['badge']) && $subitem['badge']): ?>
-                                                <span class="inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-xs font-medium <?php echo $subitem['badge']['clase']; ?>">
-                                                    <?php echo $subitem['badge']['numero']; ?>
-                                                </span>
-                                            <?php endif; ?>
-                                        </a>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php else: ?>
-                            <!-- Elemento Simple -->
-                            <a href="<?php echo $item['url']; ?>" 
-                               class="<?php echo $menu_item_base . ' ' . ($menu_activo === $item['id'] ? $menu_item_active : $menu_item_inactive); ?>">
-                                <i class="bi <?php echo $item['icono']; ?> text-lg transition-transform group-hover:scale-110"></i>
-                                <span><?php echo $item['titulo']; ?></span>
-                            </a>
-                        <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
-
-        <!-- Footer del Menú -->
-        <div class="border-t border-gray-200 p-4">
-            <a href="cerrar_sesion.php" 
-               class="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition-all duration-200 hover:bg-red-100 hover:text-red-700">
-                <i class="bi bi-box-arrow-right text-lg"></i>
-                Cerrar Sesión
-            </a>
-        </div>
+    <!-- Overlay para móvil -->
+    <div x-show="menuAbierto" 
+         class="lg:hidden fixed inset-0 z-30 bg-gray-800/40 backdrop-blur-sm"
+         @click="menuAbierto = false">
     </div>
-</aside>
+
+    <!-- Menú lateral -->
+    <aside class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white lg:block"
+           :class="menuAbierto ? 'block' : 'hidden'">
+        <div class="flex h-full flex-col">
+            <!-- Logo y Título -->
+            <div class="flex h-16 items-center px-6">
+                <a href="admin_panel.php" 
+                   @click="menuAbierto = false" 
+                   class="flex items-center gap-3">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                        <i class="bi bi-heart-pulse text-xl"></i>
+                    </div>
+                    <span class="text-lg font-semibold text-gray-800">Panel Médico</span>
+                </a>
+            </div>
+
+            <!-- Navegación -->
+            <nav class="flex-1 overflow-auto px-3 py-4">
+                <ul class="flex flex-col gap-1">
+                    <?php foreach ($menu_items as $item): ?>
+                        <li>
+                            <?php if (isset($item['submenu'])): ?>
+                                <!-- Elemento con Submenú -->
+                                <div x-data="{ open: true }">
+                                    <button @click="open = !open" 
+                                            class="<?php echo $menu_item_base . ' w-full justify-between ' . (in_array($menu_activo, array_column($item['submenu'], 'id')) ? $menu_item_active : $menu_item_inactive); ?>">
+                                        <div class="flex items-center gap-3">
+                                            <i class="bi <?php echo $item['icono']; ?> text-lg transition-transform group-hover:scale-110"></i>
+                                            <span><?php echo $item['titulo']; ?></span>
+                                        </div>
+                                        <i class="bi bi-chevron-down text-sm transition-transform" :class="{ 'rotate-180': !open }"></i>
+                                    </button>
+                                    
+                                    <div x-show="open" 
+                                         class="mt-1 space-y-1 px-3">
+                                        <?php foreach ($item['submenu'] as $subitem): ?>
+                                            <a href="<?php echo $subitem['url']; ?>" 
+                                               @click="menuAbierto = false"
+                                               class="<?php echo $submenu_item_base . ' ' . ($menu_activo === $subitem['id'] ? $submenu_item_active : $submenu_item_inactive); ?>">
+                                                <div class="flex items-center gap-2">
+                                                    <i class="bi <?php echo $subitem['icono']; ?>"></i>
+                                                    <?php echo $subitem['titulo']; ?>
+                                                </div>
+                                                <?php if (isset($subitem['badge']) && $subitem['badge']): ?>
+                                                    <span class="inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-xs font-medium <?php echo $subitem['badge']['clase']; ?>">
+                                                        <?php echo $subitem['badge']['numero']; ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <!-- Elemento Simple -->
+                                <a href="<?php echo $item['url']; ?>" 
+                                   @click="menuAbierto = false"
+                                   class="<?php echo $menu_item_base . ' ' . ($menu_activo === $item['id'] ? $menu_item_active : $menu_item_inactive); ?>">
+                                    <i class="bi <?php echo $item['icono']; ?> text-lg transition-transform group-hover:scale-110"></i>
+                                    <span><?php echo $item['titulo']; ?></span>
+                                </a>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+
+            <!-- Footer del Menú -->
+            <div class="border-t border-gray-200 p-4">
+                <a href="cerrar_sesion.php" 
+                   @click="menuAbierto = false"
+                   class="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition-all duration-200 hover:bg-red-100 hover:text-red-700">
+                    <i class="bi bi-box-arrow-right text-lg"></i>
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </aside>
+</div>
 
 <!-- Alpine.js para el menú desplegable -->
 <script src="//unpkg.com/alpinejs" defer></script> 

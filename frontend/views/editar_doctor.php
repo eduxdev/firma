@@ -103,16 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="//unpkg.com/alpinejs" defer></script>
-    <style>
-        .main-content {
-            margin-left: 16rem;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
+    <?php include 'shared_styles.php'; ?>
 </head>
 <body class="h-full bg-[#f8f9fa]">
     <?php include 'menu_lateral.php'; ?>
@@ -120,9 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="main-content">
         <?php include 'header.php'; ?>
 
-        <main class="p-6">
+        <main class="p-4 sm:p-6 lg:p-8">
             <!-- Breadcrumb -->
-            <nav class="flex mb-6" aria-label="breadcrumb">
+            <nav class="flex mb-6 overflow-x-auto whitespace-nowrap" aria-label="breadcrumb">
                 <ol class="flex items-center space-x-2">
                     <li>
                         <a href="admin_panel.php" class="text-blue-600 hover:text-blue-700">Dashboard</a>
@@ -137,9 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
 
             <!-- Formulario -->
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
-                <div class="p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
+                <div class="p-4 sm:p-6 border-b border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800">Editar Doctor</h2>
                             <p class="text-sm text-gray-500 mt-1">Modificar información del usuario</p>
@@ -147,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-4 sm:p-6">
                     <?php if (!empty($error)): ?>
                         <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
                             <i class="bi bi-exclamation-circle me-2"></i><?php echo $error; ?>
@@ -161,87 +152,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endif; ?>
 
                     <form method="POST" action="" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Nombre <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="nombre" 
-                                       name="nombre" 
-                                       value="<?php echo htmlspecialchars($doctor['nombre']); ?>" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                       required>
-                            </div>
-
-                            <div>
-                                <label for="apellido" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Apellido <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="apellido" 
-                                       name="apellido" 
-                                       value="<?php echo htmlspecialchars($doctor['apellido']); ?>" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                       required>
-                            </div>
-
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Correo Electrónico <span class="text-red-500">*</span>
-                                </label>
-                                <input type="email" 
-                                       id="email" 
-                                       name="email" 
-                                       value="<?php echo htmlspecialchars($doctor['email']); ?>" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                       required>
-                            </div>
-
-                            <div>
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Contraseña <small class="text-gray-500">(Dejar vacío para mantener la actual)</small>
-                                </label>
-                                <input type="password" 
-                                       id="password" 
-                                       name="password" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-
-                            <div>
-                                <label for="rol" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Rol <span class="text-red-500">*</span>
-                                </label>
-                                <select id="rol" 
-                                        name="rol" 
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                                        required>
-                                    <option value="doctor" <?php echo ($doctor['rol'] === 'doctor') ? 'selected' : ''; ?>>Doctor</option>
-                                    <option value="admin" <?php echo ($doctor['rol'] === 'admin') ? 'selected' : ''; ?>>Administrador</option>
-                                </select>
-                            </div>
-
-                            <div class="flex items-center">
-                                <div class="flex h-full items-center">
-                                    <input type="checkbox" 
-                                           id="activo" 
-                                           name="activo" 
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
-                                           <?php echo ($doctor['activo']) ? 'checked' : ''; ?>>
-                                    <label for="activo" class="ml-2 block text-sm text-gray-700">
-                                        Cuenta activa
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Nombre <span class="text-red-500">*</span>
                                     </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-person text-gray-400"></i>
+                                        </div>
+                                        <input type="text" 
+                                               id="nombre" 
+                                               name="nombre" 
+                                               value="<?php echo htmlspecialchars($doctor['nombre']); ?>" 
+                                               class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="apellido" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Apellido <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-person text-gray-400"></i>
+                                        </div>
+                                        <input type="text" 
+                                               id="apellido" 
+                                               name="apellido" 
+                                               value="<?php echo htmlspecialchars($doctor['apellido']); ?>" 
+                                               class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Correo Electrónico <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-envelope text-gray-400"></i>
+                                        </div>
+                                        <input type="email" 
+                                               id="email" 
+                                               name="email" 
+                                               value="<?php echo htmlspecialchars($doctor['email']); ?>" 
+                                               class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Contraseña <small class="text-gray-500">(Dejar vacío para mantener la actual)</small>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-lock text-gray-400"></i>
+                                        </div>
+                                        <input type="password" 
+                                               id="password" 
+                                               name="password" 
+                                               class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="rol" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Rol <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-shield-lock text-gray-400"></i>
+                                        </div>
+                                        <select id="rol" 
+                                                name="rol" 
+                                                class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white" 
+                                                required>
+                                            <option value="doctor" <?php echo ($doctor['rol'] === 'doctor') ? 'selected' : ''; ?>>Doctor</option>
+                                            <option value="admin" <?php echo ($doctor['rol'] === 'admin') ? 'selected' : ''; ?>>Administrador</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            <i class="bi bi-chevron-down text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center pt-4">
+                                    <div class="relative">
+                                        <input type="checkbox" 
+                                               id="activo" 
+                                               name="activo" 
+                                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
+                                               <?php echo ($doctor['activo']) ? 'checked' : ''; ?>>
+                                        <label for="activo" class="ml-2 block text-sm text-gray-700">
+                                            Cuenta activa
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex justify-end space-x-3 pt-6 border-t border-gray-100">
+                        <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 space-x-0 sm:space-x-3 pt-6 border-t border-gray-100">
                             <a href="gestionar_doctores.php" 
-                               class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                               class="inline-flex items-center justify-center h-9 rounded-md px-4 py-2 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
                                 <i class="bi bi-x-circle me-2"></i> Cancelar
                             </a>
                             <button type="submit" 
-                                    class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-950 disabled:pointer-events-none disabled:opacity-50">
+                                    class="inline-flex items-center justify-center h-9 rounded-md px-4 py-2 text-sm font-medium bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-950 disabled:pointer-events-none disabled:opacity-50">
                                 <i class="bi bi-save me-2"></i> Guardar Cambios
                             </button>
                         </div>

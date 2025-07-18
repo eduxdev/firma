@@ -97,7 +97,11 @@ if (isset($_POST['cambiar_password'])) {
             $update_password_stmt->bind_param("si", $password_nueva, $id);
             
             if ($update_password_stmt->execute()) {
-                $success_password = "Contraseña actualizada correctamente.";
+                session_start();
+                $_SESSION['password_changed'] = true;
+                session_destroy();
+                header('Location: login.php?password_changed=true');
+                exit();
             } else {
                 $error_password = "Error al actualizar la contraseña: " . $conn->error;
             }
@@ -109,10 +113,9 @@ if (isset($_POST['cambiar_password'])) {
 $titulo = "Configuración";
 $subtitulo = "Ajustes de cuenta y preferencias";
 
-
 // Scripts adicionales para el header
 $scripts_adicionales = '
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="//unpkg.com/alpinejs" defer></script>
 <style>
     [x-cloak] { 
         display: none !important; 
@@ -127,25 +130,15 @@ $scripts_adicionales = '
     <title>Configuración - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="//unpkg.com/alpinejs" defer></script>
-    <style>
-        .main-content {
-            margin-left: 16rem;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
+    <?php include 'shared_styles.php'; ?>
 </head>
-<body class="h-full bg-[#f8f9fa]">
+<body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false }">
     <?php include 'menu_lateral.php'; ?>
     
     <div class="main-content">
         <?php include 'header.php'; ?>
 
-        <main class="p-6">
+        <main class="p-4 sm:p-6 lg:p-8">
             <?php if ($_SESSION['user_rol'] === 'admin'): ?>
             <nav class="flex mb-6" aria-label="breadcrumb">
                 <ol class="flex items-center space-x-2">
@@ -159,12 +152,12 @@ $scripts_adicionales = '
             <?php endif; ?>
 
             <!-- Encabezado de la página -->
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Configuración</h2>
-                        <p class="text-sm text-gray-500 mt-1">Ajustes de cuenta y preferencias</p>
-                    </div>
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Configuración</h2>
+                    <p class="text-sm text-gray-500 mt-1">Ajustes de cuenta y preferencias</p>
                 </div>
+            </div>
 
             <!-- Mensajes de éxito o error para actualización de perfil -->
             <?php if (!empty($success_perfil)): ?>
@@ -175,7 +168,7 @@ $scripts_adicionales = '
                     </button>
                 </div>
             <?php endif; ?>
-            
+
             <?php if (!empty($error_perfil)): ?>
                 <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded flex items-center">
                     <i class="bi bi-exclamation-circle me-2"></i><?php echo $error_perfil; ?>
@@ -184,7 +177,7 @@ $scripts_adicionales = '
                     </button>
                 </div>
             <?php endif; ?>
-            
+
             <!-- Mensajes de éxito o error para cambio de contraseña -->
             <?php if (!empty($success_password)): ?>
                 <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center">

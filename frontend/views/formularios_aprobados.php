@@ -115,16 +115,8 @@ $scripts_adicionales = '
     <title>Formularios Aprobados</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        .main-content {
-            margin-left: 16rem;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <?php include 'shared_styles.php'; ?>
 </head>
 <body class="h-full bg-[#f8f9fa]" x-data="{ showModal: false, formId: null, formNombre: '' }">
     <?php include 'menu_lateral.php'; ?>
@@ -132,7 +124,7 @@ $scripts_adicionales = '
     <div class="main-content">
         <?php include 'header.php'; ?>
 
-        <main class="p-6">
+        <main class="p-4 sm:p-6 lg:p-8">
             <?php if (isset($_SESSION['success'])): ?>
                 <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
                     <i class="bi bi-check-circle me-2"></i><?php echo $_SESSION['success']; ?>
@@ -237,56 +229,123 @@ $scripts_adicionales = '
                     </div>
                 </div>
                 
+                <!-- Vista de tabla para pantallas grandes y tarjetas para móviles -->
                 <div class="relative">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50/75 border-b border-gray-200">
-                            <tr>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Nombre</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Fecha de Creación</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
-                                    <div class="flex items-center space-x-2">
-                                        <span>Fecha de Aprobación</span>
-                                    </div>
-                                </th>
-                                <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 border-b border-gray-200">
-                            <?php if ($result->num_rows > 0): ?>
-                                <?php while($row = $result->fetch_assoc()): ?>
-                                <tr class="hover:bg-gray-50/50">
-                                    <td class="p-4 px-6 align-middle">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
-                                                <i class="bi bi-person text-gray-600"></i>
+                    <!-- Vista de tabla (oculta en móviles) -->
+                    <div class="hidden md:block">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50/75 border-b border-gray-200">
+                                <tr>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Nombre</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Fecha de Creación</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-left align-middle font-medium text-gray-500">
+                                        <div class="flex items-center space-x-2">
+                                            <span>Fecha de Aprobación</span>
+                                        </div>
+                                    </th>
+                                    <th class="h-12 px-6 text-right align-middle font-medium text-gray-500">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 border-b border-gray-200">
+                                <?php if ($result->num_rows > 0): ?>
+                                    <?php while($row = $result->fetch_assoc()): ?>
+                                    <tr class="hover:bg-gray-50/50">
+                                        <td class="p-4 px-6 align-middle">
+                                            <div class="flex items-center gap-3">
+                                                <div class="h-9 w-9 rounded-full bg-gray-100/75 flex items-center justify-center">
+                                                    <i class="bi bi-person text-gray-600"></i>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
+                                                </div>
                                             </div>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle text-gray-700">
                                             <div class="flex flex-col">
-                                                <span class="font-medium"><?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?></span>
+                                                <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
+                                                <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle text-gray-700">
+                                            <div class="flex flex-col">
+                                                <span><?php echo date('d/m/Y', strtotime($row['fecha_revision'])); ?></span>
+                                                <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_revision'])); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 px-6 align-middle">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-eye me-2"></i> Ver
+                                                </a>
+                                                <a href="generar_pdf.php?id=<?php echo $row['id']; ?>" 
+                                                   class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-green-600 text-white shadow-sm hover:bg-green-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-file-pdf me-2"></i> PDF
+                                                </a>
+                                                <button type="button" 
+                                                        @click="showModal = true; formId = <?php echo $row['id']; ?>; formNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
+                                                        class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                                    <i class="bi bi-trash me-2"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4" class="py-12">
+                                            <div class="text-center">
+                                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                                    <i class="bi bi-inbox text-2xl"></i>
+                                                </div>
+                                                <h3 class="text-lg font-medium text-gray-900 mb-1">No hay formularios</h3>
+                                                <p class="text-sm text-gray-500">No hay formularios aprobados en este momento.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Vista de tarjetas para móviles -->
+                    <div class="md:hidden">
+                        <?php if ($result->num_rows > 0): ?>
+                            <?php 
+                            // Reiniciar el puntero del resultado
+                            $result->data_seek(0);
+                            ?>
+                            <div class="grid grid-cols-1 gap-4 p-4">
+                                <?php while($row = $result->fetch_assoc()): ?>
+                                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="h-10 w-10 rounded-full bg-green-100/75 flex items-center justify-center">
+                                            <i class="bi bi-person text-green-600"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="text-sm font-medium text-gray-900 truncate">
+                                                <?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>
+                                            </h3>
+                                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                                                <i class="bi bi-calendar3"></i>
+                                                <span>Creado: <?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-xs text-green-600 mt-1">
+                                                <i class="bi bi-check-circle"></i>
+                                                <span>Aprobado: <?php echo date('d/m/Y', strtotime($row['fecha_revision'])); ?></span>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle text-gray-700">
-                                        <div class="flex flex-col">
-                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_creacion'])); ?></span>
-                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_creacion'])); ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle text-gray-700">
-                                        <div class="flex flex-col">
-                                            <span><?php echo date('d/m/Y', strtotime($row['fecha_revision'])); ?></span>
-                                            <span class="text-xs text-gray-500"><?php echo date('H:i', strtotime($row['fecha_revision'])); ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="p-4 px-6 align-middle">
-                                        <div class="flex items-center justify-end gap-2">
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <div class="grid grid-cols-2 gap-2">
                                             <a href="ver_formulario.php?id=<?php echo $row['id']; ?>" 
                                                class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
                                                 <i class="bi bi-eye me-2"></i> Ver
@@ -295,30 +354,26 @@ $scripts_adicionales = '
                                                class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-green-600 text-white shadow-sm hover:bg-green-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-950 disabled:pointer-events-none disabled:opacity-50">
                                                 <i class="bi bi-file-pdf me-2"></i> PDF
                                             </a>
-                                            <button type="button" 
-                                                    @click="showModal = true; formId = <?php echo $row['id']; ?>; formNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
-                                                    class="inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
-                                                <i class="bi bi-trash me-2"></i> Eliminar
-                                            </button>
                                         </div>
-                                    </td>
-                                </tr>
+                                        <button type="button" 
+                                                @click="showModal = true; formId = <?php echo $row['id']; ?>; formNombre = '<?php echo htmlspecialchars($row['nombre'] . ' ' . $row['apellido']); ?>'"
+                                                class="w-full inline-flex items-center justify-center h-9 rounded-md px-3 text-sm font-medium bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-950 disabled:pointer-events-none disabled:opacity-50">
+                                            <i class="bi bi-trash me-2"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
                                 <?php endwhile; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="4" class="py-12">
-                                        <div class="text-center">
-                                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
-                                                <i class="bi bi-inbox text-2xl"></i>
-                                            </div>
-                                            <h3 class="text-lg font-medium text-gray-900 mb-1">No hay formularios</h3>
-                                            <p class="text-sm text-gray-500">No hay formularios aprobados en este momento.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center py-12 px-4">
+                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-500 mb-3">
+                                    <i class="bi bi-inbox text-2xl"></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No hay formularios</h3>
+                                <p class="text-sm text-gray-500">No hay formularios aprobados en este momento.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <?php if ($total_paginas > 1): ?>

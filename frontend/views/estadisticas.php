@@ -156,16 +156,7 @@ $scripts_adicionales = '
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .main-content {
-            margin-left: 16rem;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        [x-cloak] { 
-            display: none !important; 
-        }
-    </style>
+    <?php include 'shared_styles.php'; ?>
 </head>
 <body class="h-full bg-[#f8f9fa]">
     <?php include 'menu_lateral.php'; ?>
@@ -173,10 +164,10 @@ $scripts_adicionales = '
     <div class="main-content">
         <?php include 'header.php'; ?>
 
-        <main class="p-6">
+        <main class="p-4 sm:p-6 lg:p-8">
             <!-- Encabezado de la página -->
-            <div class="flex justify-between items-center mb-6">
-                
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <h1 class="text-2xl font-bold text-gray-800">Estadísticas del Sistema</h1>
                 <div class="flex gap-3">
                     <a href="exportar_estadisticas.php" 
                        class="inline-flex items-center justify-center h-9 rounded-md px-4 text-sm font-medium border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50">
@@ -186,10 +177,10 @@ $scripts_adicionales = '
             </div>
             
             <!-- Resumen de Estadísticas -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <!-- Total Formularios -->
                 <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-3">
                                 <div class="p-3 bg-blue-100 text-blue-700 rounded-lg">
@@ -201,17 +192,23 @@ $scripts_adicionales = '
                                 <?php echo $formularios['pendientes'] + $formularios['aprobados'] + $formularios['rechazados']; ?>
                             </span>
                         </div>
-                        <div class="flex justify-between mt-4 text-sm">
-                            <span class="text-blue-600"><i class="bi bi-hourglass-split"></i> <?php echo $formularios['pendientes']; ?> pendientes</span>
-                            <span class="text-green-600"><i class="bi bi-check-circle"></i> <?php echo $formularios['aprobados']; ?> aprobados</span>
-                            <span class="text-red-600"><i class="bi bi-x-circle"></i> <?php echo $formularios['rechazados']; ?> rechazados</span>
+                        <div class="flex flex-wrap gap-3 mt-4 text-sm">
+                            <span class="inline-flex items-center gap-1 text-blue-600">
+                                <i class="bi bi-hourglass-split"></i> <?php echo $formularios['pendientes']; ?> pendientes
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-green-600">
+                                <i class="bi bi-check-circle"></i> <?php echo $formularios['aprobados']; ?> aprobados
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-red-600">
+                                <i class="bi bi-x-circle"></i> <?php echo $formularios['rechazados']; ?> rechazados
+                            </span>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Total Usuarios -->
                 <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-3">
                                 <div class="p-3 bg-green-100 text-green-700 rounded-lg">
@@ -221,16 +218,20 @@ $scripts_adicionales = '
                             </div>
                             <span class="text-3xl font-bold text-gray-800"><?php echo $usuarios['total_doctores']; ?></span>
                         </div>
-                        <div class="flex justify-between mt-4 text-sm">
-                            <span class="text-blue-600"><i class="bi bi-person-gear"></i> <?php echo $usuarios['total_admins']; ?> administradores</span>
-                            <span class="text-blue-600"><i class="bi bi-person-badge"></i> <?php echo $usuarios['total_docs']; ?> doctores</span>
+                        <div class="flex flex-wrap gap-3 mt-4 text-sm">
+                            <span class="inline-flex items-center gap-1 text-blue-600">
+                                <i class="bi bi-person-gear"></i> <?php echo $usuarios['total_admins']; ?> administradores
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-blue-600">
+                                <i class="bi bi-person-badge"></i> <?php echo $usuarios['total_docs']; ?> doctores
+                            </span>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Tasa de Aprobación -->
                 <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-3">
                                 <div class="p-3 bg-amber-100 text-amber-700 rounded-lg">
@@ -255,10 +256,10 @@ $scripts_adicionales = '
             </div>
             
             <!-- Gráficos principales -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8">
                 <!-- Gráfico de estado de formularios -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Estado de Formularios</h3>
                         <div class="flex gap-2">
                             <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
@@ -266,14 +267,14 @@ $scripts_adicionales = '
                             </button>
                         </div>
                     </div>
-                    <div class="h-64">
+                    <div class="h-64 sm:h-80">
                         <canvas id="chartFormularios"></canvas>
                     </div>
                 </div>
                 
                 <!-- Gráfico de distribución de usuarios -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Distribución de Usuarios</h3>
                         <div class="flex gap-2">
                             <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
@@ -281,15 +282,15 @@ $scripts_adicionales = '
                             </button>
                         </div>
                     </div>
-                    <div class="h-64">
+                    <div class="h-64 sm:h-80">
                         <canvas id="chartUsuarios"></canvas>
                     </div>
                 </div>
             </div>
             
             <!-- Gráfico de tendencia por mes -->
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6 mb-8">
-                <div class="flex items-center justify-between mb-6">
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6 mb-8">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                     <h3 class="text-lg font-semibold text-gray-800">Tendencia de Formularios</h3>
                     <div class="flex gap-2">
                         <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
@@ -297,16 +298,16 @@ $scripts_adicionales = '
                         </button>
                     </div>
                 </div>
-                <div class="h-80">
+                <div class="h-80 sm:h-96">
                     <canvas id="chartTendencia"></canvas>
                 </div>
             </div>
             
             <!-- Fila adicional: Estado de usuarios y Top doctores -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8">
                 <!-- Gráfico de estado de usuarios -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Estado de Usuarios</h3>
                         <div class="flex gap-2">
                             <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
@@ -314,14 +315,14 @@ $scripts_adicionales = '
                             </button>
                         </div>
                     </div>
-                    <div class="h-64">
+                    <div class="h-64 sm:h-80">
                         <canvas id="chartEstadoUsuarios"></canvas>
                     </div>
                 </div>
                 
                 <!-- Top doctores -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Doctores Recientes</h3>
                         <div class="flex gap-2">
                             <button class="inline-flex items-center justify-center h-8 rounded-md px-3 text-xs font-medium border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50">
@@ -330,22 +331,22 @@ $scripts_adicionales = '
                         </div>
                     </div>
                     <?php if ($result_doctores->num_rows > 0): ?>
-                        <ul class="space-y-4">
+                        <div class="space-y-4">
                             <?php while ($doctor = $result_doctores->fetch_assoc()): ?>
-                            <li class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                            <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
                                     <i class="bi bi-person"></i>
                                 </div>
-                                <div class="flex-1">
-                                    <h4 class="font-medium text-gray-900"><?php echo htmlspecialchars($doctor['nombre'] . ' ' . $doctor['apellido']); ?></h4>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-medium text-gray-900 truncate"><?php echo htmlspecialchars($doctor['nombre'] . ' ' . $doctor['apellido']); ?></h4>
                                     <div class="flex items-center text-sm text-gray-500">
                                         <i class="bi bi-calendar3 me-1"></i>
-                                        <span>Desde: <?php echo date('d/m/Y', strtotime($doctor['fecha_creacion'])); ?></span>
+                                        <span class="truncate">Desde: <?php echo date('d/m/Y', strtotime($doctor['fecha_creacion'])); ?></span>
                                     </div>
                                 </div>
-                            </li>
+                            </div>
                             <?php endwhile; ?>
-                        </ul>
+                        </div>
                     <?php else: ?>
                         <p class="text-gray-500 italic text-center">No hay datos suficientes</p>
                     <?php endif; ?>
@@ -356,6 +357,24 @@ $scripts_adicionales = '
 
     <!-- Scripts para gráficos -->
     <script>
+        // Configuración común de Chart.js
+        Chart.defaults.font.family = 'system-ui, sans-serif';
+        Chart.defaults.font.size = 12;
+        Chart.defaults.color = '#374151';
+        Chart.defaults.responsive = true;
+        Chart.defaults.maintainAspectRatio = false;
+
+        // Función para ajustar el tamaño de los gráficos
+        function resizeCharts() {
+            const charts = [chartFormularios, chartUsuarios, chartTendencia, chartEstadoUsuarios];
+            charts.forEach(chart => {
+                if (chart) chart.resize();
+            });
+        }
+
+        // Escuchar cambios de tamaño de ventana
+        window.addEventListener('resize', resizeCharts);
+        
         // Datos de los gráficos
         const datosFormularios = <?php echo $datos_formularios; ?>;
         const datosUsuarios = <?php echo $datos_usuarios; ?>;
@@ -373,14 +392,9 @@ $scripts_adicionales = '
             active: '#4ade80' // green-400
         };
         
-        // Configuración común de Chart.js
-        Chart.defaults.font.family = 'system-ui, sans-serif';
-        Chart.defaults.font.size = 12;
-        Chart.defaults.color = '#374151';
-        
         // 1. Gráfico de Formularios (Donut)
         const ctxFormularios = document.getElementById('chartFormularios').getContext('2d');
-        new Chart(ctxFormularios, {
+        const chartFormularios = new Chart(ctxFormularios, {
             type: 'doughnut',
             data: {
                 labels: datosFormularios.labels,
@@ -392,11 +406,10 @@ $scripts_adicionales = '
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: window.innerWidth < 640 ? 'bottom' : 'right',
+                        align: 'center'
                     }
                 },
                 cutout: '65%'
@@ -405,7 +418,7 @@ $scripts_adicionales = '
         
         // 2. Gráfico de Usuarios (Pie)
         const ctxUsuarios = document.getElementById('chartUsuarios').getContext('2d');
-        new Chart(ctxUsuarios, {
+        const chartUsuarios = new Chart(ctxUsuarios, {
             type: 'pie',
             data: {
                 labels: datosUsuarios.labels,
@@ -417,11 +430,10 @@ $scripts_adicionales = '
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: window.innerWidth < 640 ? 'bottom' : 'right',
+                        align: 'center'
                     }
                 }
             }
@@ -429,7 +441,7 @@ $scripts_adicionales = '
         
         // 3. Gráfico de Tendencia (Line)
         const ctxTendencia = document.getElementById('chartTendencia').getContext('2d');
-        new Chart(ctxTendencia, {
+        const chartTendencia = new Chart(ctxTendencia, {
             type: 'line',
             data: {
                 labels: datosPorMes.labels,
@@ -471,8 +483,6 @@ $scripts_adicionales = '
                 ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -483,7 +493,8 @@ $scripts_adicionales = '
                 },
                 plugins: {
                     legend: {
-                        position: 'top'
+                        position: window.innerWidth < 640 ? 'bottom' : 'top',
+                        align: 'center'
                     },
                     tooltip: {
                         mode: 'index',
@@ -500,7 +511,7 @@ $scripts_adicionales = '
         
         // 4. Gráfico de Estado de Usuarios (Donut)
         const ctxEstadoUsuarios = document.getElementById('chartEstadoUsuarios').getContext('2d');
-        new Chart(ctxEstadoUsuarios, {
+        const chartEstadoUsuarios = new Chart(ctxEstadoUsuarios, {
             type: 'doughnut',
             data: {
                 labels: datosEstadoUsuarios.labels,
@@ -512,14 +523,29 @@ $scripts_adicionales = '
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: window.innerWidth < 640 ? 'bottom' : 'right',
+                        align: 'center'
                     }
                 },
                 cutout: '65%'
+            }
+        });
+
+        // Ajustar posición de las leyendas al cambiar el tamaño de la ventana
+        window.addEventListener('resize', () => {
+            const isMobile = window.innerWidth < 640;
+            const charts = [chartFormularios, chartUsuarios, chartEstadoUsuarios];
+            charts.forEach(chart => {
+                if (chart) {
+                    chart.options.plugins.legend.position = isMobile ? 'bottom' : 'right';
+                    chart.update();
+                }
+            });
+            if (chartTendencia) {
+                chartTendencia.options.plugins.legend.position = isMobile ? 'bottom' : 'top';
+                chartTendencia.update();
             }
         });
     </script>

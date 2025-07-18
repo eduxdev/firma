@@ -41,84 +41,91 @@ $menu_activo = 'dashboard';
     <title>Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <?php include 'shared_styles.php'; ?>
 </head>
 <body class="h-full bg-[#f8f9fa]">
     <?php include 'menu_lateral.php'; ?>
     
-    <div class="ml-64">
+    <div class="main-content">
         <?php include 'header.php'; ?>
 
-        <main class="p-6">
+        <main class="p-4 sm:p-6 lg:p-8">
             <!-- Estadísticas Principales -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                 <!-- Formularios Pendientes -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-3 bg-amber-100 text-amber-700 rounded-lg">
-                                    <i class="bi bi-hourglass-split text-2xl"></i>
+                <a href="formularios_pendientes.php" class="block">
+                    <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-3 bg-amber-100 text-amber-700 rounded-lg">
+                                        <i class="bi bi-hourglass-split text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Pendientes</h3>
                                 </div>
-                                <h3 class="text-lg font-semibold text-gray-800">Pendientes</h3>
+                                <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['pendientes']; ?></span>
                             </div>
-                            <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['pendientes']; ?></span>
+                            <span class="inline-flex items-center text-sm text-amber-600 hover:text-amber-700">
+                                Ver formularios pendientes
+                                <i class="bi bi-arrow-right ml-2"></i>
+                            </span>
                         </div>
-                        <a href="formularios_pendientes.php" class="inline-flex items-center text-sm text-amber-600 hover:text-amber-700">
-                            Ver formularios pendientes
-                            <i class="bi bi-arrow-right ml-2"></i>
-                        </a>
                     </div>
-                </div>
+                </a>
 
                 <!-- Formularios Aprobados -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-3 bg-green-100 text-green-700 rounded-lg">
-                                    <i class="bi bi-check-circle text-2xl"></i>
+                <a href="formularios_aprobados.php" class="block">
+                    <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-3 bg-green-100 text-green-700 rounded-lg">
+                                        <i class="bi bi-check-circle text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Aprobados</h3>
                                 </div>
-                                <h3 class="text-lg font-semibold text-gray-800">Aprobados</h3>
+                                <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['aprobados']; ?></span>
                             </div>
-                            <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['aprobados']; ?></span>
+                            <span class="inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                                Ver formularios aprobados
+                                <i class="bi bi-arrow-right ml-2"></i>
+                            </span>
                         </div>
-                        <a href="formularios_aprobados.php" class="inline-flex items-center text-sm text-green-600 hover:text-green-700">
-                            Ver formularios aprobados
-                            <i class="bi bi-arrow-right ml-2"></i>
-                        </a>
                     </div>
-                </div>
+                </a>
 
                 <!-- Formularios Rechazados -->
-                <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-3 bg-red-100 text-red-700 rounded-lg">
-                                    <i class="bi bi-x-circle text-2xl"></i>
+                <a href="formularios_rechazados.php" class="block">
+                    <div class="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-3 bg-red-100 text-red-700 rounded-lg">
+                                        <i class="bi bi-x-circle text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Rechazados</h3>
                                 </div>
-                                <h3 class="text-lg font-semibold text-gray-800">Rechazados</h3>
+                                <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['rechazados']; ?></span>
                             </div>
-                            <span class="text-3xl font-bold text-gray-800"><?php echo $conteo['rechazados']; ?></span>
+                            <span class="inline-flex items-center text-sm text-red-600 hover:text-red-700">
+                                Ver formularios rechazados
+                                <i class="bi bi-arrow-right ml-2"></i>
+                            </span>
                         </div>
-                        <a href="formularios_rechazados.php" class="inline-flex items-center text-sm text-red-600 hover:text-red-700">
-                            Ver formularios rechazados
-                            <i class="bi bi-arrow-right ml-2"></i>
-                        </a>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Estadísticas de Usuarios -->
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6 mb-6">
-                <div class="flex items-center justify-between mb-6">
+            <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <h2 class="text-xl font-semibold text-gray-800">Gestión de Usuarios</h2>
-                    <a href="nuevo_doctor.php" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <a href="nuevo_doctor.php" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         <i class="bi bi-person-plus"></i>
-                        Nuevo Doctor
+                        <span>Nuevo Doctor</span>
                     </a>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     <!-- Total Usuarios -->
                     <div class="rounded-lg border border-gray-100 p-4">
                         <div class="flex items-center gap-3 mb-2">
@@ -155,7 +162,7 @@ $menu_activo = 'dashboard';
             </div>
 
             <!-- Acciones Rápidas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <a href="gestionar_doctores.php" class="group bg-white rounded-lg border border-gray-100 shadow-sm p-6 hover:shadow-md transition-all duration-200">
                     <div class="flex flex-col items-center text-center gap-4">
                         <div class="p-3 bg-blue-100 text-blue-700 rounded-lg group-hover:scale-110 transition-transform">
