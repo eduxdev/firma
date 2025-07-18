@@ -375,6 +375,24 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
             </div>
         </div>
 
+        <!-- Declaraciones Legales -->
+        <div class="section">
+            <h2 class="section-title">Declaraciones Legales</h2>
+            <div class="mt-4">
+                <p class="text-gray-800">El paciente ha aceptado y confirmado todas las siguientes declaraciones legales:</p>
+                <ul class="list-disc list-inside space-y-2 mt-4 pl-4">
+                    <li>He informado al profesional de cualquier alergia conocida a medicamentos u otras sustancias.</li>
+                    <li>Entiendo que la terapia de infusión intravenosa no ha sido evaluada por la FDA.</li>
+                    <li>He informado al profesional de todos los medicamentos y suplementos actuales.</li>
+                    <li>Entiendo mi derecho a ser informado durante el procedimiento.</li>
+                    <li>Comprendo los riesgos y beneficios del procedimiento.</li>
+                    <li>Verifico que toda la información presentada es verdadera.</li>
+                    <li>Acepto la responsabilidad del pago de servicios no cubiertos.</li>
+                    <li>Acepto las condiciones sobre la información completa y cargos adicionales.</li>
+                </ul>
+            </div>
+        </div>
+
         <?php if (!empty($formulario['comentarios_doctor'])): ?>
         <div class="section">
             <h2 class="section-title">Observaciones del Doctor</h2>

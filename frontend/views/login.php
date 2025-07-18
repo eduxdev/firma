@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Panel del Doctor</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Agregamos Font Awesome para el ícono del ojo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .mesh-background {
             background-color: #f8fafc;
@@ -33,6 +35,14 @@
 <body class="h-full mesh-background">
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 relative">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <!-- Botón Regresar -->
+            <div class="mb-4 text-left">
+                <a href="/" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-all duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Regresar
+                </a>
+            </div>
+
             <img class="mx-auto h-16 w-auto rounded-full shadow-lg bg-white p-2" src="/public/assets/img/logo.jpg" alt="Logo">
             <h2 class="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                 Iniciar Sesión
@@ -79,7 +89,7 @@
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">
                             Contraseña
                         </label>
-                        <div class="mt-2">
+                        <div class="mt-2 relative">
                             <input
                                 id="password"
                                 name="password"
@@ -87,6 +97,13 @@
                                 required
                                 class="block w-full rounded-lg border border-gray-200 py-2 px-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm sm:leading-6 bg-white/50 backdrop-blur-sm"
                             >
+                            <button 
+                                type="button" 
+                                onclick="togglePassword()"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 cursor-pointer"
+                            >
+                                <i class="fas fa-eye" id="togglePassword"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -102,5 +119,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html> 
