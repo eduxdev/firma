@@ -172,17 +172,23 @@ if ($formulario['estado_revision'] === 'aprobado') {
                         <p><span class="font-semibold">Insuf. Cardíaca:</span> <?php echo $formulario['insuficiencia']; ?></p>
                         <p><span class="font-semibold">Anticoagulantes:</span> <?php echo $formulario['anticoagulantes']; ?></p>
                         <p><span class="font-semibold">Cáncer:</span> <?php echo $formulario['cancer']; ?></p>
+                        <p>
+                            <span class="font-semibold">Alérgico:</span> <?php echo $formulario['alergico']; ?>
+                            <?php if ($formulario['alergico'] === 'Si'): ?>
+                                <br><span class="font-semibold">Especificación de alergias:</span> <?php echo htmlspecialchars($formulario['medicamento_alergico']); ?>
+                            <?php endif; ?>
+                        </p>
+                        <p>
+                            <span class="font-semibold">Condición médica:</span> <?php echo $formulario['condicion_medica']; ?>
+                            <?php if ($formulario['condicion_medica'] === 'Si'): ?>
+                                <br><span class="font-semibold">Explicación:</span> <?php echo htmlspecialchars($formulario['condicion_explicacion']); ?>
+                            <?php endif; ?>
+                        </p>
                     </div>
 
                     <?php if ($formulario['drogas'] === 'Si'): ?>
                         <div class="mt-4">
                             <p><span class="font-semibold">Frecuencia de uso de drogas:</span> <?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></p>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($formulario['alergico'] === 'Si'): ?>
-                        <div class="mt-4">
-                            <p><span class="font-semibold">Medicamentos Alérgicos:</span> <?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></p>
                         </div>
                     <?php endif; ?>
                 </div>

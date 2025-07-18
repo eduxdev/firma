@@ -325,17 +325,27 @@ if (isset($_GET['cancelar']) && $_GET['cancelar'] == 'true') {
                     <span class="data-label">Cáncer:</span>
                     <span><?php echo $formulario['cancer']; ?></span>
                 </div>
+                <div class="data-item">
+                    <span class="data-label">Alérgico:</span>
+                    <span><?php echo $formulario['alergico']; ?></span>
+                    <?php if ($formulario['alergico'] === 'Si'): ?>
+                        <br><span class="data-label">Especificación de alergias:</span>
+                        <span><?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></span>
+                    <?php endif; ?>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Condición médica:</span>
+                    <span><?php echo $formulario['condicion_medica']; ?></span>
+                    <?php if ($formulario['condicion_medica'] === 'Si'): ?>
+                        <br><span class="data-label">Explicación:</span>
+                        <span><?php echo htmlspecialchars($formulario['condicion_explicacion']); ?></span>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php if ($formulario['drogas'] === 'Si'): ?>
                 <div class="mt-4">
                     <span class="data-label">Frecuencia de uso de drogas:</span>
                     <span><?php echo htmlspecialchars($formulario['drogas_frecuencia']); ?></span>
-                </div>
-            <?php endif; ?>
-            <?php if ($formulario['alergico'] === 'Si'): ?>
-                <div class="mt-2">
-                    <span class="data-label">Medicamentos Alérgicos:</span>
-                    <span><?php echo htmlspecialchars($formulario['medicamento_alergico']); ?></span>
                 </div>
             <?php endif; ?>
         </div>
