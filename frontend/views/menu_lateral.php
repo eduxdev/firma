@@ -139,18 +139,18 @@ $submenu_item_inactive = "text-gray-600 hover:bg-gray-50 hover:text-gray-900";
     <!-- Botón de menú móvil -->
     <button @click="menuAbierto = !menuAbierto" 
             type="button"
-            class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 focus:outline-none">
+            class="menu-toggle lg:hidden fixed top-4 left-4 p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 focus:outline-none">
         <i class="bi" :class="menuAbierto ? 'bi-x-lg' : 'bi-list'"></i>
     </button>
 
     <!-- Overlay para móvil -->
     <div x-show="menuAbierto" 
-         class="lg:hidden fixed inset-0 z-30 bg-gray-800/40 backdrop-blur-sm"
+         class="menu-overlay lg:hidden fixed inset-0 bg-gray-800/40 backdrop-blur-sm"
          @click="menuAbierto = false">
     </div>
 
     <!-- Menú lateral -->
-    <aside class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white lg:block"
+    <aside class="fixed left-0 top-0 h-screen w-64 border-r border-gray-200 bg-white lg:block"
            :class="menuAbierto ? 'block' : 'hidden'">
         <div class="flex h-full flex-col">
             <!-- Logo y Título -->
@@ -158,10 +158,10 @@ $submenu_item_inactive = "text-gray-600 hover:bg-gray-50 hover:text-gray-900";
                 <a href="admin_panel.php" 
                    @click="menuAbierto = false" 
                    class="flex items-center gap-3">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                    <div class="hidden lg:flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
                         <i class="bi bi-heart-pulse text-xl"></i>
                     </div>
-                    <span class="text-lg font-semibold text-gray-800">Panel Médico</span>
+                    <span class="font-semibold text-gray-800 lg:ml-0 ml-10">Panel Médico</span>
                 </a>
             </div>
 

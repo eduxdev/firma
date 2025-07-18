@@ -1,5 +1,47 @@
 <link rel="stylesheet" href="/public/assets/css/styles.css">
 <style>
+    /* Layout principal */
+    .main-content {
+        margin-left: 16rem;
+        min-height: 100vh;
+        background-color: #f8f9fa;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Menú lateral */
+    aside {
+        z-index: 40 !important;
+    }
+
+    /* Header */
+    header {
+        position: sticky !important;
+        top: 0;
+        z-index: 30 !important;
+        background-color: white;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Botón de menú móvil */
+    .menu-toggle {
+        z-index: 50 !important;
+    }
+
+    /* Overlay del menú */
+    .menu-overlay {
+        z-index: 35 !important;
+    }
+
+    /* Media queries */
+    @media (max-width: 1024px) {
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+    }
+
     /* Estilos específicos para Alpine.js */
     [x-cloak] { 
         display: none !important; 

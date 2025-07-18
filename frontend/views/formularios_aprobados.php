@@ -205,21 +205,21 @@ $scripts_adicionales = '
 
             <!-- Lista de Formularios -->
             <div class="bg-white rounded-lg border border-gray-100 shadow-sm">
-                <div class="p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between">
+                <div class="p-4 sm:p-6 border-b border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800">Formularios Aprobados</h2>
                             <p class="text-sm text-gray-500 mt-1">Lista de todos los formularios aprobados</p>
                         </div>
                         <!-- Buscador -->
-                        <div class="flex items-center space-x-2">
-                            <form action="" method="GET" class="flex items-center">
-                                <div class="relative">
+                        <div class="flex items-center">
+                            <form action="" method="GET" class="flex items-center w-full sm:w-auto">
+                                <div class="relative flex-1 sm:flex-none">
                                     <input type="text" 
                                            name="busqueda" 
                                            value="<?php echo htmlspecialchars($busqueda); ?>" 
                                            placeholder="Buscar por nombre..." 
-                                           class="h-9 w-64 px-3 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 placeholder:text-gray-500">
+                                           class="h-9 w-full sm:w-64 px-3 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 placeholder:text-gray-500">
                                     <button type="submit" class="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-gray-600">
                                         <i class="bi bi-search"></i>
                                     </button>
