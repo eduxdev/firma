@@ -610,7 +610,7 @@
     </div>
 
     <div class="mb-3">
-      <label>¿Es usted alérgico(a)? <span class="text-danger">*</span></label><br>
+      <label>¿Es usted alérgico(a)? *</label><br>
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="alergico" value="Si" required onclick="toggleField('medicamento_alergico', true)">
         <label class="form-check-label">Si</label>
@@ -619,14 +619,14 @@
         <input class="form-check-input" type="radio" name="alergico" value="No" required onclick="toggleField('medicamento_alergico', false)">
         <label class="form-check-label">No</label>
       </div>
-      <div class="text-danger small mt-1">Campo obligatorio</div>
+      
     </div>
 
     <div class="mb-3">
-      <label>Si su respuesta es si especifique: <span class="text-danger">*</span></label>
+      <label>Si su respuesta es si especifique: </label>
       <input type="text" class="form-control" name="medicamento_alergico" id="medicamento_alergico" disabled 
-             placeholder="Por favor, especifique sus alergias">
-      <div class="text-danger small mt-1">Campo obligatorio si seleccionó "Si"</div>
+             >
+    
     </div>
 
     <div class="mb-3">
